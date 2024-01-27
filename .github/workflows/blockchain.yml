@@ -8,7 +8,7 @@ env:
   VITE_VUE_APP_API_URL: ""
 jobs:
   deploy-development:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     strategy:
       fail-fast: false
       matrix:
