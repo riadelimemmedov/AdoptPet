@@ -10,14 +10,14 @@ describe("PetAdoption", function () {
 
 	async function deployContractFixture() {
 		// eslint-disable-next-line no-undef
+		const PETS_COUNT = 5
 		const [deployer,account2] = await hre.ethers.getSigners()
-		const contract = await (await ethers.getContractFactory("PetAdoption")).deploy()
-		const randomNumber = Math.random()
+		const contract = await (await ethers.getContractFactory("PetAdoption")).deploy(PETS_COUNT)
 		return {
 			deployer,
 			account2,
 			contract,
-			randomNumber
+			petsAddedCount:PETS_COUNT
 		}
 	}
 
@@ -42,6 +42,11 @@ describe("PetAdoption", function () {
 		it("should revert with the right error in case of other account",async function () {
 			const {account2,contract} = await loadFixture(deployContractFixture)
 			await expect(contract.connect(account2).addPet()).to.be.revertedWith("Only a contract owner can be add a new pet!")//Error text must be match to require message text on smart contract
+		})
+		it("should increase pet index", async function () {
+			const {petsAddedCount,contract} = await loadFixture(deployContractFixture)
+			await contract.addPet()
+			expect(await contract.petIndex()).to.equal(petsAddedCount+1)//I am wait 6
 		})
 	})
 })
