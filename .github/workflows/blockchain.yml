@@ -1,0 +1,30 @@
+name: Smart Contract Deploy
+on:
+  push:
+    paths:
+      - blockchain/**
+      - .github/workflows/blockchain.yml
+env:
+  VITE_VUE_APP_API_URL: ""
+jobs:
+  deploy-development:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version:
+          - 20
+    defaults:
+      run:
+        working-directory: blockchain/
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Install NPM dependencies
+        run: npm install
+      - name: Run tests
+        run: npm run test
+      - name: Run ESLint Check Code Quality
+        run: npm run lint
