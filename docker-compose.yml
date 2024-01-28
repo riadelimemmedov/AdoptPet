@@ -1,0 +1,14 @@
+version: "3.7"
+
+services:
+  frontend:
+    container_name: frontend
+    build: ./frontend/contract-ui/
+    ports:
+      - 5173:8000
+    working_dir: /frontend/contract-ui/
+    volumes:
+      - type: bind
+        source: ./frontend/contract-ui/
+        target: /frontend/contract-ui/
+    tty: true
