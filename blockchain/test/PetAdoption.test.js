@@ -13,7 +13,7 @@ describe("PetAdoption", function () {
 		const PETS_COUNT = 5
 		const ADOPTED_PED_IDX = 0
 		const [deployer,account2,account3] = await hre.ethers.getSigners()
-		const contract = await (await ethers.getContractFactory("PetAdoption")).deploy(PETS_COUNT)
+		const contract = await (await ethers.getContractFactory("PetAdoption")).deploy(PETS_COUNT)//initialPetIndex
 
 		await contract.connect(account3).adoptPet(ADOPTED_PED_IDX)
 
@@ -64,6 +64,29 @@ describe("PetAdoption", function () {
 		it("should revert with the pet is already adopted", async function () {
 			const {contract,adoptedPetIdx} = await loadFixture(deployContractFixture)
 			await expect(contract.adoptPet(adoptedPetIdx)).to.be.revertedWith("Pet is already adopted!")
+		})
+		it("should adopt pet successfully", async function () {
+			const {contract,account2} = await loadFixture(deployContractFixture)
+			const firstPetIdx = 1
+			const secondPetIdx = 4
+			
+			await expect(contract.connect(account2).adoptPet(firstPetIdx)).not.to.be.reverted
+			await contract.connect(account2).adoptPet(secondPetIdx)
+
+			const petOwnerAddress = await contract.petIdxToOwnerAddress(firstPetIdx)
+			expect(petOwnerAddress).to.be.equal(account2.address)
+
+			const petsByOwner = await contract.connect(account2).getAllAdoptedPetsByOwner()
+			const allAdoptedPets = await contract.getAllAdoptedPets()
+
+			expect(petsByOwner.length).to.be.equal(2)
+			expect(allAdoptedPets.length).to.be.equal(3)
+
+			expect(await contract.ownerAddressToPetList(account2.address,0)).to.be.equal(firstPetIdx)
+			expect(await contract.allAdoptedPets(2)).to.equal(secondPetIdx)
+
+			const zeroAddress = await contract.petIdxToOwnerAddress(85)//If not find address match to petId,return zero address => 0x0000000000000000000000000000000000000000 like this
+			expect(zeroAddress).to.be.equal("0x0000000000000000000000000000000000000000")
 		})
 	})
 })

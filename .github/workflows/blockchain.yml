@@ -28,8 +28,10 @@ jobs:
         run: npm run test
       - name: Run tests coverage
         run: npm run coverage
-      - name: Run ESLint Check Code Quality
-        run: npm run lint
+      - name: Check typing problem on code
+        run: npx eslint --fix .
+      - name: Format solidity code
+        run: npx prettier --write "**/*.sol"
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
         with:

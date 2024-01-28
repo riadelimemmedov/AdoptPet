@@ -10,3 +10,9 @@
   - `npx eslint --fix .`
 - Review issue on file
   - `npm run lint`
+- Check formatting for solidity file
+  - `npx prettier --check "**/*.sol"`
+- Modify formatting issue inside solidity file
+  - `npx prettier --write "**/*.sol"`
+- Run tests coverage
+  - `npx hardhat coverage`
