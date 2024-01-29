@@ -1,0 +1,11 @@
+name: Backend API
+on:
+  push:
+    paths:
+      - backend/**
+      - .github/workflows/backend.yml
+env:
+  AWS_SECRET_KEY: ""
+jobs:
+  deploy-development:
+    runs-on: windows-latest
