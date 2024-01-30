@@ -1,11 +1,25 @@
 version: "3.7"
 
 services:
+  backend:
+    build:
+      context: ./backend/
+    container_name: backend
+    ports:
+      - "8001:8000" #http://localhost:8001/
+    volumes:
+      - .:/backend:/api/
+    env_file:
+      - .env
+    # depends_on:
+    #   - rabbitmq
+    #   - redis
+
   frontend:
     container_name: frontend
     build: ./frontend/contract-ui/
     ports:
-      - 5173:8000
+      - 5173:8000 #http://localhost:5173/
     working_dir: /frontend/contract-ui/
     volumes:
       - type: bind
