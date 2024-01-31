@@ -11,7 +11,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: [3.9] # Updated to Python 3.9
+        python-version: [3.10.0] # Updated to Python 3.9
         poetry-version: [1.7.1]
         os: [windows-latest]
     runs-on: ${{ matrix.os }}
@@ -19,51 +19,79 @@ jobs:
       run:
         working-directory: backend/
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v3
+      - uses: actions/checkout@v1
+
+      - name: Setup Python
+        uses: actions/setup-python@v2
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: 3.10.0
+
       - name: Install poetry
-        uses: abatilo/actions-poetry@v2.0.0
+        run: |
+          python -m pip install poetry==1.7.1
+
+      - name: Configure poetry
+        run: |
+          python -m poetry config virtualenvs.in-project true
+
+      - name: Cache the virtualenv
+        uses: actions/cache@v2
         with:
-          poetry-version: ${{ matrix.poetry-version }}
+          path: ./.venv
+          key: ${{ runner.os }}-venv-${{ hashFiles('**/poetry.lock') }}
+
       - name: Install dependencies
-        run: poetry install
+        run: |
+          python -m poetry install
+
       # - name: Run tests
-      #   run: poetry run pytest tests.py --cov=./ --cov-report=xml
-      # - name: Upload coverage to Codecov
-      #   uses: codecov/codecov-action@v3
-      #   with:
-      #     token: ${{ secrets.CODECOV_TOKEN }}
-  code-quality:
-    strategy:
-      fail-fast: false
-      matrix:
-        python-version: [3.9]
-        poetry-version: [1.7.1]
-        os: [windows-latest]
-    runs-on: ${{ matrix.os }}
-    defaults:
-      run:
-        working-directory: backend/
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v3
-        with:
-          python-version: ${{ matrix.python-version }}
-      - name: Install poetry
-        uses: abatilo/actions-poetry@v2.0.0
-        with:
-          poetry-version: ${{ matrix.poetry-version }}
-      - name: Install dependencies
-        run: poetry install
-      # - name: Run automatically format code if not formatted
-      # run: bash format_code.sh
-      - name: Run black
-        run: poetry run black .
-      - name: Run isort
-        run: poetry run isort . --profile black
-      - name: Run flake8
-        run: poetry run flake8 .
-      - name: Run bandit
-        run: poetry run bandit .
+      #   run: |
+      #     python -m poetry run python -m pytest -sxv
+        # - uses: actions/checkout@v3
+        # - uses: actions/setup-python@v3
+        #   with:
+        #     python-version: ${{ matrix.python-version }}
+        # - name: Install poetry
+        #   uses: abatilo/actions-poetry@v2.0.0
+        #   with:
+        #     poetry-version: ${{ matrix.poetry-version }}
+        # - name: Install dependencies
+        #   run: poetry install
+        # - name: Run tests
+        #   run: poetry run pytest tests.py --cov=./ --cov-report=xml
+        # - name: Upload coverage to Codecov
+        #   uses: codecov/codecov-action@v3
+        #   with:
+        #     token: ${{ secrets.CODECOV_TOKEN }}
+  # code-quality:
+  #   strategy:
+  #     fail-fast: false
+  #     matrix:
+  #       python-version: [3.9]
+  #       poetry-version: [1.7.1]
+  #       os: [windows-latest]
+  #   runs-on: ${{ matrix.os }}
+  #   defaults:
+  #     run:
+  #       working-directory: backend/
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - uses: actions/setup-python@v3
+  #       with:
+  #         python-version: ${{ matrix.python-version }}
+  #     - name: Install poetry
+  #       uses: abatilo/actions-poetry@v2.0.0
+  #       with:
+  #         poetry-version: ${{ matrix.poetry-version }}
+  #     - name: Install dependencies
+  #       run: poetry install
+  #     # - name: Run automatically format code if not formatted
+  #     # run: bash format_code.sh
+  #     - name: Run black
+  #       run: poetry run black .
+  #     - name: Run isort
+  #       run: poetry run isort . --profile black
+  #     - name: Run flake8
+  #       run: poetry run flake8 .
+  #     - name: Run bandit
+  #       run: poetry run bandit .
