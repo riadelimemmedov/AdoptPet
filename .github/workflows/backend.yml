@@ -1,4 +1,5 @@
 name: Backend API
+
 on:
   push:
     paths:
@@ -6,11 +7,11 @@ on:
       - ".github/workflows/backend.yml"
 
 jobs:
-  test: # new
+  test:
     strategy:
       fail-fast: false
       matrix:
-        python-version: [3.9.13]
+        python-version: [3.9] # Updated to Python 3.9
         poetry-version: [1.7.1]
         os: [windows-latest]
     runs-on: ${{ matrix.os }}
@@ -38,7 +39,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: [3.9.13]
+        python-version: [3.9]
         poetry-version: [1.7.1]
         os: [windows-latest]
     runs-on: ${{ matrix.os }}
@@ -57,7 +58,7 @@ jobs:
       - name: Install dependencies
         run: poetry install
       # - name: Run automatically format code if not formatted
-        # run: bash format_code.sh
+      # run: bash format_code.sh
       - name: Run black
         run: poetry run black .
       - name: Run isort
