@@ -55,7 +55,7 @@ jobs:
         with:
           poetry-version: ${{ matrix.poetry-version }}
       - name: Install dependencies
-        run: poetry install --no-root
+        run: poetry install
       # - name: Run automatically format code if not formatted
         # run: bash format_code.sh
       - name: Run black
