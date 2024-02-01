@@ -14,9 +14,43 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
+#!Django Modules
+from django.conf import settings
+from django.conf.urls.i18n import i18n_patterns
+from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import path
+from django.urls import include, path
+from django.utils.translation import gettext_lazy as _
 
-urlpatterns = [
-    path("admin/", admin.site.urls),
+#!Abstract
+from abstract.constants import AppName
+from abstract.views import *
+
+# *Admin Site Configuration
+admin.site.site_header = _("Adopt Pet")  # login page
+admin.site.site_title = _("AdopetPet Admin User")  # html <title> tag
+admin.site.index_title = _("Welcome My AdoptPet Project")  # site administration
+
+urlpatterns = []
+
+if not settings.APP_NAME or settings.APP_NAME not in [app.value for app in AppName]:
+    raise Exception(_("Please set app correct name same as abstract.constants.AppName"))
+
+
+urls_admin = [
+    path("jet/", include("jet.urls", "jet")),
+    path("jet/dashboard/", include("jet.dashboard.urls", "jet-dashboard")),
 ]
+
+if settings.APP_NAME == AppName.ADMIN.name:
+    urlpatterns += urls_admin
+else:
+    urlpatterns += []
+    urlpatterns += urls_admin
+urlpatterns += i18n_patterns(path("admin/", admin.site.urls))
+
+
+# *Settings Debug
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

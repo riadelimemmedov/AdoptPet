@@ -29,13 +29,10 @@ Backend
   - `poetry run pytest --cov`
 - Run tests with output capturing disabled:
   - `poetry run pytest -s`
-    - Disable output capturing when running tests, allowing the output from tests to be displayed on the console.
 - Run specific file:
   - `poetry run pytest -k`
-    - Allows you to select a specific file and run only that selected file when executing pytest.
 - Run tests until failure:
   - `poetry run pytest -x`
-    - Run tests until a failure occurs, then stop the tests when encountering a failed test function.
 - Format code using Black:
   - `poetry run black .`
 - Check code formatting is needed or not:
@@ -46,3 +43,13 @@ Backend
   - `poetry run flake8 .`
 - Check code bug:
   - `poetry run bandit .`
+- Run all the tests in the apps.users.tests module:
+  - `poetry run manage.py test apps.users.tests`
+- Run all the tests found within the 'apps' package:
+  - `poetry run manage.py test apps`
+- Run just one test case class:
+  - `poetry run manage.py test apps.users.tests.UsersManagersTests`
+- Run just one test method:
+  - `poetry run manage.py test apps.users.tests.UsersManagersTests.test_create_user`
+- Return migration data without creating the migration file,like mock migration file.Migration not affect to database:
+- `poetry run manage.py makemigrations --dry-run --verbosity 3`

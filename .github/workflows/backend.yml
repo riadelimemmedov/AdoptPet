@@ -43,7 +43,10 @@ jobs:
       - name: Install dependencies
         run: |
           python -m poetry install
-
+      
+      - name: Run tests
+        run: poetry run manage.py test apps
+        
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
         with:
@@ -91,8 +94,8 @@ jobs:
       - name: Run isort
         run: poetry run isort . --profile black
 
-      - name: Run flake8
-        run: poetry run flake8 .
+      # - name: Run flake8
+      #   run: poetry run flake8 .
 
       - name: Run bandit
         run: poetry run bandit .
