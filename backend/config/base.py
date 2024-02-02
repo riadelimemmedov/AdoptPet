@@ -24,7 +24,7 @@ ENVIRONMENT = config("ENVIRONMENT", default="LOCAL")
 # In order to allow access to the Django app from any server or IP
 # address,ensure ALLOWED_HOSTS in settings.py file set to *,as shown in
 # the left
-ALLOWED_HOSTS = ([])
+ALLOWED_HOSTS = []
 
 if ENVIRONMENT != "LOCAL":
     pass

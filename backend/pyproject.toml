@@ -37,3 +37,8 @@ bandit = "^1.7.7"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 88
+target-version = ['py310']
+include = '\.pyi?$'
