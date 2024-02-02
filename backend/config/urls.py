@@ -36,7 +36,7 @@ urlpatterns = []
 if not settings.APP_NAME or settings.APP_NAME not in [app.value for app in AppName]:
     raise Exception(_("Please set app correct name same as abstract.constants.AppName"))
 
-
+# For only admin
 urls_admin = [
     path("jet/", include("jet.urls", "jet")),
     path("jet/dashboard/", include("jet.dashboard.urls", "jet-dashboard")),
