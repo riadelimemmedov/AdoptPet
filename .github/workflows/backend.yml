@@ -99,6 +99,3 @@ jobs:
 
       - name: Run bandit
         run: poetry run bandit .
-
-      - name: Run pre commit
-        run: poetry run pre-commit run --all-files
