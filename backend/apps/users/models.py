@@ -8,7 +8,7 @@ from .managers import CustomUserManager
 # Create your models here.
 
 
-#!CustomUser
+# !CustomUser
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     username = None
     email = models.EmailField(_("email address"), unique=True)

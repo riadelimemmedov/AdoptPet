@@ -4,6 +4,10 @@ exclude =
     .git,
     build,
     dist,
-    .venv
-max-complexity = 10
+    .venv,
+max-complexity = 18
 docstring_style=sphinx
+ignore = E203, E266, E501, W503, F403, F401,F821
+per-file-ignores =
+    ./config/settings/*:F405 F403 F401,F821
+select = B,C,E,F,W,T4,B9

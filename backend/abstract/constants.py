@@ -1,7 +1,7 @@
 from enum import Enum
 
 
-#!AppName
+# !AppName
 class AppName(Enum):
     ADMIN = "ADMIN"
     USER = "USER"

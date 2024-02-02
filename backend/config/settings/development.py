@@ -2,11 +2,11 @@ from decouple import config
 
 from ..base import *
 
-#!Debug
+# !Debug
 DEBUG = True
 
 
-#!Databases
+# !Databases
 
 # Default Sqlite For Development
 DATABASES = {
@@ -30,9 +30,9 @@ DATABASES = {
 #     }
 # }
 
-#!Installed Apps
+# !Installed Apps
 INSTALLED_APPS += []
 
 
-#!Middleware
+# !Middleware
 MIDDLEWARE += []

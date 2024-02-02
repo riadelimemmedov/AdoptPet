@@ -53,3 +53,5 @@ Backend
   - `poetry run manage.py test apps.users.tests.UsersManagersTests.test_create_user`
 - Return migration data without creating the migration file,like mock migration file.Migration not affect to database:
 - `poetry run manage.py makemigrations --dry-run --verbosity 3`
+- Run pre commit hooks
+- `poetry run pre-commit run --all-files`

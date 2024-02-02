@@ -1,0 +1,9 @@
+{
+    //!Black Formatting Code
+    "editor.formatOnSave": true,//when change code automatically saved
+    "python.formatting.provider": "black",//formatting tool,optional using
+    "python.formatting.blackArgs": [
+        "--line-length",//how long to be each line our code,well know we limited our code length each line when formatting code using black
+        "120",//length each line
+    ],
+}
