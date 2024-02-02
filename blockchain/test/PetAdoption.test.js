@@ -69,7 +69,7 @@ describe("PetAdoption", function () {
 			const {contract,account2} = await loadFixture(deployContractFixture)
 			const firstPetIdx = 1
 			const secondPetIdx = 4
-			
+
 			await expect(contract.connect(account2).adoptPet(firstPetIdx)).not.to.be.reverted
 			await contract.connect(account2).adoptPet(secondPetIdx)
 
