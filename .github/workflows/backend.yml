@@ -94,8 +94,11 @@ jobs:
       - name: Run isort
         run: poetry run isort . --profile black
 
-      # - name: Run flake8
-      #   run: poetry run flake8 .
+      - name: Run flake8
+        run: poetry run flake8 .
 
       - name: Run bandit
         run: poetry run bandit .
+
+      - name: Run pre commit
+        run: poetry run pre-commit run --all-files
