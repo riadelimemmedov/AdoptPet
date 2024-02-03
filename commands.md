@@ -35,6 +35,8 @@ Backend
   - `poetry run pytest -x`
 - Format code using Black:
   - `poetry run black .`
+- Generate html for covering tests:
+  - `poetry run pytest --cov=./ --cov-report=html`
 - Check code formatting is needed or not:
   - `poetry run black . --check`
 - Sort imports using isort with Black profile:
@@ -55,3 +57,5 @@ Backend
 - `poetry run manage.py makemigrations --dry-run --verbosity 3`
 - Run pre commit hooks
 - `poetry run pre-commit run --all-files`
+- Generate api schema
+- `poetry run manage.py spectacular --file schema.yml`

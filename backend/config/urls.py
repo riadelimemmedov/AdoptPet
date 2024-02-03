@@ -21,6 +21,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
 from django.utils.translation import gettext_lazy as _
+from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerSplitView
 
 # !Abstract
 from abstract.constants import AppName
@@ -36,18 +37,20 @@ urlpatterns = []
 if not settings.APP_NAME or settings.APP_NAME not in [app.value for app in AppName]:
     raise Exception(_("Please set app correct name same as abstract.constants.AppName"))
 
-# For only admin
-urls_admin = [
-    path("jet/", include("jet.urls", "jet")),
-    path("jet/dashboard/", include("jet.dashboard.urls", "jet-dashboard")),
-]
 
 if settings.APP_NAME == AppName.ADMIN.name:
-    urlpatterns += urls_admin
-else:
-    urlpatterns += []
-    urlpatterns += urls_admin
-urlpatterns += i18n_patterns(path("admin/", admin.site.urls))
+    # Only for admin
+    urlpatterns += [
+        path("jet/", include("jet.urls", "jet")),
+        path("jet/dashboard/", include("jet.dashboard.urls", "jet-dashboard")),
+        path("api/schema", SpectacularAPIView.as_view(), name="schema_api"),
+        path(
+            "api/schema/docs",
+            SpectacularSwaggerSplitView.as_view(url_name="schema_api"),
+        ),
+    ]
+    urlpatterns += i18n_patterns(path("admin/", admin.site.urls))
+    urlpatterns += [path("users/", include("apps.users.urls", namespace="users"))]
 
 
 # *Settings Debug

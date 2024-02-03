@@ -47,6 +47,9 @@ DEFAULT_APPS = [
 THIRD_PARTY_APPS = [
     "django_cleanup",
     "django_extensions",
+    "rest_framework",
+    "drf_spectacular",
+    "djmoney",
 ]
 
 # !Created Apps
@@ -205,3 +208,17 @@ JET_THEMES = [
 # EMAIL_HOST_USER = config("EMAIL_HOST_USER")
 # EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD")
 # DEFAULT_FROM_EMAIL = config("DEFAULT_FROM_EMAIL")
+
+
+# !Rest Framework
+REST_FRAMEWORK = {
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+}
+
+# !SPECTACULAR_SETTINGS
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Django DRF Ecommerce",
+    "DESCRIPTION": "This project purpose creating ecommerce api for business company",
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
+}

@@ -47,6 +47,9 @@ jobs:
       - name: Run tests
         run: poetry run manage.py test apps
 
+      - name: Run tests with pytest
+        run: poetry run pytest --cov=./ --cov-report=html
+
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
         with:
