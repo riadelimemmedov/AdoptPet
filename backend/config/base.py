@@ -15,7 +15,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 APP_NAME = "ADMIN"  # Default ADMIN,BOOK
 
 # !SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config("SECRET_KEY")
+SECRET_KEY = config(
+    "SECRET_KEY",
+    default="django-insecure-97(!!1=_(2xgj%)pp2&6bn8x@0^g6b1ps5ea24*i2tnc-!3%tq",
+)
 
 
 # !# PROD, LOCAL, DEV
@@ -53,9 +56,7 @@ THIRD_PARTY_APPS = [
 ]
 
 # !Created Apps
-CREATED_APPS = [
-    "apps.users",
-]
+CREATED_APPS = ["apps.users"]
 
 # !Installed Apps
 INSTALLED_APPS = DEFAULT_APPS + CREATED_APPS + THIRD_PARTY_APPS
