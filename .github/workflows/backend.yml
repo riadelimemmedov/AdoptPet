@@ -45,7 +45,7 @@ jobs:
           python -m poetry install
 
       - name: Set django settings path
-        run: $env:DJANGO_SETTINGS_MODULE="config.settings"
+        run: export DJANGO_SETTINGS_MODULE="config.settings"
 
       - name: Run tests
         run: poetry run pytest .
