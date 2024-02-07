@@ -44,8 +44,11 @@ jobs:
         run: |
           python -m poetry install
 
+      - name: Set django settings path
+        run: $env:DJANGO_SETTINGS_MODULE="config.settings"
+
       - name: Run tests
-        run: poetry run manage.py test apps
+        run: poetry run pytest .
 
       - name: Run tests with pytest
         run: poetry run pytest --cov=./ --cov-report=xml

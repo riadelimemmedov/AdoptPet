@@ -7,7 +7,7 @@ from rest_framework.test import APIClient
 register(factories.UserFactory)
 
 
-#! api_client
+# !api_client
 @pytest.fixture
 def api_client():
     return APIClient
