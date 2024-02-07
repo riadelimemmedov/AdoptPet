@@ -13,8 +13,8 @@ jobs:
       matrix:
         python-version: [3.10.0]
         poetry-version: [1.7.1]
-        os: [ubuntu-22.04]
-    runs-on: ubuntu-22.04
+        os: [windows-latest]
+    runs-on: windows-latest
     defaults:
       run:
         working-directory: backend/
@@ -45,7 +45,7 @@ jobs:
           python -m poetry install
 
       - name: Set django settings path
-        run: export DJANGO_SETTINGS_MODULE="config.settings"
+        run: echo "DJANGO_SETTINGS_MODULE=config.settings" >> $GITHUB_ENV
 
       - name: Run tests
         run: poetry run pytest .
