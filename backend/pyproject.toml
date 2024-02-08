@@ -52,3 +52,6 @@ include_trailing_comma = true
 line_length = 88
 multi_line_output = 3
 known_first_party = ["config"]
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "config.settings"
