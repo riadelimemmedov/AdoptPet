@@ -46,7 +46,7 @@ jobs:
 
       - name: Set django settings path
         run: |
-          echo "DJANGO_SETTINGS_MODULE=config.settings" >> $env:GITHUB_ENV"
+          echo "DJANGO_SETTINGS_MODULE=config.settings" >> $env:GITHUB_ENV
 
       - name: Run tests
         run: poetry run pytest .
