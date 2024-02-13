@@ -21,9 +21,5 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     objects = CustomUserManager()
 
-    class Meta:
-        verbose_name = "Custom User"
-        verbose_name_plural = "Custom Users"
-
     def __str__(self):
         return self.email

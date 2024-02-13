@@ -1,5 +1,9 @@
 import factory
 from django.contrib.auth import get_user_model
+from django.db.models.signals import post_save
+
+from abstract.constants import Genders, Status, Types
+from apps.user_profile.models import Profile
 
 # *User
 
@@ -29,3 +33,18 @@ class UserFactory(factory.django.DjangoModelFactory):
             kwargs["is_staff"] = True
             kwargs["is_superuser"] = True
         return super().create(**kwargs)
+
+
+@factory.django.mute_signals(post_save)
+class ProfileFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = Profile
+
+    # user = factory.SubFactory(UserFactory, profile=None)
+
+    first_name = "Joe"
+    last_name = "Doe"
+    profile_key = "abc123"
+    account_type = Types[1][0]
+    status = Status[1][0]
+    gender = Genders[1][0]

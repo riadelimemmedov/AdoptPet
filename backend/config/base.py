@@ -56,7 +56,7 @@ THIRD_PARTY_APPS = [
 ]
 
 # !Created Apps
-CREATED_APPS = ["apps.users"]
+CREATED_APPS = ["apps.users", "apps.user_profile"]
 
 # !Installed Apps
 INSTALLED_APPS = DEFAULT_APPS + CREATED_APPS + THIRD_PARTY_APPS
@@ -106,20 +106,20 @@ WSGI_APPLICATION = "config.wsgi.application"
 # AUTH_USER_MODEL = 'account.Account'
 
 # !Auth Password Validators
-AUTH_PASSWORD_VALIDATORS = [
-    {
-        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
-    },
-]
+# AUTH_PASSWORD_VALIDATORS = [
+#     {
+#         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
+#     },
+#     {
+#         "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
+#     },
+#     {
+#         "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
+#     },
+#     {
+#         "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
+#     },
+# ]
 
 # !Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
