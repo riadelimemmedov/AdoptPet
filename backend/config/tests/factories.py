@@ -35,12 +35,13 @@ class UserFactory(factory.django.DjangoModelFactory):
         return super().create(**kwargs)
 
 
+# !ProfileFactory
 @factory.django.mute_signals(post_save)
 class ProfileFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Profile
 
-    # user = factory.SubFactory(UserFactory, profile=None)
+    user = factory.SubFactory(UserFactory)
 
     first_name = "Joe"
     last_name = "Doe"
@@ -48,3 +49,4 @@ class ProfileFactory(factory.django.DjangoModelFactory):
     account_type = Types[1][0]
     status = Status[1][0]
     gender = Genders[1][0]
+    is_active = False

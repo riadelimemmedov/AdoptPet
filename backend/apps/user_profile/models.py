@@ -11,6 +11,15 @@ from config.helpers import setFullName
 # Create your models here.
 
 
+# *ActiveQueryset
+class ActiveQueryset(models.QuerySet):
+    def get_is_active(self):
+        return self.filter(is_active=True)
+
+    def get_is_active_count(self):
+        return self.filter(is_active=True).count()
+
+
 # !Profile
 class Profile(models.Model):
     user = models.OneToOneField(
@@ -31,6 +40,9 @@ class Profile(models.Model):
     city = models.CharField(_("City"), max_length=50, null=True, blank=True)
     adress = models.CharField(_("Adress"), max_length=50, null=True, blank=True)
     additional_information = models.TextField(_("Additional Information"), blank=True)
+    is_active = models.BooleanField(_("Is active"), default=False)
+
+    objects = ActiveQueryset.as_manager()
 
     # photo = models.ImageField(
     #     _("Photo"),

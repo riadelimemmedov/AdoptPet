@@ -8,6 +8,11 @@ pytestmark = pytest.mark.django_db
 
 # !TestUsersManagers
 class TestUsersManagers:
+
+    def test_str_method(self, user_factory):
+        user = user_factory.create_user(email="normal_user@gmail.com", password="foo")
+        assert user.__str__() == "normal_user@gmail.com"
+
     def test_create_user(self, user_factory):
         user = user_factory.create_user(email="normal_user@gmail.com", password="foo")
         assert user.email == "normal_user@gmail.com"
