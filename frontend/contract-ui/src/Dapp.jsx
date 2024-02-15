@@ -13,10 +13,10 @@ function Dapp() {
   return (
     <>
       <div className="container">
-        <TxError/>
+        {/*<TxError/>*/}
         <br />
         <div className="navbar-container">
-        <Navbar/>
+          <Navbar/>
         </div>
         <div className="items">
           <PetItem/>

@@ -1,36 +1,39 @@
+import { ToastContainer, toast } from 'react-toastify';
+
 //*PetItem
 export function PetItem(){
     //return jsx to client
+    const notify = () => toast("Wow so easy!");
+
+    //return jsx to client
     return (
         <>
-            <div className="item">
-                <div className="image">
-                    <img
-                        src="https://images.unsplash.com/photo-1537019575197-df34a13f342c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1338&q=40"
-                        alt="">
-                    </img>
-                </div>
-                <div className="info-holder">
-                    <div>
-                        <b>Name:</b> Rocky
+            <div className="max-w-5xl mx-auto mt-20">
+                <div className="grid grid-cols-2 gap-5 text-center mt-4 mb-10">
+                    <div className="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl">
+                        <div className="md:flex">
+                            <div className="md:shrink-0">
+                                <img className="h-48 w-full object-cover md:h-full md:w-48" src="https://placedog.net/300/200/11" alt="Modern building architecture"/>
+                            </div>
+                            <div className="p-8">
+                                <div className="grid-rows-4 grid-flow-col gap-4 text-left">
+                                    <span className='font-bold text-gray-500'>Name: </span><span>Frieda</span><br />
+                                    <hr />
+                                    <span className='font-bold text-gray-500'>Age: </span><span> 3</span><br />
+                                    <hr />
+                                    <span className='font-bold text-gray-500'>Breed: </span><span> Scottish Terrier</span><br />
+                                    <hr />
+                                    <span className='font-bold text-gray-500'>Location: </span><span> Lisco,Alabama</span><br />
+                                    <hr />
+                                    <span className='font-bold text-gray-500'>Age: </span><span> 3</span><br />
+                                    <hr />
+                                    <span className='font-bold text-gray-500'>Description: </span><span> Lorem ipsum dolor sit amet consectetur, adipisicing elit. Eaque maiores, veniam velit exercitationem totam quibusdam nam harum facilis accusamus nulla.</span><br />
+                                    <hr />
+                                </div>
+                                <button className="bg-sky-300 mt-4 hover:bg-sky-400 rounded py-2 w-full">Adopt Now</button>
+                            </div>
+                        </div>
                     </div>
-                    <div>
-                        <b>Age:</b> 3
-                    </div>
-                    <div>
-                        <b>Breed:</b> German Shepherd
-                    </div>
-                    <div>
-                        <b>Location:</b> Burlington, Vermont
-                    </div>
-                    <div>
-                        <b>Description:</b> Rocky is a loyal and obedient German Shepherd
-                        who will do anything to protect his family. He loves to play fetch
-                        and go on long walks.
-                    </div>
-                </div>
-                <div className="action-menu">
-                    <button className="action-button">Adopt</button>
                 </div>
             </div>
         </>
