@@ -6,4 +6,10 @@
         "--line-length",//how long to be each line our code,well know we limited our code length each line when formatting code using black
         "120",//length each line
     ],
+    "[javascript]": {
+        "editor.formatOnSave": false
+    },
+    "[javascriptreact]": {
+        "editor.formatOnSave": false
+    }
 }

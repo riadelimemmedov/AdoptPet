@@ -17,3 +17,12 @@ Status = [("ACTIVE", _("active")), ("INACTIVE", _("inactive"))]
 
 # !Genders
 Genders = [("MALE", _("male")), ("FEMALE", _("female"))]
+
+# !Genders Pet
+GendersPet = [
+    ("MALE", _("male")),
+    ("FEMALE", _("female")),
+    ("Neutered ", _("neutered ")),
+    ("Spayed", _("spayed")),
+    ("Other", _("other")),
+]

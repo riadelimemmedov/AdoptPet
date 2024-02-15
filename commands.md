@@ -39,7 +39,7 @@ Backend
   - `poetry run pytest --cov=./ --cov-report=html`
 - Check code formatting is needed or not:
   - `poetry run black . --check`
-- Sort imports using isort with Black profile:
+- Sor t imports using isort with Black profile:
   - `poetry run isort . --profile black`
 - Check code style with Flake8:
   - `poetry run flake8 .`
