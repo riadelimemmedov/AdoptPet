@@ -2,6 +2,8 @@ import pytest
 from django.core.exceptions import ValidationError
 from django.db import IntegrityError, transaction
 
+from config.helpers import is_valid_wallet_address
+
 # *If you don't declare pytestmark our test class model don't accsess to database table
 pytestmark = pytest.mark.django_db
 
@@ -12,6 +14,19 @@ class TestUsersManagers:
     def test_str_method(self, user_factory):
         user = user_factory.create_user(email="normal_user@gmail.com", password="foo")
         assert user.__str__() == "normal_user@gmail.com"
+
+    def test_valid_wallet_address(self):
+        address = "0xCeD6ADEbbdDB8fE9AC85C359EbB5BEe0c03F67C2"
+        assert is_valid_wallet_address(address) is True
+
+    def test_invalid_metamask_address(self):
+        address = "0xCetyythda7788aX"
+        with pytest.raises(ValidationError):
+            is_valid_wallet_address(address)
+
+    def test_empty_wallet_address(self):
+        address = ""
+        assert is_valid_wallet_address(address) == ""
 
     def test_create_user(self, user_factory):
         user = user_factory.create_user(email="normal_user@gmail.com", password="foo")

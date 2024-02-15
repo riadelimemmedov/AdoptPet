@@ -53,10 +53,11 @@ THIRD_PARTY_APPS = [
     "rest_framework",
     "drf_spectacular",
     "djmoney",
+    "colorfield",
 ]
 
 # !Created Apps
-CREATED_APPS = ["apps.users", "apps.user_profile"]
+CREATED_APPS = ["apps.users", "apps.user_profile", "apps.pet"]
 
 # !Installed Apps
 INSTALLED_APPS = DEFAULT_APPS + CREATED_APPS + THIRD_PARTY_APPS
