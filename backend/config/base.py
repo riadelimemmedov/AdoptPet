@@ -227,7 +227,7 @@ SPECTACULAR_SETTINGS = {
 }
 
 # !S3 Storage
-USE_S3 = config("USE_S3", default=True, cast=bool)
+USE_S3 = config("USE_S3", cast=bool)
 if USE_S3:
     # aws settings
     AWS_ACCESS_KEY_ID = config("AWS_ACCESS_KEY_ID")
