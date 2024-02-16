@@ -6,6 +6,7 @@ from rest_framework.test import APIClient
 # Register UserFactork for create fake data
 register(factories.UserFactory)
 register(factories.ProfileFactory)
+register(factories.PetFactory)
 
 
 # !api_client

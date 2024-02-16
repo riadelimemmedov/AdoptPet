@@ -3,36 +3,5 @@ info:
   title: Django DRF Ecommerce
   version: 1.0.0
   description: This project purpose creating ecommerce api for business company
-paths:
-  /users/sayhello/:
-    get:
-      operationId: users_sayhello_retrieve
-      tags:
-      - users
-      security:
-      - cookieAuth: []
-      - basicAuth: []
-      - {}
-      responses:
-        '200':
-          description: No response body
-    post:
-      operationId: users_sayhello_create
-      tags:
-      - users
-      security:
-      - cookieAuth: []
-      - basicAuth: []
-      - {}
-      responses:
-        '200':
-          description: No response body
-components:
-  securitySchemes:
-    basicAuth:
-      type: http
-      scheme: basic
-    cookieAuth:
-      type: apiKey
-      in: cookie
-      name: sessionid
+paths: {}
+components: {}

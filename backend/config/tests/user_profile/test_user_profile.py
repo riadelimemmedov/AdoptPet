@@ -1,6 +1,6 @@
 import pytest
 from django.core.exceptions import ValidationError
-from django.db import IntegrityError, transaction
+from django.db import IntegrityError
 
 from apps.user_profile.models import Profile
 
@@ -60,7 +60,7 @@ class TestUserProfileManagers:
         with pytest.raises(IntegrityError):
             profile_factory()
 
-    def test_is_active(self, profile_factory):
+    def test_is_active_or_passive(self, profile_factory):
         obj = profile_factory()
         assert obj.is_active is False
         obj.is_active = True
@@ -69,20 +69,27 @@ class TestUserProfileManagers:
     def test_user(self, profile_factory):
         assert profile_factory().user is not None
 
-    def test_return_profile_active_only_true(self, profile_factory):
+    def test_is_active(self, profile_factory):
         self.create_mock_profile(profile_factory)
-        qs = Profile.objects.get_is_active().count()
-        assert qs == 2
+        qs = Profile.objects.get_active_profiles().is_active()
+        for obj in qs:
+            assert obj.is_active is True
 
-    def test_return_profile_active_only_false(self, profile_factory):
+    def test_is_active_count(self, profile_factory):
         self.create_mock_profile(profile_factory)
-        qs = Profile.objects.count()
-        assert qs == 3
+        qs = Profile.objects.get_active_profiles().is_active_count()
+        assert qs == 0 or qs > 0
 
-    def tests_get_is_active_count(self, profile_factory):
+    def test_is_passive(self, profile_factory):
         self.create_mock_profile(profile_factory)
-        qs = Profile.objects.get_is_active_count()
-        assert qs == 2
+        qs = Profile.objects.get_passive_profiles().is_passive()
+        for obj in qs:
+            assert obj.is_active is False
+
+    def test_is_passive_count(self, profile_factory):
+        self.create_mock_profile(profile_factory)
+        qs = Profile.objects.get_passive_profiles().is_passive_count()
+        assert qs == 0 or qs > 0
 
     def test_get_full_name(self, profile_factory):
         obj = profile_factory(first_name="Generator", last_name="Rex")

@@ -54,10 +54,11 @@ THIRD_PARTY_APPS = [
     "drf_spectacular",
     "djmoney",
     "colorfield",
+    "storages",
 ]
 
 # !Created Apps
-CREATED_APPS = ["apps.users", "apps.user_profile", "apps.pet"]
+CREATED_APPS = ["apps.users", "apps.user_profile", "apps.pet", "apps.upload"]
 
 # !Installed Apps
 INSTALLED_APPS = DEFAULT_APPS + CREATED_APPS + THIRD_PARTY_APPS
@@ -160,8 +161,8 @@ if ENVIRONMENT == "LOCAL" or ENVIRONMENT == "PROD":
 
 
 # !MediuUrl and MediaRoot
-MEDIA_URL = "/media/"
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+# MEDIA_URL = "/media/"
+# MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 
 # !Jet Themes
@@ -224,3 +225,21 @@ SPECTACULAR_SETTINGS = {
     "VERSION": "1.0.0",
     "SERVE_INCLUDE_SCHEMA": False,
 }
+
+# !S3 Storage
+USE_S3 = config("USE_S3", default=True, cast=bool)
+if USE_S3:
+    # aws settings
+    AWS_ACCESS_KEY_ID = config("AWS_ACCESS_KEY_ID")
+    AWS_SECRET_ACCESS_KEY = config("AWS_SECRET_ACCESS_KEY")
+    AWS_STORAGE_BUCKET_NAME = config("AWS_STORAGE_BUCKET_NAME")
+    AWS_DEFAULT_ACL = None
+    AWS_S3_ENDPOINT_URL = config("AWS_S3_ENDPOINT_URL")
+    AWS_S3_OBJECT_PARAMETERS = {"CacheControl": "max-age=86400"}
+    # s3 public media settings
+    PUBLIC_MEDIA_LOCATION = "media"
+    MEDIA_URL = f"{AWS_S3_ENDPOINT_URL}media/"
+    DEFAULT_FILE_STORAGE = "config.storage_backends.PublicMediaStorage"
+else:
+    MEDIA_URL = "/mediafiles/"
+    MEDIA_ROOT = os.path.join(BASE_DIR, "mediafiles")

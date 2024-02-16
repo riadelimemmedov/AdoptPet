@@ -1,8 +1,10 @@
+from django.core.validators import FileExtensionValidator
 from django.db import models
 from django.db.models.signals import post_save
 from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 from django_extensions.db.fields import RandomCharField
+from django_extensions.db.models import TimeStampedModel
 
 from abstract.constants import Genders, Status, Types
 from apps.users.models import CustomUser
@@ -13,15 +15,33 @@ from config.helpers import setFullName
 
 # *ActiveQueryset
 class ActiveQueryset(models.QuerySet):
-    def get_is_active(self):
+    def is_active(self):
         return self.filter(is_active=True)
 
-    def get_is_active_count(self):
+    def is_active_count(self):
         return self.filter(is_active=True).count()
 
 
+# *PassiveQueryset
+class PassiveQueryset(models.QuerySet):
+    def is_passive(self):
+        return self.filter(is_active=False)
+
+    def is_passive_count(self):
+        return self.filter(is_active=False).count()
+
+
+# *ProfileManager
+class ProfileManager(models.Manager):
+    def get_active_profiles(self):
+        return ActiveQueryset(self.model, using=self._db)
+
+    def get_passive_profiles(self):
+        return PassiveQueryset(self.model, using=self._db)
+
+
 # !Profile
-class Profile(models.Model):
+class Profile(TimeStampedModel):
     user = models.OneToOneField(
         CustomUser, verbose_name=_("User"), on_delete=models.CASCADE, null=True
     )
@@ -42,15 +62,13 @@ class Profile(models.Model):
     additional_information = models.TextField(_("Additional Information"), blank=True)
     is_active = models.BooleanField(_("Is active"), default=False)
 
-    objects = ActiveQueryset.as_manager()
+    objects = ProfileManager()
 
-    # photo = models.ImageField(
-    #     _("Photo"),
-    #     upload_to="account",
-    #     blank=True,
-    #     null=True,
-    #     validators=[FileExtensionValidator(["png", "jpg", "jpeg"])],
-    # )
+    profile_photo_url = models.FileField(
+        _("Profile photo"),
+        blank=True,
+        validators=[FileExtensionValidator(allowed_extensions=["png", "jpg", "jpeg"])],
+    )
 
     account_type = models.CharField(
         _("Account type"),

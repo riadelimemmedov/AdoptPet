@@ -1,8 +1,10 @@
 import factory
 from django.contrib.auth import get_user_model
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.db.models.signals import post_save
 
 from abstract.constants import Genders, Status, Types
+from apps.pet.models import Pet
 from apps.user_profile.models import Profile
 
 # *User
@@ -50,3 +52,21 @@ class ProfileFactory(factory.django.DjangoModelFactory):
     status = Status[1][0]
     gender = Genders[1][0]
     is_active = False
+
+
+# !PetFactory
+class PetFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = Pet
+
+    name = "Max"
+    age = 3
+    breed = "Labrador"
+    color = "#D859FF"
+    weight = 25.5
+    gender = "male"
+    pet_photo_url = SimpleUploadedFile("test.jpg", b"")
+    location = "New York"
+    status = True
+    vaccinated = True
+    description = "Energetic and playful pup"

@@ -1,13 +1,42 @@
 from colorfield.fields import ColorField
+from django.core.validators import FileExtensionValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from django_extensions.db.models import TimeStampedModel
 
 from abstract.constants import GendersPet
 
 
+# *ActiveStatusQueryset
+class ActiveStatusQueryset(models.QuerySet):
+    def active_status(self):
+        return self.filter(status=True)
+
+    def active_status_count(self):
+        return self.filter(status=True).count()
+
+
+# *PassiveStatusQueryset
+class PassiveStatusQueryset(models.QuerySet):
+    def passive_status(self):
+        return self.filter(status=False)
+
+    def passive_status_count(self):
+        return self.filter(status=False).count()
+
+
+# *PetManager
+class PetManager(models.Manager):
+    def get_active_status(self):
+        return ActiveStatusQueryset(self.model, using=self._db)
+
+    def get_passive_status(self):
+        return PassiveStatusQueryset(self.model, using=self._db)
+
+
 # Create your models here.
 # !Pet
-class Pet(models.Model):
+class Pet(TimeStampedModel):
     name = models.CharField(_("Name"), max_length=50)
     age = models.IntegerField(_("Age"))
     breed = models.CharField(_("Breed"), max_length=50)
@@ -16,8 +45,22 @@ class Pet(models.Model):
     gender = models.CharField(
         _("Gender"), choices=GendersPet, default=GendersPet[4][0], max_length=50
     )
-    # image = models.ImageField(_("Image"), upload_to="images/")
+    pet_photo_url = models.FileField(
+        _("Pet photo"),
+        blank=True,
+        validators=[FileExtensionValidator(allowed_extensions=["png", "jpg", "jpeg"])],
+    )
     location = models.CharField(_("Location"), max_length=50)
     status = models.BooleanField(_("Status"), default=True)
     vaccinated = models.BooleanField(_("Vaccinated"), default=True)
     description = models.TextField(_("Description"), max_length=150)
+
+    objects = PetManager()
+
+    class Meta:
+        verbose_name = _("Pet")
+        verbose_name_plural = _("Pets")
+        ordering = ["-created"]
+
+    def __str__(self):
+        return f"{self.name} - {self.age}"

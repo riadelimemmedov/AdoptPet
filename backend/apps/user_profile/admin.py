@@ -8,5 +8,14 @@ from .models import Profile
 # !ProfileAdmin
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
-    list_display = ["user", "full_name", "country", "city", "adress", "slug"]
+    list_display = [
+        "user",
+        "full_name",
+        "country",
+        "city",
+        "adress",
+        "slug",
+        "created",
+        "modified",
+    ]
     list_display_links = ["user", "full_name"]
