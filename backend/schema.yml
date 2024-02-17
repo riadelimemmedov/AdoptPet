@@ -3,5 +3,59 @@ info:
   title: Django DRF Ecommerce
   version: 1.0.0
   description: This project purpose creating ecommerce api for business company
-paths: {}
-components: {}
+paths:
+  /upload/image/:
+    post:
+      operationId: upload_image_create
+      tags:
+      - upload
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Upload'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Upload'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Upload'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Upload'
+          description: ''
+components:
+  schemas:
+    Upload:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        upload_at:
+          type: string
+          format: date-time
+          readOnly: true
+        file:
+          type: string
+          format: uri
+      required:
+      - file
+      - id
+      - upload_at
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: sessionid

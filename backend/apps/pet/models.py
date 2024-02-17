@@ -1,10 +1,13 @@
 from colorfield.fields import ColorField
 from django.core.validators import FileExtensionValidator
 from django.db import models
+from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
+from django_extensions.db.fields import RandomCharField
 from django_extensions.db.models import TimeStampedModel
 
 from abstract.constants import GendersPet
+from config.helpers import setPetName
 
 
 # *ActiveStatusQueryset
@@ -40,6 +43,12 @@ class Pet(TimeStampedModel):
     name = models.CharField(_("Name"), max_length=50)
     age = models.IntegerField(_("Age"))
     breed = models.CharField(_("Breed"), max_length=50)
+    slug = models.SlugField(
+        _("Slug"), unique=True, db_index=True, editable=False, blank=True
+    )
+    pet_key = RandomCharField(
+        _("Pet key"), length=12, unique=True, blank=True, include_alpha=True
+    )
     color = ColorField()
     weight = models.FloatField(_("Weight"))
     gender = models.CharField(
@@ -62,6 +71,19 @@ class Pet(TimeStampedModel):
         verbose_name = _("Pet")
         verbose_name_plural = _("Pets")
         ordering = ["-created"]
+
+    def save(self, *args, **kwargs):
+        if not self.name:
+            name = setPetName(
+                self.name if self.name is not None else "",
+            )
+            is_exists = __class__.objects.filter(name=name).exists()
+            if is_exists:
+                self.name = f"{name}_{self.pet_key}"
+            else:
+                self.name = f"{name}"
+            self.slug = slugify(self.name)
+        super(Pet, self).save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.name} - {self.age}"

@@ -4,8 +4,13 @@ from django.core.exceptions import ValidationError
 
 
 # ? setFullName
-def setFullName(name, surname):
+def setFullName(name: str, surname: str) -> str:
     return f"{name} {surname}"
+
+
+# ? setPetName
+def setPetName(name: str) -> str:
+    return f"{name}"
 
 
 # ? is_valid_wallet_address

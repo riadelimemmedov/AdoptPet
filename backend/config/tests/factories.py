@@ -67,6 +67,7 @@ class PetFactory(factory.django.DjangoModelFactory):
         name = faker.name()
         age = faker.random_int(min=1, max=15)
         breed = faker.name()
+        slug = faker.random_letters(length=12)
         color = faker.hex_color()
         weight = faker.random_int(min=1, max=50)
         gender = faker.random_element(["MALE", "FEMALE"])

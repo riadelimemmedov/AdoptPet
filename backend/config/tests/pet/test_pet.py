@@ -19,6 +19,7 @@ class TestPetManagers:
             name="Max",
             age=3,
             breed="Labrador",
+            slug="yxxa77",
             color="#ff00ff",
             weight=25.5,
             gender="Male",
@@ -32,6 +33,7 @@ class TestPetManagers:
         pet_factory(
             age=2,
             breed="Golden Retriever",
+            slug="yxghjk88pa",
             color="#f9a602",
             weight=28.7,
             gender="Female",
@@ -46,6 +48,7 @@ class TestPetManagers:
             name="Charlie",
             age=4,
             breed="Beagle",
+            slug="ghjkjdha5577uj",
             color="#aabbcc",
             weight=15.2,
             gender="Male",
