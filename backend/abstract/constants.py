@@ -26,3 +26,6 @@ GendersPet = [
     ("Spayed", _("spayed")),
     ("Other", _("other")),
 ]
+
+# !Image Extension
+ImageExtension = ["png", "jpg", "jpeg"]
