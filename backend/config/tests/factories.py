@@ -2,10 +2,14 @@ import factory
 from django.contrib.auth import get_user_model
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.db.models.signals import post_save
+from faker import Faker
 
-from abstract.constants import Genders, Status, Types
+from abstract.constants import Genders, GendersPet, Status, Types
 from apps.pet.models import Pet
 from apps.user_profile.models import Profile
+
+# Faker
+faker = Faker()
 
 # *User
 
@@ -59,14 +63,18 @@ class PetFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Pet
 
-    name = "Max"
-    age = 3
-    breed = "Labrador"
-    color = "#D859FF"
-    weight = 25.5
-    gender = "male"
-    pet_photo_url = SimpleUploadedFile("test.jpg", b"")
-    location = "New York"
-    status = True
-    vaccinated = True
-    description = "Energetic and playful pup"
+    for _ in range(10):
+        name = faker.name()
+        age = faker.random_int(min=1, max=15)
+        breed = faker.name()
+        color = faker.hex_color()
+        weight = faker.random_int(min=1, max=50)
+        gender = faker.random_element(["MALE", "FEMALE"])
+        pet_photo_url = faker.file_extension(
+            category="image",
+        )
+        location = faker.address()
+        city = faker.city()
+        status = faker.boolean(chance_of_getting_true=50)
+        vaccinated = faker.boolean(chance_of_getting_true=50)
+        description = faker.text(max_nb_chars=150)

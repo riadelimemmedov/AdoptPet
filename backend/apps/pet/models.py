@@ -51,6 +51,7 @@ class Pet(TimeStampedModel):
         validators=[FileExtensionValidator(allowed_extensions=["png", "jpg", "jpeg"])],
     )
     location = models.CharField(_("Location"), max_length=50)
+    city = models.CharField(_("City"), max_length=50)
     status = models.BooleanField(_("Status"), default=True)
     vaccinated = models.BooleanField(_("Vaccinated"), default=True)
     description = models.TextField(_("Description"), max_length=150)
