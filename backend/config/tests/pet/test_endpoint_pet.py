@@ -7,15 +7,12 @@ pytestmark = pytest.mark.django_db
 
 
 # !TestPetManagers
-# class TestPetEndpoints:
-#     endpoint = "/pets/"
+class TestPetEndpoints:
+    endpoint = "/pets/"
 
-#     def test_return_all_pets(self, pet_factory_end_to_end, api_client):
-#         pet_factory_end_to_end.create_batch(4)
-#         response = api_client().get(self.endpoint, format="json")
+    def test_return_all_pets(self, pet_factory_end_to_end, api_client):
+        pet_factory_end_to_end.create_batch(4)
+        response = api_client().get(self.endpoint, format="json")
 
-#         print("Pet content", json.loads(response.content))
-#         assert response.status_code == 200
-#         assert len(json.loads(response.content)) == 4
-#         assert response.data["next"] is None
-#         assert response.data["previous"] is None
+        assert response.status_code == 200
+        assert len(json.loads(response.content)) == 4
