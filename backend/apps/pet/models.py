@@ -73,16 +73,8 @@ class Pet(TimeStampedModel):
         ordering = ["-created"]
 
     def save(self, *args, **kwargs):
-        if not self.name:
-            name = setPetName(
-                self.name if self.name is not None else "",
-            )
-            is_exists = __class__.objects.filter(name=name).exists()
-            if is_exists:
-                self.name = f"{name}_{self.pet_key}"
-            else:
-                self.name = f"{name}"
-            self.slug = slugify(self.name)
+        slug_data = f"{self.name}-{self.pet_key}"
+        self.slug = slugify(slug_data)
         super(Pet, self).save(*args, **kwargs)
 
     def __str__(self):

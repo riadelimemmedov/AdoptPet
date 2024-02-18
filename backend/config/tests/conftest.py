@@ -7,6 +7,7 @@ from rest_framework.test import APIClient
 register(factories.UserFactory)
 register(factories.ProfileFactory)
 register(factories.PetFactory)
+register(factories.PetFactoryEndToEnd)
 
 
 # !api_client

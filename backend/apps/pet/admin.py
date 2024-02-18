@@ -7,5 +7,14 @@ from .models import Pet
 # !PetAdmin
 @admin.register(Pet)
 class PetAdmin(admin.ModelAdmin):
-    list_display = ["name", "age", "breed", "color", "gender", "created", "modified"]
+    list_display = [
+        "name",
+        "age",
+        "breed",
+        "color",
+        "gender",
+        "created",
+        "modified",
+        "slug",
+    ]
     list_display_links = ["name", "age"]

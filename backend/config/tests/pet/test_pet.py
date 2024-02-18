@@ -65,6 +65,12 @@ class TestPetManagers:
         assert obj.__str__() is not None
         TruncateTestData(Pet)
 
+    def test_slug(self, pet_factory):
+        obj = pet_factory(name="rex", pet_key="iamptoswoqgy")
+        obj.save()
+        assert obj.slug == f"{obj.name}-{obj.pet_key.lower()}"
+        TruncateTestData(Pet)
+
     def test_max_length_method(self, pet_factory):
         name = "a" * 50
         breed = "b" * 50

@@ -79,3 +79,27 @@ class PetFactory(factory.django.DjangoModelFactory):
         status = faker.boolean(chance_of_getting_true=50)
         vaccinated = faker.boolean(chance_of_getting_true=50)
         description = faker.text(max_nb_chars=150)
+
+
+# !PetFactoryEndToEnd
+class PetFactoryEndToEnd(factory.django.DjangoModelFactory):
+    class Meta:
+        model = Pet
+
+    name = factory.LazyAttribute(lambda _: faker.name())
+    age = factory.LazyAttribute(lambda _: faker.random_int(min=1, max=15))
+    breed = factory.LazyAttribute(lambda _: faker.name())
+    slug = factory.LazyAttribute(lambda _: faker.random_letters(length=12))
+    color = factory.LazyAttribute(lambda _: faker.hex_color())
+    weight = factory.LazyAttribute(lambda _: faker.random_int(min=1, max=50))
+    gender = factory.LazyAttribute(lambda _: faker.random_element(["MALE", "FEMALE"]))
+    pet_photo_url = factory.LazyAttribute(
+        lambda _: faker.file_extension(category="image")
+    )
+    location = factory.LazyAttribute(lambda _: faker.address())
+    city = factory.LazyAttribute(lambda _: faker.city())
+    status = factory.LazyAttribute(lambda _: faker.boolean(chance_of_getting_true=50))
+    vaccinated = factory.LazyAttribute(
+        lambda _: faker.boolean(chance_of_getting_true=50)
+    )
+    description = factory.LazyAttribute(lambda _: faker.text(max_nb_chars=150))

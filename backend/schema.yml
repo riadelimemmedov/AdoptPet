@@ -4,6 +4,22 @@ info:
   version: 1.0.0
   description: This project purpose creating ecommerce api for business company
 paths:
+  /pets/:
+    get:
+      operationId: pets_retrieve
+      tags:
+      - pets
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pet'
+          description: ''
   /upload/image/:
     post:
       operationId: upload_image_create
@@ -34,6 +50,88 @@ paths:
           description: ''
 components:
   schemas:
+    GenderEnum:
+      enum:
+      - MALE
+      - FEMALE
+      - 'Neutered '
+      - Spayed
+      - Other
+      type: string
+      description: "* `MALE` - male\n* `FEMALE` - female\n* `Neutered ` - neutered\
+        \ \n* `Spayed` - spayed\n* `Other` - other"
+    Pet:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        modified:
+          type: string
+          format: date-time
+          readOnly: true
+        name:
+          type: string
+          maxLength: 50
+        age:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          format: int64
+        breed:
+          type: string
+          maxLength: 50
+        slug:
+          type: string
+          readOnly: true
+          pattern: ^[-a-zA-Z0-9_]+$
+        pet_key:
+          type: string
+          readOnly: true
+        color:
+          type: string
+          pattern: ^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
+          maxLength: 25
+        weight:
+          type: number
+          format: double
+        gender:
+          $ref: '#/components/schemas/GenderEnum'
+        pet_photo_url:
+          type: string
+          format: uri
+          title: Pet photo
+          pattern: (?:png|jpg|jpeg)$
+        location:
+          type: string
+          maxLength: 50
+        city:
+          type: string
+          maxLength: 50
+        status:
+          type: boolean
+        vaccinated:
+          type: boolean
+        description:
+          type: string
+          maxLength: 150
+      required:
+      - age
+      - breed
+      - city
+      - created
+      - description
+      - id
+      - location
+      - modified
+      - name
+      - pet_key
+      - slug
+      - weight
     Upload:
       type: object
       properties:
