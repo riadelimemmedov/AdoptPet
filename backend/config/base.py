@@ -240,6 +240,13 @@ if USE_S3:
     PUBLIC_MEDIA_LOCATION = "media"
     MEDIA_URL = f"{AWS_S3_ENDPOINT_URL}media/"
     DEFAULT_FILE_STORAGE = "config.storage_backends.PublicMediaStorage"
+    # s3 private media settings
+    PRIVATE_MEDIA_LOCATION = "private"
+    PRIVATE_FILE_STORAGE = "config.storage_backends.PrivateMediaStorage"
 else:
     MEDIA_URL = "/mediafiles/"
     MEDIA_ROOT = os.path.join(BASE_DIR, "mediafiles")
+
+
+# !FORMS_URLFIELD_ASSUME_HTTPS
+FORMS_URLFIELD_ASSUME_HTTPS = True
