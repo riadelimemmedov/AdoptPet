@@ -131,7 +131,7 @@ class PetDetailAPIView(APIView):
         serializer = self.serializer_class(pet, data=request.data)
         if serializer.is_valid():
             pet = serializer.save()
-            return Response(self.serializer_class(pet).data)
+            return Response(self.serializer_class(pet).data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, slug):
