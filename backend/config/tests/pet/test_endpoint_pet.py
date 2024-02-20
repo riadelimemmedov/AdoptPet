@@ -209,7 +209,6 @@ class TestPetEndpoints:
         The test should pass if the API successfully deletes the existing pet object, returning the correct status codes indicating deletion and absence of the pet object.
 
         """
-
         obj = pet_factory_end_to_end.create_batch(1)
 
         response = api_client().get(f"{self.endpoint}{obj[0].slug}/", format="json")
