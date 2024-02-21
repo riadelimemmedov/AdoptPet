@@ -41,6 +41,7 @@ if not settings.APP_NAME or settings.APP_NAME not in [app.value for app in AppNa
 if settings.APP_NAME == AppName.ADMIN.name:
     # Only for admin
     urlpatterns += [
+        path("__debug__/", include("debug_toolbar.urls")),
         path("jet/", include("jet.urls", "jet")),
         path("jet/dashboard/", include("jet.dashboard.urls", "jet-dashboard")),
         path("api/schema", SpectacularAPIView.as_view(), name="schema_api"),

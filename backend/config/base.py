@@ -1,3 +1,4 @@
+import mimetypes
 import os
 from pathlib import Path
 
@@ -55,6 +56,7 @@ THIRD_PARTY_APPS = [
     "djmoney",
     "colorfield",
     "storages",
+    "debug_toolbar",
 ]
 
 # !Created Apps
@@ -70,6 +72,7 @@ AUTH_USER_MODEL = "users.CustomUser"
 
 # !Middleware
 MIDDLEWARE = [
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -158,6 +161,13 @@ if ENVIRONMENT == "LOCAL" or ENVIRONMENT == "PROD":
     STATIC_ROOT = os.path.join(BASE_DIR, "static")
 # else:#if site deployed to production
 #     STATIC_ROOT = os.path.join(BASE_DIR,'static')#for production
+
+
+# !Django Debug Toolbar
+if ENVIRONMENT == "LOCAL":
+    INTERNAL_IPS = [
+        "127.0.0.1",
+    ]
 
 
 # !MediuUrl and MediaRoot
@@ -250,3 +260,12 @@ else:
 
 # !FORMS_URLFIELD_ASSUME_HTTPS
 FORMS_URLFIELD_ASSUME_HTTPS = True
+
+
+# !Configure mimetypes
+mimetypes.add_type("application/javascript", ".js", True)
+
+# !Settings up Debug Toolbar
+DEBUG_TOOLBAR_CONFIG = {
+    "INTERCEPT_REDIRECTS": False,
+}
