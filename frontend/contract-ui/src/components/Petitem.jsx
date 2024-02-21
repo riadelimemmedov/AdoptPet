@@ -13,7 +13,7 @@ export function PetItem(){
                     <div className="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl">
                         <div className="md:flex">
                             <div className="md:shrink-0">
-                                <img className="h-48 w-full object-cover md:h-full md:w-48" src="https://placedog.net/300/200/11" alt="Modern building architecture"/>
+                                <img className="h-48 w-full object-fill md:h-full md:w-48" src="https://placedog.net/300/200/11" alt="Modern building architecture"/>
                             </div>
                             <div className="p-8">
                                 <div className="grid-rows-4 grid-flow-col gap-4 text-left">
