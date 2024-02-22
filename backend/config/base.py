@@ -81,6 +81,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     # "apps.account.middleware.RedirectAuthenticatedMiddleware",
+    "middleware.metric.metric_middleware",
 ]
 
 # !Root UrlConf

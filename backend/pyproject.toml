@@ -34,6 +34,7 @@ django-lifecycle = "^1.1.2"
 django-redis = "^5.4.0"
 redis = "^5.0.1"
 gunicorn = "^21.2.0"
+waitress = "^3.0.0"
 
 
 [tool.poetry.group.dev.dependencies]

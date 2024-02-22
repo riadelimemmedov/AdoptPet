@@ -59,3 +59,7 @@ Backend
 - `poetry run pre-commit run --all-files`
 - Generate api schema
 - `poetry run manage.py spectacular --file schema.yml`
+- Configure waitress
+- `poetry run waitress-serve --listen=*:8000 config.wsgi:application`
+- Stress test using Apache Benchmark
+- `./ab -c 10 -n 20 http://127.0.0.1:8000/pets/`
