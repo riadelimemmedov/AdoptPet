@@ -159,11 +159,10 @@ class TestPetEndpoints:
         obj = pet_factory_end_to_end.create_batch(1, name="Rex", pet_key="uuxx12345jky")
 
         response = api_client().get(f"{self.endpoint}{obj[0].slug}/", format="json")
+
         if obj[0].pet_photo_url not in ImageExtension:
-            print("Invalid file extension.")
             assert False
         else:
-            print("Valid file extension.")
             assert True
 
         data = {

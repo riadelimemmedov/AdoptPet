@@ -11,7 +11,7 @@ export function Navbar(){
                         <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTg54kp7Ls5r0xQADKRDYdgZl7trqbByWip-A&usqp=CAU" className="h-8" alt="Flowbite Logo" />
                         <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Adopt Pet</span>
                     </a>
-                    <div className="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
+                    <div className="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse -mr-56">
                         <button type="button" className="flex text-sm bg-gray-800 rounded-full md:me-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" id="user-menu-button" aria-expanded="false" data-dropdown-toggle="user-dropdown" data-dropdown-placement="bottom">
                             <img className="w-8 h-8 rounded-full" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQIf4R5qPKHPNMyAqV-FjS_OTBB8pfUV29Phg&usqp=CAU" alt="user photo"/>
                         </button>
