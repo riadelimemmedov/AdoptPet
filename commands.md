@@ -63,3 +63,6 @@ Backend
 - `poetry run waitress-serve --listen=*:8000 config.wsgi:application`
 - Stress test using Apache Benchmark
 - `./ab -c 10 -n 20 http://127.0.0.1:8000/pets/`
+
+- `./ab -c 10 -n 20 http://localhost:8000/pets/`
+  chmod +x ./ab.exe

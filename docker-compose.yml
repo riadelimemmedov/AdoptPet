@@ -18,14 +18,14 @@ services:
     container_name: redis
     image: redis:alpine
 
-  frontend:
-    container_name: frontend
-    build: ./frontend/contract-ui/
-    ports:
-      - 5173:8001 #http://localhost:5173/
-    working_dir: /frontend/contract-ui/
-    volumes:
-      - type: bind
-        source: ./frontend/contract-ui/
-        target: /frontend/contract-ui/
-    tty: true
+  # frontend:
+  #   container_name: frontend
+  #   build: ./frontend/contract-ui/
+  #   ports:
+  #     - 5173:8001 #http://localhost:5173/
+  #   working_dir: /frontend/contract-ui/
+  #   volumes:
+  #     - type: bind
+  #       source: ./frontend/contract-ui/
+  #       target: /frontend/contract-ui/
+  #   tty: true

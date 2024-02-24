@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 from django.shortcuts import render
+from django.views.decorators.cache import cache_page
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -17,6 +18,7 @@ class PetView(APIView):
 
     serializer_class = PetSerializer
 
+    # @cache_page(60)
     def get(self, request):
         """
         Retrieve a list of all pets.
@@ -28,6 +30,7 @@ class PetView(APIView):
             Response: A response object containing the serialized data of all pets and the HTTP status code.
         """
         pets = Pet.objects.all()
+        print("Cached dataaaaa")
         serializer = self.serializer_class(pets, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
