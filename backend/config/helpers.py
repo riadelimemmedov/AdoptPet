@@ -21,3 +21,8 @@ def is_valid_wallet_address(wallet_address: str):
     elif not re.match(pattern, wallet_address):
         raise ValidationError("Invalid MetaMask address.")
     return True
+
+
+# ?show_toolbar
+def show_toolbar(request):
+    return True

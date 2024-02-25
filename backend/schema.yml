@@ -7,6 +7,14 @@ paths:
   /pets/:
     get:
       operationId: pets_retrieve
+      description: |-
+        Retrieve a list of all pets.
+
+        Parameters:
+            request (HttpRequest): The HTTP request object.
+
+        Returns:
+            Response: A response object containing the serialized data of all pets and the HTTP status code.
       tags:
       - pets
       security:
@@ -20,6 +28,160 @@ paths:
               schema:
                 $ref: '#/components/schemas/Pet'
           description: ''
+    post:
+      operationId: pets_create
+      description: |-
+        Create a new pet.
+
+        Parameters:
+            request (HttpRequest): The HTTP request object.
+            format (str): The format of the request data (optional).
+
+        Returns:
+            Response: A response object containing the serialized data of the created pet and the HTTP status code.
+      tags:
+      - pets
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Pet'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Pet'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Pet'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pet'
+          description: ''
+    delete:
+      operationId: pets_destroy
+      description: |-
+        Delete all pets.
+
+        Parameters:
+            request (HttpRequest): The HTTP request object.
+
+        Returns:
+            Response: A response object with no content and the HTTP status code indicating success.
+      tags:
+      - pets
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '204':
+          description: No response body
+  /pets/{slug}/:
+    get:
+      operationId: pets_retrieve_2
+      description: |-
+        Retrieve details of a specific pet.
+
+        Parameters:
+            request (HttpRequest): The HTTP request object.
+            slug (str): The slug of the pet.
+
+        Returns:
+            Response: A response object containing the serialized data of the pet if found, or an HTTP status code indicating not found.
+      parameters:
+      - in: path
+        name: slug
+        schema:
+          type: string
+        required: true
+      tags:
+      - pets
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pet'
+          description: ''
+    put:
+      operationId: pets_update
+      description: |-
+        Update the details of a specific pet.
+
+        Parameters:
+            request (HttpRequest): The HTTP request object.
+            slug (str): The slug of the pet.
+
+        Returns:
+            Response: A response object containing the serialized data of the updated pet if successful, or an HTTP status code indicating an error.
+      parameters:
+      - in: path
+        name: slug
+        schema:
+          type: string
+        required: true
+      tags:
+      - pets
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Pet'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Pet'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Pet'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pet'
+          description: ''
+    delete:
+      operationId: pets_destroy_2
+      description: |-
+        Delete a specific pet.
+
+        Parameters:
+            request (HttpRequest): The HTTP request object.
+            slug (str): The slug of the pet.
+
+        Returns:
+            Response: A response object with no content and the HTTP status code indicating success or not found.
+      parameters:
+      - in: path
+        name: slug
+        schema:
+          type: string
+        required: true
+      tags:
+      - pets
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '204':
+          description: No response body
   /upload/image/:
     post:
       operationId: upload_image_create
@@ -63,17 +225,6 @@ components:
     Pet:
       type: object
       properties:
-        id:
-          type: integer
-          readOnly: true
-        created:
-          type: string
-          format: date-time
-          readOnly: true
-        modified:
-          type: string
-          format: date-time
-          readOnly: true
         name:
           type: string
           maxLength: 50
@@ -89,9 +240,6 @@ components:
           type: string
           readOnly: true
           pattern: ^[-a-zA-Z0-9_]+$
-        pet_key:
-          type: string
-          readOnly: true
         color:
           type: string
           pattern: ^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
@@ -104,6 +252,7 @@ components:
         pet_photo_url:
           type: string
           format: uri
+          nullable: true
           title: Pet photo
           pattern: (?:png|jpg|jpeg)$
         location:
@@ -123,13 +272,9 @@ components:
       - age
       - breed
       - city
-      - created
       - description
-      - id
       - location
-      - modified
       - name
-      - pet_key
       - slug
       - weight
     Upload:

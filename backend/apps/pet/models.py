@@ -1,6 +1,8 @@
 from colorfield.fields import ColorField
+from django.core.cache import cache
 from django.core.validators import FileExtensionValidator
 from django.db import models
+from django.utils import timezone
 from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 from django_extensions.db.fields import RandomCharField
@@ -8,6 +10,13 @@ from django_extensions.db.models import TimeStampedModel
 
 from abstract.constants import GendersPet
 from config.helpers import setPetName
+
+
+# *CustomQuerySet
+class CustomQuerySet(models.QuerySet):
+    def update(self, **kwargs):
+        cache.delete("pet_objects")
+        super(CustomQuerySet, self).update(updated=timezone.now(), **kwargs)
 
 
 # *ActiveStatusQueryset
@@ -28,13 +37,16 @@ class PassiveStatusQueryset(models.QuerySet):
         return self.filter(status=False).count()
 
 
-# *PetManager
+# ?PetManager
 class PetManager(models.Manager):
     def get_active_status(self):
         return ActiveStatusQueryset(self.model, using=self._db)
 
     def get_passive_status(self):
         return PassiveStatusQueryset(self.model, using=self._db)
+
+    def get_queryset(self):
+        return CustomQuerySet(self.model, using=self._db)
 
 
 # Create your models here.

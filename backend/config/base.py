@@ -5,6 +5,8 @@ from pathlib import Path
 from decouple import config
 from django.utils.translation import gettext_lazy as _
 
+from .helpers import show_toolbar
+
 # !Your everywhere service name
 SITE_NAME = ""  # Domain Name
 
@@ -166,9 +168,7 @@ if ENVIRONMENT == "LOCAL" or ENVIRONMENT == "PROD":
 
 # !Django Debug Toolbar
 if ENVIRONMENT == "LOCAL":
-    INTERNAL_IPS = [
-        "127.0.0.1",
-    ]
+    INTERNAL_IPS = ["127.0.0.1"]
 
 
 # !MediuUrl and MediaRoot
@@ -266,8 +266,10 @@ FORMS_URLFIELD_ASSUME_HTTPS = True
 # !Configure mimetypes
 mimetypes.add_type("application/javascript", ".js", True)
 
+
 # !Settings up Debug Toolbar
 DEBUG_TOOLBAR_CONFIG = {
+    "SHOW_TOOLBAR_CALLBACK": show_toolbar,
     "INTERCEPT_REDIRECTS": False,
 }
 
@@ -285,3 +287,5 @@ CACHES = {
         },
     }
 }
+
+print("Configgg ", config("REDIS_HOST"), config("REDIS_PORT"), config("REDIS_DB"))
