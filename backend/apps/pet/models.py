@@ -7,16 +7,16 @@ from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 from django_extensions.db.fields import RandomCharField
 from django_extensions.db.models import TimeStampedModel
+from django_lifecycle import (
+    AFTER_DELETE,
+    AFTER_SAVE,
+    AFTER_UPDATE,
+    LifecycleModel,
+    hook,
+)
 
 from abstract.constants import GendersPet
 from config.helpers import setPetName
-
-
-# *CustomQuerySet
-class CustomQuerySet(models.QuerySet):
-    def update(self, **kwargs):
-        cache.delete("pet_objects")
-        super(CustomQuerySet, self).update(updated=timezone.now(), **kwargs)
 
 
 # *ActiveStatusQueryset
@@ -45,13 +45,10 @@ class PetManager(models.Manager):
     def get_passive_status(self):
         return PassiveStatusQueryset(self.model, using=self._db)
 
-    def get_queryset(self):
-        return CustomQuerySet(self.model, using=self._db)
-
 
 # Create your models here.
 # !Pet
-class Pet(TimeStampedModel):
+class Pet(TimeStampedModel, LifecycleModel):
     name = models.CharField(_("Name"), max_length=50)
     age = models.IntegerField(_("Age"))
     breed = models.CharField(_("Breed"), max_length=50)
@@ -92,3 +89,9 @@ class Pet(TimeStampedModel):
 
     def __str__(self):
         return f"{self.name} - {self.age}"
+
+    @hook(AFTER_SAVE)
+    @hook(AFTER_DELETE)
+    @hook(AFTER_UPDATE)
+    def invalidate_cache(self):
+        cache.delete("pet_objects")

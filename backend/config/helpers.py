@@ -1,5 +1,6 @@
 import re
 
+from django.core.cache import cache
 from django.core.exceptions import ValidationError
 
 
@@ -26,3 +27,8 @@ def is_valid_wallet_address(wallet_address: str):
 # ?show_toolbar
 def show_toolbar(request):
     return True
+
+
+# ?check_cache
+def clear_cache_put(cache_key: str):
+    cache.delete(cache_key)

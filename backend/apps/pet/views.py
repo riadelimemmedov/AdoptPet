@@ -9,6 +9,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .models import Pet
+from .pagination import PetPagination
 from .serializers import PetSerializer
 
 # Create your views here.
@@ -19,6 +20,7 @@ class PetView(APIView):
     """PetView"""
 
     serializer_class = PetSerializer
+    pagination_class = PetPagination
 
     # @method_decorator(cache_page(60 * 60 * 2, key_prefix="pet_objects"))
     def get(self, request):
@@ -32,8 +34,13 @@ class PetView(APIView):
             Response: A response object containing the serialized data of all pets and the HTTP status code.
         """
         pet_objects = cache.get("pet_objects")
+        paginator = self.pagination_class()  # Use the desired pagination class
+
+        page_number = request.query_params.get("page")
+        print("Page number ", page_number)
+
         if pet_objects is None:
-            pet_objects = Pet.objects.all()
+            pet_objects = paginator.paginate_queryset(Pet.objects.all(), request)
             cache.set("pet_objects", pet_objects, 60 * 3)
 
         # pet_objects = Pet.objects.all()
