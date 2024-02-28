@@ -59,6 +59,7 @@ THIRD_PARTY_APPS = [
     "colorfield",
     "storages",
     "debug_toolbar",
+    "corsheaders",
 ]
 
 # !Created Apps
@@ -74,6 +75,7 @@ AUTH_USER_MODEL = "users.CustomUser"
 
 # !Middleware
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     "debug_toolbar.middleware.DebugToolbarMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -85,6 +87,22 @@ MIDDLEWARE = [
     # "apps.account.middleware.RedirectAuthenticatedMiddleware",
     "middleware.metric.metric_middleware",
 ]
+
+
+# !CORS_ALLOWED_ORIGINS
+CORS_ALLOW_ALL_ORIGINS = True
+
+
+# !CORS_ALLOW_METHODS
+CORS_ALLOW_METHODS = [
+    "DELETE",
+    "GET",
+    "OPTIONS",
+    "PATCH",
+    "POST",
+    "PUT",
+]
+
 
 # !Root UrlConf
 ROOT_URLCONF = "config.urls"
