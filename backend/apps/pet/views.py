@@ -34,18 +34,22 @@ class PetView(APIView):
             Response: A response object containing the serialized data of all pets and the HTTP status code.
         """
         pet_objects = cache.get("pet_objects")
+        pet_count = cache.get("pet_count")
+        page_number = cache.get("page_number")
         paginator = self.pagination_class()  # Use the desired pagination class
 
-        page_number = request.query_params.get("page")
-        print("Page number ", page_number)
+        page = request.query_params.get("page")
 
-        if pet_objects is None:
+        if pet_objects is None or pet_count is None or page_number != page:
             pet_objects = paginator.paginate_queryset(Pet.objects.all(), request)
+            pet_count = Pet.objects.count()
             cache.set("pet_objects", pet_objects, 60 * 3)
+            cache.set("pet_count", pet_count, 60 * 3)
+            cache.set("page_number", page, 60 * 3)
 
-        # pet_objects = Pet.objects.all()
         serializer = self.serializer_class(pet_objects, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        response_data = {"pet_count": pet_count, "pet_objects": serializer.data}
+        return Response(response_data, status=status.HTTP_200_OK)
 
     def post(self, request, format=None):
         """
