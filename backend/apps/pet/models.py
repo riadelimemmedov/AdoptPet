@@ -65,9 +65,15 @@ class Pet(TimeStampedModel, LifecycleModel):
     )
     pet_photo_url = models.FileField(
         _("Pet photo"),
-        blank=True,
-        null=True,
-        validators=[FileExtensionValidator(allowed_extensions=["png", "jpg", "jpeg"])],
+        validators=[
+            FileExtensionValidator(
+                allowed_extensions=[
+                    "png",
+                    "jpg",
+                    "jpeg",
+                ]
+            )
+        ],
     )
     location = models.CharField(_("Location"), max_length=50)
     city = models.CharField(_("City"), max_length=50)

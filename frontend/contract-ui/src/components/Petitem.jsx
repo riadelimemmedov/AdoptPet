@@ -18,7 +18,6 @@ export function PetItem(){
         }, 1500);
     },[page])
 
-
     // ?getPetData
     const getPetData = async () => {
         const apiUrl = `${url}/pets/?page=${page}`
@@ -46,42 +45,44 @@ export function PetItem(){
         <>
             <div className="max-w-5xl mx-auto mt-20">
 
-                <InfiniteScroll dataLength={petData.length} next={()=>setPage(()=>page+1)} hasMore={hasMore} loader={
-                    <div className="flex justify-center items-center h-screen">
-                        <div  className="border-t-4 border-b-4 border-gray-500 rounded-full w-12 h-12 animate-spin"></div>
-                    </div>
-                }>
-                        {
-                            petData.map((pet,index) => (
-                                <div className="grid grid-cols-1 gap-5 text-center mt-4 mb-10" key={index}>
-                                    <div className="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl">
-                                        <div className="md:flex">
-                                            <div className="md:shrink-0">
-                                                <img className="h-48 w-full object-fill md:h-full md:w-48" src="https://placedog.net/300/200/11" alt="Modern building architecture"/>
-                                            </div>
-                                            <div className="p-8">
-                                                <div className="grid-rows-4 grid-flow-col gap-4 text-left">
-                                                    <span className='font-bold text-gray-500'>Name: </span><span>Frieda</span><br />
-                                                    <hr />
-                                                    <span className='font-bold text-gray-500'>Age: </span><span> 3</span><br />
-                                                    <hr />
-                                                    <span className='font-bold text-gray-500'>Breed: </span><span> Scottish Terrier</span><br />
-                                                    <hr />
-                                                    <span className='font-bold text-gray-500'>Location: </span><span> Lisco,Alabama</span><br />
-                                                    <hr />
-                                                    <span className='font-bold text-gray-500'>Age: </span><span> 3</span><br />
-                                                    <hr />
-                                                    <span className='font-bold text-gray-500'>Description: </span><span> Lorem ipsum dolor sit amet consectetur, adipisicing elit. Eaque maiores, veniam velit exercitationem totam quibusdam nam harum facilis accusamus nulla.</span><br />
-                                                    <hr />
-                                                </div>
-                                                <button className="bg-sky-300 mt-4 hover:bg-sky-400 rounded py-2 w-full">Adopt Now</button>
-                                            </div>
-                                        </div>
-                                    </div>
+                {
+                    petData.length > 0 ? (
+                            <InfiniteScroll dataLength={petData.length} next={()=>setPage(prevState => prevState+1)} hasMore={hasMore} loader={
+                                <div className="flex justify-center items-center h-screen">
+                                    <div  className="border-t-4 border-b-4 border-gray-500 rounded-full w-12 h-12 animate-spin"></div>
                                 </div>
-                            ))
-                        }
-                </InfiniteScroll>
+                            }>
+                                <div class="grid grid-cols-5 gap-5">
+                                    {
+                                        petData.map((pet,index) => (
+                                                    <div class="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700" key={index}>
+                                                        <a href="#">
+                                                        <figure class="max-w-lg">
+                                                            <img class="h-screen w-full max-w-full" src={url+pet.pet_photo_url ? null : pet_photo_url} alt="image description"/>
+                                                        </figure>
+                                                        </a>
+                                                        <div class="px-5 pb-5">
+                                                        <a href="#">
+                                                            <h5 class="text-sm font-semibold tracking-tight text-gray-900 dark:text-white mt-2">{pet.name}</h5>
+                                                            <hr />
+                                                        </a>
+                                                        <div class="flex items-center justify-between mt-2">
+                                                            <span class="text-md font-bold text-gray-900 dark:text-white">$599</span>
+                                                            <a href="#" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300  rounded-lg text-sm px-1 py-1 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Add to cart</a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    ))
+                                                }
+                                    </div>
+                        </InfiniteScroll>
+                    )
+                    :
+                    (
+                        <p>Not founds</p>
+                    )
+                }
+
             </div>
         </>
     )

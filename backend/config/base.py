@@ -292,18 +292,18 @@ DEBUG_TOOLBAR_CONFIG = {
 }
 
 # !Django Redis Cache
-CACHES = {
-    "default": {
-        "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://{}:{}/{}".format(
-            config("REDIS_HOST"),
-            config("REDIS_PORT"),
-            config("REDIS_DB"),
-        ),
-        "OPTIONS": {
-            "CLIENT_CLASS": "django_redis.client.DefaultClient",
-        },
-    }
-}
+# CACHES = {
+#     "default": {
+#         "BACKEND": "django_redis.cache.RedisCache",
+#         "LOCATION": "redis://{}:{}/{}".format(
+#             config("REDIS_HOST"),
+#             config("REDIS_PORT"),
+#             config("REDIS_DB"),
+#         ),
+#         "OPTIONS": {
+#             "CLIENT_CLASS": "django_redis.client.DefaultClient",
+#         },
+#     }
+# }
 
 print("Configgg ", config("REDIS_HOST"), config("REDIS_PORT"), config("REDIS_DB"))
