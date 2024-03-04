@@ -7,7 +7,9 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from rest_framework import status
 
 from abstract.constants import ImageExtension
+from apps.pet.models import Pet
 from apps.pet.serializers import PetSerializer
+from infrastructure.test_data_clear import TruncateTestData
 
 # * If you don't declare pytestmark our test class model don't accsess to database table
 pytestmark = pytest.mark.django_db
@@ -34,7 +36,8 @@ class TestPetEndpoints:
         response = api_client().get(self.endpoint, format="json")
 
         assert response.status_code == status.HTTP_200_OK
-        assert len(json.loads(response.content)) == 4
+        assert json.loads(response.content)["pet_count"] == 4
+        TruncateTestData(Pet)
 
     def test_create_pet(self, pet_factory_end_to_end, api_client):
         """
@@ -73,6 +76,7 @@ class TestPetEndpoints:
         )
         assert response.status_code == status.HTTP_201_CREATED
         assert response.data["name"] == "Max"
+        TruncateTestData(Pet)
 
     def test_delete_all_pets(self, pet_factory_end_to_end, api_client):
         """
@@ -93,18 +97,17 @@ class TestPetEndpoints:
         The test should pass if the API successfully deletes all the pets, returning the correct status codes and counts before and after the deletion.
 
         """
-        pet_factory_end_to_end.create_batch(4)
+        pet_factory_end_to_end.create_batch(5)
         response = api_client().get(self.endpoint, format="json")
 
         assert response.status_code == status.HTTP_200_OK
-        assert len(json.loads(response.content)) == 4
+        assert json.loads(response.content)["pet_count"] == 5
 
         response = api_client().delete(self.endpoint)
         assert response.status_code == status.HTTP_204_NO_CONTENT
-
-        response = api_client().get(self.endpoint, format="json")
-        assert response.status_code == status.HTTP_200_OK
-        assert len(json.loads(response.content)) == 0
+        assert response.content == b""
+        assert len(response.content) == 0
+        TruncateTestData(Pet)
 
     def test_get_object_existing_pet(self, pet_factory_end_to_end, api_client):
         """
@@ -132,6 +135,7 @@ class TestPetEndpoints:
         assert response.status_code == status.HTTP_200_OK
         assert len(obj) == 1
         assert response.data["slug"] == obj[0].slug
+        TruncateTestData(Pet)
 
     def test_put_existing_pet(self, pet_factory_end_to_end, api_client):
         """
@@ -190,6 +194,7 @@ class TestPetEndpoints:
         assert response.data["name"] != "Rex"
         assert response.data.pop("slug") is not None
         assert response.data == PetSerializer(data).data
+        TruncateTestData(Pet)
 
     def test_delete_existing_pet(self, pet_factory_end_to_end, api_client):
         """
@@ -218,3 +223,4 @@ class TestPetEndpoints:
 
         response = api_client().get(f"{self.endpoint}{obj[0].slug}/", format="json")
         assert response.status_code == status.HTTP_404_NOT_FOUND
+        TruncateTestData(Pet)

@@ -74,6 +74,7 @@ class PetFactory(factory.django.DjangoModelFactory):
         pet_photo_url = faker.file_extension(
             category="image",
         )
+        pet_photo_link = faker.url()
         location = faker.address()
         city = faker.city()
         status = faker.boolean(chance_of_getting_true=50)
@@ -96,6 +97,7 @@ class PetFactoryEndToEnd(factory.django.DjangoModelFactory):
     pet_photo_url = factory.LazyAttribute(
         lambda _: faker.file_extension(category="image")
     )
+    pet_photo_url = factory.LazyAttribute(lambda _: faker.url())
     location = factory.LazyAttribute(lambda _: faker.address())
     city = factory.LazyAttribute(lambda _: faker.city())
     status = factory.LazyAttribute(lambda _: faker.boolean(chance_of_getting_true=50))

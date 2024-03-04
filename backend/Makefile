@@ -8,13 +8,19 @@ get_backend:
 get_redis:
 	docker exec -it redis sh
 
-makemigrations:
-	poetry run python manage.py makemigrations
-migrate:
-	poetry run python manage.py migrate
+run_server:
+	poetry run python manage.py runserver
+create_superuser:
+	poetry run python manage.py createsuperuser
 test:
 	poetry run pytest -s .
 
+run_migrations:
+	bash run_migrations.sh
+clean_migrations:
+	bash clean_migrations.sh
+
 .PHONY: down,build
 .PHONY: get_backend,get_redis
-.PHONY: makemigrations,migrate,test
+.PHONY: test create_superuser
+.PHONY: run_migrations,clean_migrations

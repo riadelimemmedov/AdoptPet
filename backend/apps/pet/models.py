@@ -14,6 +14,7 @@ from django_lifecycle import (
     LifecycleModel,
     hook,
 )
+from djmoney.models.fields import MoneyField
 
 from abstract.constants import GendersPet
 from config.helpers import setPetName
@@ -81,6 +82,9 @@ class Pet(TimeStampedModel, LifecycleModel):
     city = models.CharField(_("City"), max_length=50)
     status = models.BooleanField(_("Status"), default=True)
     vaccinated = models.BooleanField(_("Vaccinated"), default=True)
+    price = MoneyField(
+        _("Price"), max_digits=14, decimal_places=2, default_currency="USD", null=True
+    )
     description = models.TextField(_("Description"), max_length=150)
 
     objects = PetManager()
