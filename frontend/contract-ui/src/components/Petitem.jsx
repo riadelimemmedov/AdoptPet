@@ -10,7 +10,7 @@ export function PetItem(){
 
     const PAGE_LIMIT = 5
 
-    const url = "http://127.0.0.1:8000"
+    const url = import.meta.env.VITE_VUE_APP_URL || "http://127.0.0.1:8000";
 
     useEffect(() => {
         setTimeout(() => {
@@ -40,6 +40,26 @@ export function PetItem(){
         }
     }
 
+    // ?isAuthenticated
+    const isAuthenticated = async () => {
+        const provider = window.ethereum
+        if (typeof provider !== 'undefined') {
+            let accounts = await provider.request({method: "eth_requestAccounts"})
+            return true
+        } else {
+            toast.error("MetaMask is not installed");
+            return false
+        }
+    }
+
+    //? addToCart
+    const addToCart = async () => {
+        const is_auth = await isAuthenticated()
+        if (is_auth){
+            toast.success('Added to cart successfully')
+        }
+    }
+
     //return jsx to client
     return (
         <>
@@ -54,19 +74,18 @@ export function PetItem(){
                                         {
                                             petData.map((pet,index) => (
                                                 <li className="relative flex flex-col sm:flex-row xl:flex-col items-start" key={index}>
-                                                    <div class="order-1 sm:ml-6 xl:ml-0">
+                                                    <div className="order-1 sm:ml-6 xl:ml-0">
                                                         <h3 class="mb-1 text-slate-900 font-semibold dark:text-slate-200">
-                                                            <span class="mb-1 block text-sm leading-6 text-indigo-500">Headless UI</span>
-                                                            Completely unstyled, fully accessible UI components
+                                                            <span className="mb-1 block text-sm leading-6 text-indigo-500">{pet.name}</span>
                                                         </h3>
-                                                        <div class="prose prose-slate prose-sm text-slate-600 dark:prose-dark">
-                                                            <p>Completely unstyled, fully accessible UI components, designed to integrate beautifully with Tailwind CSS.</p>
+                                                        <div className="prose prose-slate prose-sm text-slate-600 dark:prose-dark">
+                                                            <p>{pet.description}</p>
                                                         </div>
-                                                        <a class="group inline-flex items-center h-9 rounded-full text-sm font-semibold whitespace-nowrap px-3 focus:outline-none focus:ring-2 bg-slate-100 text-slate-700 hover:bg-slate-200 hover:text-slate-900 focus:ring-slate-500 dark:bg-slate-700 dark:text-slate-100 dark:hover:bg-slate-600 dark:hover:text-white dark:focus:ring-slate-500 mt-6" href="https://headlessui.dev">
+                                                        <a className="group inline-flex items-center h-9 rounded-full text-sm font-semibold whitespace-nowrap px-3 focus:outline-none focus:ring-2 bg-slate-100 text-slate-700 hover:bg-slate-200 hover:text-slate-900 focus:ring-slate-500 dark:bg-slate-700 dark:text-slate-100 dark:hover:bg-slate-600 dark:hover:text-white dark:focus:ring-slate-500 mt-6" href="https://headlessui.dev">
                                                             Learn more
-                                                            <span class="sr-only">, Completely unstyled, fully accessible UI components</span>
+                                                            <span className="sr-only">, Completely unstyled, fully accessible UI components</span>
                                                             <svg
-                                                                class="overflow-visible ml-3 text-slate-300 group-hover:text-slate-400 dark:text-slate-500 dark:group-hover:text-slate-400"
+                                                                className="overflow-visible ml-3 text-slate-300 group-hover:text-slate-400 dark:text-slate-500 dark:group-hover:text-slate-400"
                                                                 width="3"
                                                                 height="6"
                                                                 viewBox="0 0 3 6"
@@ -79,14 +98,35 @@ export function PetItem(){
                                                                 <path d="M0 0L3 3L0 6"></path>
                                                             </svg>
                                                         </a>
+
+                                                        <button onClick={addToCart} className="text-white w-55 bg-blue-700 hover:bg-blue-800 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800
+                                                            ml-2 group inline-flex items-center h-9 rounded-full text-sm font-semibold whitespace-nowrap px-3 pr-6 pl-4 focus:outline-none focus:ring-2 ">
+                                                            Add to cart
+                                                            <svg
+                                                                className="overflow-visible ml-1 -mt-2  text-slate-300 group-hover:text-slate-400 dark:text-slate-500 dark:group-hover:text-slate-400"
+                                                                width="3"
+                                                                height="5"
+                                                                viewBox="0 0 3 6"
+                                                                fill="none"
+                                                                stroke="currentColor"
+                                                                stroke-width="2"
+                                                                stroke-linecap="round"
+                                                                stroke-linejoin="round"
+                                                            >
+                                                            <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5M3.102 4l1.313 7h8.17l1.313-7zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4m-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2m7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
+
+                                                            </svg>
+
+                                                        </button>
+
                                                     </div>
                                                     {
                                                         pet.pet_photo_link != "" ? (
-                                                            <img src={pet.pet_photo_link} alt="arrr" class="mb-6 shadow-md rounded-lg bg-slate-50 w-full sm:w-[17rem] sm:mb-0 xl:mb-6 xl:w-full" width="1216" height="640" />
+                                                            <img src={pet.pet_photo_link} alt="arrr" className="mb-6 shadow-md rounded-lg bg-slate-50 w-full sm:w-[17rem] sm:mb-0 xl:mb-6 xl:w-full" width="1216" height="640" />
                                                         )
                                                         :
                                                         (
-                                                            <img src={url+pet.pet_photo_url} alt="anoorrr" class="mb-6 shadow-md rounded-lg bg-slate-50 w-full sm:w-[17rem] sm:mb-0 xl:mb-6 xl:w-full" width="1216" height="640" style={{width:"346px",height:"230px"}} />
+                                                            <img src={url+pet.pet_photo_url} alt="anoorrr" className="mb-6 shadow-md rounded-lg bg-slate-50 w-full sm:w-[17rem] sm:mb-0 xl:mb-6 xl:w-full" width="1216" height="640" style={{width:"346px",height:"230px"}} />
                                                         )
                                                     }
                                                 </li>
@@ -97,7 +137,7 @@ export function PetItem(){
                 )
                 :
                 (
-                    <p>dsadad</p>
+                    null
                 )
             }
         </>
