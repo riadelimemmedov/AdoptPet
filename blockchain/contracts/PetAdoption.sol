@@ -11,6 +11,15 @@ contract PetAdoption {
     mapping(uint => address) public petIdxToOwnerAddress;
     mapping(address => uint[]) public ownerAddressToPetList;
 
+    struct Pet {
+        uint256 id;
+        string name;
+        string color;
+        uint256 price;
+        string photo;
+    }
+    mapping(address => Pet[]) private cart;
+
     constructor(uint initialPetIndex) {
         owner = msg.sender;
         petIndex = initialPetIndex;
@@ -46,5 +55,26 @@ contract PetAdoption {
 
     function getAllAdoptedPets() public view returns (uint[] memory) {
         return allAdoptedPets;
+    }
+
+    function addToCart(
+        uint256 _petId,
+        string memory _petName,
+        string memory _petColor,
+        uint256 _petPrice,
+        string memory _petPhoto
+    ) public {
+        Pet memory newPet = Pet(
+            _petId,
+            _petName,
+            _petColor,
+            _petPrice,
+            _petPhoto
+        );
+        cart[msg.sender].push(newPet);
+    }
+
+    function getCartItems() public view returns (Pet[] memory) {
+        return cart[msg.sender];
     }
 }

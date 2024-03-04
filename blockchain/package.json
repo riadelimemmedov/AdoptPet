@@ -24,7 +24,8 @@
   "scripts": {
     "lint": "eslint",
     "test": "npx hardhat test",
-    "coverage": "npx hardhat coverage"
+    "coverage": "npx hardhat coverage",
+    "compile": "npx hardhat compile"
   },
   "dependencies": {
     "ganache-cli": "^6.12.2"

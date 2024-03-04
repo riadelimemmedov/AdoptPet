@@ -89,4 +89,42 @@ describe("PetAdoption", function () {
 			expect(zeroAddress).to.be.equal("0x0000000000000000000000000000000000000000")
 		})
 	})
+
+	describe("Add to cart",function(){
+		it("should add to card succsesfully",async function () {
+			const {account2,contract} = await loadFixture(deployContractFixture)
+
+			const pet_id = 1
+			const pet_name = "Rex"
+			const pet_color = "red"
+			const pet_price = 100
+			const pet_photo = "https://images.unsplash.com/photo-1600682011352-e448301668e7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1348&q=40"
+
+			expect(account2).not.be.null
+			await expect(contract.addToCart(pet_id,pet_name,pet_color,pet_price,pet_photo)).not.to.be.reverted
+			await expect(contract.getCartItems()).not.be.null
+		})
+		it("should match added and returned pet",async function(){
+			const {account2,contract} = await loadFixture(deployContractFixture)
+
+
+			const pet_id = 1
+			const pet_name = "Rex"
+			const pet_color = "red"
+			const pet_price = 100
+			const pet_photo = "https://images.unsplash.com/photo-1600682011352-e448301668e7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1348&q=40"
+
+			await expect(contract.connect(account2)).not.to.be.reverted
+			await expect(contract.connect(account2).addToCart(pet_id, pet_name, pet_color, pet_price, pet_photo)).not.to.be.reverted
+
+			const cartItems = await contract.connect(account2).getCartItems()
+			expect(account2).not.be.null
+			expect(cartItems.length).to.be.equal(1)
+			expect(cartItems[0].id).to.be.equal(pet_id)
+			expect(cartItems[0].name).to.be.equal(pet_name)
+			expect(cartItems[0].color).to.be.equal(pet_color)
+			expect(cartItems[0].price).to.be.equal(pet_price)
+			expect(cartItems[0].photo).to.be.equal(pet_photo)
+		})
+	})
 })
