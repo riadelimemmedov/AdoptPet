@@ -3,7 +3,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 //*PetItem
-export function PetItem(){
+export function PetItem({isAuthenticated,checkNetwork}){
     const [petData,setPetData] = useState([])
     const [hasMore,setHasMore] = useState(true)
     const [page,setPage] = useState(1)
@@ -17,6 +17,7 @@ export function PetItem(){
             getPetData()
         }, 1500);
     },[page])
+
 
     // ?getPetData
     const getPetData = async () => {
@@ -40,21 +41,11 @@ export function PetItem(){
         }
     }
 
-    // ?isAuthenticated
-    const isAuthenticated = async () => {
-        const provider = window.ethereum
-        if (typeof provider !== 'undefined') {
-            let accounts = await provider.request({method: "eth_requestAccounts"})
-            return true
-        } else {
-            toast.error("MetaMask is not installed");
-            return false
-        }
-    }
 
     //? addToCart
     const addToCart = async () => {
-        const is_auth = await isAuthenticated()
+        const is_auth = await checkNetwork()
+        console.log("Add to carttt  ", is_auth)
         if (is_auth){
             toast.success('Added to cart successfully')
         }

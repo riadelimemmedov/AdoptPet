@@ -1,8 +1,6 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.9;
 
-// import "hardhat/console.sol"; //If you want use console.log inside the smart contract you need to install hardhat
-
 contract PetAdoption {
     address public owner;
     uint public petIndex = 0;
