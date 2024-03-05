@@ -38,7 +38,7 @@ class TestPetEndpoints:
 
         assert response.status_code == status.HTTP_200_OK
         assert json.loads(response.content)["pet_count"] == 4
-        TruncateTestData(Pet)
+        # TruncateTestData(Pet)
 
     def test_create_pet(self, pet_factory_end_to_end, api_client):
         """
@@ -77,7 +77,7 @@ class TestPetEndpoints:
         )
         assert response.status_code == status.HTTP_201_CREATED
         assert response.data["name"] == "Max"
-        TruncateTestData(Pet)
+        # TruncateTestData(Pet)
 
     def test_delete_all_pets(self, pet_factory_end_to_end, api_client):
         """
@@ -108,7 +108,7 @@ class TestPetEndpoints:
         assert response.status_code == status.HTTP_204_NO_CONTENT
         assert response.content == b""
         assert len(response.content) == 0
-        TruncateTestData(Pet)
+        # TruncateTestData(Pet)
 
     def test_get_object_existing_pet(self, pet_factory_end_to_end, api_client):
         """
@@ -136,7 +136,7 @@ class TestPetEndpoints:
         assert response.status_code == status.HTTP_200_OK
         assert len(obj) == 1
         assert response.data["slug"] == obj[0].slug
-        TruncateTestData(Pet)
+        # TruncateTestData(Pet)
 
     def test_put_existing_pet(self, pet_factory_end_to_end, api_client):
         """
@@ -194,7 +194,7 @@ class TestPetEndpoints:
             assert response.data["name"] != "Rex"
             assert response.data.pop("slug") is not None
             assert response.data == PetSerializer(data).data
-            TruncateTestData(Pet)
+            # TruncateTestData(Pet)
 
     def test_delete_existing_pet(self, pet_factory_end_to_end, api_client):
         """
@@ -223,4 +223,4 @@ class TestPetEndpoints:
 
         response = api_client().get(f"{self.endpoint}{obj[0].slug}/", format="json")
         assert response.status_code == status.HTTP_404_NOT_FOUND
-        TruncateTestData(Pet)
+        # TruncateTestData(Pet)
