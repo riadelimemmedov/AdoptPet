@@ -2,6 +2,7 @@ import json
 import os
 
 import pytest
+from django.core.exceptions import ValidationError
 from django.core.files.storage import FileSystemStorage
 from django.core.files.uploadedfile import SimpleUploadedFile
 from rest_framework import status
@@ -165,36 +166,35 @@ class TestPetEndpoints:
         response = api_client().get(f"{self.endpoint}{obj[0].slug}/", format="json")
 
         if obj[0].pet_photo_url not in ImageExtension:
-            assert False
+            with pytest.raises(ValidationError):
+                obj[0].full_clean()
         else:
-            assert True
+            data = {
+                "name": name,
+                "age": response.data["age"],
+                "breed": response.data["breed"],
+                "color": response.data["color"],
+                "weight": response.data["weight"],
+                "pet_photo_url": "",
+                "gender": response.data["gender"],
+                "location": response.data["location"],
+                "city": response.data["city"],
+                "status": response.data["status"],
+                "vaccinated": response.data["vaccinated"],
+                "description": response.data["description"],
+            }
 
-        data = {
-            "name": name,
-            "age": response.data["age"],
-            "breed": response.data["breed"],
-            "color": response.data["color"],
-            "weight": response.data["weight"],
-            "pet_photo_url": "",
-            "gender": response.data["gender"],
-            "location": response.data["location"],
-            "city": response.data["city"],
-            "status": response.data["status"],
-            "vaccinated": response.data["vaccinated"],
-            "description": response.data["description"],
-        }
+            response = api_client().put(
+                f"{self.endpoint}{obj[0].slug}/",
+                data,
+                format="multipart",
+            )
 
-        response = api_client().put(
-            f"{self.endpoint}{obj[0].slug}/",
-            data,
-            format="multipart",
-        )
-
-        assert response.status_code == status.HTTP_200_OK
-        assert response.data["name"] != "Rex"
-        assert response.data.pop("slug") is not None
-        assert response.data == PetSerializer(data).data
-        TruncateTestData(Pet)
+            assert response.status_code == status.HTTP_200_OK
+            assert response.data["name"] != "Rex"
+            assert response.data.pop("slug") is not None
+            assert response.data == PetSerializer(data).data
+            TruncateTestData(Pet)
 
     def test_delete_existing_pet(self, pet_factory_end_to_end, api_client):
         """

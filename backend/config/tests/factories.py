@@ -79,6 +79,9 @@ class PetFactory(factory.django.DjangoModelFactory):
         city = faker.city()
         status = faker.boolean(chance_of_getting_true=50)
         vaccinated = faker.boolean(chance_of_getting_true=50)
+        price = faker.pyfloat(
+            positive=True, right_digits=2, left_digits=4, min_value=25, max_value=9999
+        )
         description = faker.text(max_nb_chars=150)
 
 

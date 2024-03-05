@@ -15,6 +15,7 @@ from django_lifecycle import (
     hook,
 )
 from djmoney.models.fields import MoneyField
+from djmoney.models.validators import MaxMoneyValidator, MinMoneyValidator
 
 from abstract.constants import GendersPet
 from config.helpers import setPetName
@@ -83,7 +84,15 @@ class Pet(TimeStampedModel, LifecycleModel):
     status = models.BooleanField(_("Status"), default=True)
     vaccinated = models.BooleanField(_("Vaccinated"), default=True)
     price = MoneyField(
-        _("Price"), max_digits=14, decimal_places=2, default_currency="USD", null=True
+        _("Price"),
+        max_digits=14,
+        decimal_places=2,
+        default_currency="USD",
+        null=True,
+        validators=[
+            MinMoneyValidator({"USD": 25}),
+            MaxMoneyValidator({"USD": 9999}),
+        ],
     )
     description = models.TextField(_("Description"), max_length=150)
 

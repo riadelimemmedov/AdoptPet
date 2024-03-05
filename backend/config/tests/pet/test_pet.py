@@ -42,6 +42,7 @@ class TestPetManagers:
             status=True,
             vaccinated=True,
             description="Energetic and playful pup",
+            price=250,
         )
         pet_factory(
             age=2,
@@ -56,6 +57,7 @@ class TestPetManagers:
             status=True,
             vaccinated=True,
             description="Friendly and obedient companion",
+            price=100,
         )
         pet_factory(
             name="Charlie",
@@ -71,6 +73,7 @@ class TestPetManagers:
             status=False,
             vaccinated=True,
             description="Loyal and playful companion",
+            price=120,
         )
 
     def test_str_method(self, pet_factory):
@@ -558,3 +561,25 @@ class TestPetManagers:
         assert obj.created is not None
         assert obj.modified is not None
         TruncateTestData(Pet)
+
+    def test_pet_price(self, pet_factory):
+        """
+        Test the price attribute of the pet_factory.
+
+        This method verifies that the price attribute of the pet_factory object meets the following criteria:
+        - The price is of type float.
+        - The price is greater than or equal to 25.
+        - The price is less than or equal to 9999.
+
+        Parameters:
+        - pet_factory: An instance of the PetFactory class or a similar object that has a price attribute.
+
+        Raises:
+        - AssertionError: If any of the conditions are not met.
+
+        Returns:
+        - None
+        """
+        assert isinstance(pet_factory.price, float)
+        assert pet_factory.price >= 25
+        assert pet_factory.price <= 9999
