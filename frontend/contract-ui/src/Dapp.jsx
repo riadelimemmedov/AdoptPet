@@ -1,6 +1,7 @@
 //!React
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
+import { useEffect, useState } from 'react'
+import { ethers } from "ethers";
+
 
 //!Components
 import { PetItem } from './components/Petitem'
@@ -8,19 +9,25 @@ import { TxError } from './components/TxError'
 import { Navbar } from './components/Navbar'
 import { toast } from 'react-toastify'
 
+
+// !Helpers
+import connect_contract from '../helpers/connect_contract';
+
 // HARDHAT_NETWORK_ID
 const HARDHAT_NETWORK_ID = Number(import.meta.env.VITE_VUE_HARDHAT_NETWORK_ID)
 
 //*Dapp
 function Dapp() {
     const [selectedAddress,setSelectedAddress] = useState(null)
+    const [contract,setContract] = useState(null)
+    const [provider,setProvider] = useState(window.ethereum)
 
     // ?isAuthenticated
     const isAuthenticated = async () => {
-      const provider = window.ethereum
       if (typeof provider !== 'undefined') {
-          let accounts = await provider.request({method: "eth_requestAccounts"})
-          return true
+          await provider.request({method: "eth_requestAccounts"})
+          const is_check = await checkNetwork()
+          return is_check
       } else {
           toast.error("MetaMask is not installed");
           return false
@@ -43,7 +50,6 @@ function Dapp() {
     // ?switchNetwork
     const switchNetwork = async () => {
         const chainIdHex = `0x${HARDHAT_NETWORK_ID.toString(16)}` //Convert to 16 based hexadecimal chainIdHex number
-        if(await isAuthenticated()){
           try {
             await window.ethereum.request({
                 method: 'wallet_switchEthereumChain',
@@ -54,24 +60,20 @@ function Dapp() {
               toast.error("Switching to the network failed")
               return false
             }
-        }
-        else{
-          return false
-        }
-    }
-
-    // ?initializeDapp
-    const initializeDapp = async (address) => {
-        if (await isAuthenticated()) {
-            setSelectedAddress(address)
-            const contract = await initContract()
-        }
     }
 
     // ?initContract
     const initContract = async () => {
-      toast.success("I should init the contract !")
+        const hardhat_provider = new ethers.providers.Web3Provider(provider)
+        const connected_contract = await connect_contract(hardhat_provider)
+        setContract(connected_contract)
     }
+
+
+    //useEffect
+    useEffect(()=>{
+      initContract()
+    },[])
 
     //return jsx to client
     return (
@@ -83,7 +85,7 @@ function Dapp() {
             <Navbar/>
           </div>
           <div className="items">
-            <PetItem isAuthenticated={isAuthenticated} checkNetwork={checkNetwork}/>
+            <PetItem isAuthenticated={isAuthenticated} contract={contract}/>
           </div>
         </div>
         </>

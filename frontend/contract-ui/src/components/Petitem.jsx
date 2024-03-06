@@ -3,7 +3,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 //*PetItem
-export function PetItem({isAuthenticated,checkNetwork}){
+export function PetItem({isAuthenticated,contract}){
     const [petData,setPetData] = useState([])
     const [hasMore,setHasMore] = useState(true)
     const [page,setPage] = useState(1)
@@ -41,15 +41,36 @@ export function PetItem({isAuthenticated,checkNetwork}){
         }
     }
 
+    // ?getPet
+    const getPet = async (pet_slug) => {
+        const apiUrl = `${url}/pets/${pet_slug}/`
+        try{
+            const response = await fetch(apiUrl,{
+                method: "GET",
+            })
+            const pet = await response.json()
+            return pet
+        }
+        catch(err){
+            toast.error('Occur error when get to pet')
+        }
+    }
+
+    // }
+
 
     //? addToCart
-    const addToCart = async () => {
-        const is_auth = await checkNetwork()
-        console.log("Add to carttt  ", is_auth)
-        if (is_auth){
+    const addToCart = async (e) => {
+        const is_auth = await isAuthenticated()
+        if (is_auth && contract != null){
+            const pet_slug =  e.target.getAttribute('pet-slug')
+            const pet = await getPet(pet_slug)
+            const result = await contract.addToCart(pet.id,pet.name,pet.color,parseInt(pet.price),pet.pet_photo_link)
             toast.success('Added to cart successfully')
         }
     }
+
+
 
     //return jsx to client
     return (
@@ -89,8 +110,7 @@ export function PetItem({isAuthenticated,checkNetwork}){
                                                                 <path d="M0 0L3 3L0 6"></path>
                                                             </svg>
                                                         </a>
-
-                                                        <button onClick={addToCart} className="text-white w-55 bg-blue-700 hover:bg-blue-800 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800
+                                                        <button onClick={addToCart} pet-slug={pet.slug} className="text-white w-55 bg-blue-700 hover:bg-blue-800 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800
                                                             ml-2 group inline-flex items-center h-9 rounded-full text-sm font-semibold whitespace-nowrap px-3 pr-6 pl-4 focus:outline-none focus:ring-2 ">
                                                             Add to cart
                                                             <svg

@@ -11,4 +11,4 @@ class PetSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Pet
-        exclude = ["id", "created", "modified", "pet_key"]
+        exclude = ["created", "modified", "pet_key"]
