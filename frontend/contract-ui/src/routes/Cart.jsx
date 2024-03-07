@@ -9,7 +9,7 @@ import connect_contract from '../../helpers/connect_contract';
 export  default function Cart(){
     const [contract,setContract] = useState(null)
     const [provider,setProvider] = useState(window.ethereum)
-    const [pets,setPets] = useState([])
+    const [pets,setPets] = useState()
 
 
     // ?initContract
@@ -34,6 +34,7 @@ export  default function Cart(){
     },[])
 
 
+    //svgStyle
     const svgStyle = {
         width: '50px',
         height: '50px',
@@ -42,31 +43,37 @@ export  default function Cart(){
     //return jsx to client
     return (
         <>
-            <Navbar/>
+            <div className="container">
+                <div className="navbar-container">
+                    <Navbar/>
+                </div>
+            </div>
             {
                 contract != null ? (
                     <div className="grid sm:px-10 lg:grid-cols-2 lg:px-20 xl:px-32 mt-10">
                     <div className="px-4 pt-8">
                         <p className="text-xl font-medium">Order Summary</p>
                         <p className="text-gray-400">Check your items. And select a suitable shipping method.</p>
-                        <div className="mt-8 space-y-3 rounded-lg border bg-white px-2 py-4 sm:px-6">
-                            <div className="flex flex-col rounded-lg bg-white sm:flex-row">
-                                <img className="m-2 h-24 w-28 rounded-md border object-cover object-center" src="https://images.unsplash.com/flagged/photo-1556637640-2c80d3201be8?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8c25lYWtlcnxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60" alt="" />
-                                <div className="flex w-full flex-col px-4 py-4">
-                                    <span className="font-semibold">Nike Air Max Pro 8888 - Super Light</span>
-                                    <span className="float-right text-gray-400">42EU - 8.5US</span>
-                                    <p className="text-lg font-bold">$138.99</p>
+
+                        {pets && pets.length > 0 ? (
+                            pets.map((pet, index) => (
+                              <div key={index} className="mt-8 space-y-3 rounded-lg border bg-white px-2 py-4 sm:px-6">
+                                <div className="flex flex-col rounded-lg bg-white sm:flex-row">
+                                  <img className="m-2 h-24 w-28 rounded-md border object-cover object-center" src={pet.photo} alt="" />
+                                  <div className="grid grid-cols-1 w-full px-4 py-4">
+                                    <span className="font-semibold">Name:  {pet.name}</span>
+                                    <span className="float-right text-gray-400 p-4 mt-2 mb-2" style={{ backgroundColor: pet.color }}></span>
+                                    <p className="text-lg font-bold">Price: {pet.price.toString()}</p>
+                                  </div>
                                 </div>
-                            </div>
-                            <div className="flex flex-col rounded-lg bg-white sm:flex-row">
-                                <img className="m-2 h-24 w-28 rounded-md border object-cover object-center" src="https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8c25lYWtlcnxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60" alt="" />
-                                <div className="flex w-full flex-col px-4 py-4">
-                                    <span className="font-semibold">Nike Air Max Pro 8888 - Super Light</span>
-                                    <span className="float-right text-gray-400">42EU - 8.5US</span>
-                                    <p className="mt-auto text-lg font-bold">$238.99</p>
-                                </div>
-                            </div>
-                        </div>
+                              </div>
+                            ))
+                          ) : (
+                            null
+                          )}
+
+
+
                     <p className="mt-8 text-lg font-medium">Shipping Methods</p>
                     <form className="mt-5 grid gap-6">
                         <div className="relative">

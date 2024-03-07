@@ -82,7 +82,7 @@ function Dapp() {
           {/*<TxError/>*/}
           <br />
           <div className="navbar-container">
-            <Navbar/>
+            <Navbar isAuthenticated={isAuthenticated}/>
           </div>
           <div className="items">
             <PetItem isAuthenticated={isAuthenticated} contract={contract}/>

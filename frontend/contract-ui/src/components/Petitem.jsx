@@ -56,9 +56,6 @@ export function PetItem({isAuthenticated,contract}){
         }
     }
 
-    // }
-
-
     //? addToCart
     const addToCart = async (e) => {
         const is_auth = await isAuthenticated()
@@ -70,15 +67,13 @@ export function PetItem({isAuthenticated,contract}){
         }
     }
 
-
-
     //return jsx to client
     return (
         <>
             {
                     petData ? (
                             <InfiniteScroll dataLength={petData.length} next={()=>setPage(prevState => prevState+1)} hasMore={hasMore} loader={
-                                <div className="flex justify-center items-center h-screen">
+                                <div className="flex justify-center items-center h-screen -mr-28">
                                     <div  className="border-t-4 border-b-4 border-gray-500 rounded-full w-12 h-12 animate-spin"></div>
                                 </div>
                                 }>
