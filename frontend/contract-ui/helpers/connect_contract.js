@@ -1,13 +1,14 @@
-import { ethers } from "ethers";
-import pet_local from '../contracts/PetLocal.json'
+import * as pet_local from '../contracts/PetLocal.json' assert { type: 'json' };
+import { ethers } from 'ethers';
 
+import eth from "../ethers/ethers.js";
 
 // !connect_contract
-const connect_contract = async(hardhat_provider) => {
-    const signer = hardhat_provider.getSigner()
+const connect_contract = async() => {
+    const signer = eth.getSigner()
     const contract = new ethers.Contract(
-        pet_local.address,
-        pet_local.abi,
+        pet_local.default.address,
+        pet_local.default.abi,
         signer
     );
     return contract

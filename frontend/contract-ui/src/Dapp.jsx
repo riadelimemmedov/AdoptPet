@@ -1,6 +1,5 @@
 //!React
 import { useEffect, useState } from 'react'
-import { ethers } from "ethers";
 
 
 //!Components
@@ -64,8 +63,7 @@ function Dapp() {
 
     // ?initContract
     const initContract = async () => {
-        const hardhat_provider = new ethers.providers.Web3Provider(provider)
-        const connected_contract = await connect_contract(hardhat_provider)
+        const connected_contract = await connect_contract()
         setContract(connected_contract)
     }
 

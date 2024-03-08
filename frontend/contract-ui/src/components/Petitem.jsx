@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import { ethers } from 'ethers';
+import eth from '../../ethers/ethers';
+
 
 //*PetItem
 export function PetItem({isAuthenticated,contract}){
@@ -62,7 +65,16 @@ export function PetItem({isAuthenticated,contract}){
         if (is_auth && contract != null){
             const pet_slug =  e.target.getAttribute('pet-slug')
             const pet = await getPet(pet_slug)
-            const result = await contract.addToCart(pet.id,pet.name,pet.color,parseInt(pet.price),pet.pet_photo_link)
+            // let overrides = {
+
+            //     // The address to execute the call as
+            //     from: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+
+            //     // The maximum units of gas for the transaction to use
+            //     gasLimit: 4712388,
+
+            // }
+            const result = await contract.addToCart(pet.id,pet.name,"red",parseInt(pet.price),pet.pet_photo_link)
             toast.success('Added to cart successfully')
         }
     }
