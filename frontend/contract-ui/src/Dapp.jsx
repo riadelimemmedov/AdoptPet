@@ -1,5 +1,5 @@
 //!React
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 
 
 //!Components
@@ -7,19 +7,52 @@ import { PetItem } from './components/Petitem'
 import { TxError } from './components/TxError'
 import { Navbar } from './components/Navbar'
 import { toast } from 'react-toastify'
-
+import pet_local from '../contracts/PetLocal.json'
 
 // !Helpers
 import connect_contract from '../helpers/connect_contract';
+
+
+// !Third part packages
+import { useMoralis } from "react-moralis";
+
 
 // HARDHAT_NETWORK_ID
 const HARDHAT_NETWORK_ID = Number(import.meta.env.VITE_VUE_HARDHAT_NETWORK_ID)
 
 //*Dapp
 function Dapp() {
+    //State values
     const [selectedAddress,setSelectedAddress] = useState(null)
     const [contract,setContract] = useState(null)
     const [provider,setProvider] = useState(window.ethereum)
+    const [isAdmin,setIsAdmin] = useState(false)
+    const [reload,setReload] = useState(false)
+
+    //Moralis properties
+    const { web3,enableWeb3, account,Moralis } = useMoralis();
+
+
+    //reloadEffect
+    const reloadEffect = useCallback(() => setReload(!reload),[reload])
+
+
+    //? checkWeb3
+    const checkWeb3 = () => {
+      if(web3 != null) {
+        return true
+      }
+      return false
+    }
+
+    //? handleAccountsChanged
+    if(checkWeb3()) {
+        const handleAccountsChanged = (accounts) => {
+          checkIsAdmin()
+          reloadEffect()
+        };
+        Moralis.onAccountChanged(handleAccountsChanged);
+    }
 
     // ?isAuthenticated
     const isAuthenticated = async () => {
@@ -30,6 +63,14 @@ function Dapp() {
       } else {
           toast.error("MetaMask is not installed");
           return false
+      }
+    }
+
+    // ? checkIsAdmin
+    const checkIsAdmin = () => {
+      setIsAdmin(false)
+      if(account != null && pet_local.deployer != null && account.toLowerCase() === pet_local.deployer.toLowerCase()){
+        setIsAdmin(true)
       }
     }
 
@@ -67,11 +108,12 @@ function Dapp() {
         setContract(connected_contract)
     }
 
-
     //useEffect
     useEffect(()=>{
       initContract()
-    },[])
+      checkIsAdmin()
+    },[account])
+
 
     //return jsx to client
     return (
@@ -80,14 +122,13 @@ function Dapp() {
           {/*<TxError/>*/}
           <br />
           <div className="navbar-container">
-            <Navbar isAuthenticated={isAuthenticated}/>
+            <Navbar isAuthenticated={isAuthenticated} account={account} isAdmin={isAdmin}/>
           </div>
           <div className="items">
-            <PetItem isAuthenticated={isAuthenticated} contract={contract}/>
+            <PetItem isAuthenticated={isAuthenticated} contract={contract} account={account} isAdmin={isAdmin}/>
           </div>
         </div>
         </>
     )
 }
-
 export default Dapp

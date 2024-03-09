@@ -5,16 +5,18 @@ import { ethers } from 'ethers';
 import eth from '../../ethers/ethers';
 
 
+
+
 //*PetItem
-export function PetItem({isAuthenticated,contract}){
+export function PetItem({isAuthenticated,contract,account,isAdmin}){
     const [petData,setPetData] = useState([])
     const [hasMore,setHasMore] = useState(true)
     const [page,setPage] = useState(1)
 
     const PAGE_LIMIT = 5
-
     const url = import.meta.env.VITE_VUE_APP_URL || "http://127.0.0.1:8000";
 
+    // useEffect
     useEffect(() => {
         setTimeout(() => {
             getPetData()
@@ -62,7 +64,10 @@ export function PetItem({isAuthenticated,contract}){
     //? addToCart
     const addToCart = async (e) => {
         const is_auth = await isAuthenticated()
-        if (is_auth && contract != null){
+
+        const is_exits_in_cart = await checkCartItems(e.target.getAttribute('pet-id'))
+
+        if (is_auth && contract != null && !is_exits_in_cart){
             const pet_slug =  e.target.getAttribute('pet-slug')
             const pet = await getPet(pet_slug)
             // let overrides = {
@@ -74,10 +79,30 @@ export function PetItem({isAuthenticated,contract}){
             //     gasLimit: 4712388,
 
             // }
-            const result = await contract.addToCart(pet.id,pet.name,"red",parseInt(pet.price),pet.pet_photo_link)
+
+            const signer = eth.getSigner(account)
+            const result = await contract.connect(signer).addToCart(pet.id,pet.name,"red",parseInt(pet.price),pet.pet_photo_link)
             toast.success('Added to cart successfully')
         }
+        else{
+            toast.error('You have already added to cart')
+        }
     }
+
+    // ?checkCartItems
+    const checkCartItems = async (pet_id) => {
+        const signer = eth.getSigner(account)
+        const pets = await contract.connect(signer).getCartItems()
+        let is_exists = false
+        pets.map((pet) => {
+            if(pet.id.toString() == pet_id){
+                is_exists = true
+                return
+            }
+        })
+        return is_exists
+    }
+
 
     //return jsx to client
     return (
@@ -117,26 +142,31 @@ export function PetItem({isAuthenticated,contract}){
                                                                 <path d="M0 0L3 3L0 6"></path>
                                                             </svg>
                                                         </a>
-                                                        <button onClick={addToCart} pet-slug={pet.slug} className="text-white w-55 bg-blue-700 hover:bg-blue-800 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800
-                                                            ml-2 group inline-flex items-center h-9 rounded-full text-sm font-semibold whitespace-nowrap px-3 pr-6 pl-4 focus:outline-none focus:ring-2 ">
-                                                            Add to cart
-                                                            <svg
-                                                                className="overflow-visible ml-1 -mt-2  text-slate-300 group-hover:text-slate-400 dark:text-slate-500 dark:group-hover:text-slate-400"
-                                                                width="3"
-                                                                height="5"
-                                                                viewBox="0 0 3 6"
-                                                                fill="none"
-                                                                stroke="currentColor"
-                                                                stroke-width="2"
-                                                                stroke-linecap="round"
-                                                                stroke-linejoin="round"
-                                                            >
-                                                            <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5M3.102 4l1.313 7h8.17l1.313-7zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4m-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2m7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
-
-                                                            </svg>
-
-                                                        </button>
-
+                                                        {
+                                                            !isAdmin ? (
+                                                                <button onClick={addToCart} pet-id={pet.id} pet-slug={pet.slug} className="text-white w-55 bg-blue-700 hover:bg-blue-800 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800
+                                                                    ml-2 group inline-flex items-center h-9 rounded-full text-sm font-semibold whitespace-nowrap px-3 pr-6 pl-4 focus:outline-none focus:ring-2 ">
+                                                                    Add to cart
+                                                                    <svg
+                                                                        className="overflow-visible ml-1 -mt-2  text-slate-300 group-hover:text-slate-400 dark:text-slate-500 dark:group-hover:text-slate-400"
+                                                                        width="3"
+                                                                        height="5"
+                                                                        viewBox="0 0 3 6"
+                                                                        fill="none"
+                                                                        stroke="currentColor"
+                                                                        stroke-width="2"
+                                                                        stroke-linecap="round"
+                                                                        stroke-linejoin="round"
+                                                                    >
+                                                                    <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5M3.102 4l1.313 7h8.17l1.313-7zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4m-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2m7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
+                                                                    </svg>
+                                                                </button>
+                                                            )
+                                                            :
+                                                            (
+                                                                null
+                                                            )
+                                                        }
                                                     </div>
                                                     {
                                                         pet.pet_photo_link != "" ? (

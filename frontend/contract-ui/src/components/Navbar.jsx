@@ -2,7 +2,7 @@ import { ConnectButton,Logo,Button } from 'web3uikit';
 import {Link} from 'react-router-dom'
 
 //*Navbar
-export function Navbar({isAuthenticated}){
+export function Navbar({isAuthenticated,account,isAdmin}){
     //return jsx to client
     return(
         <>
@@ -34,6 +34,11 @@ export function Navbar({isAuthenticated}){
                         </button>
                         <span>
                             <ConnectButton/>
+                        </span>
+                        <span>
+                            <span class="bg-blue-100  text-blue-800 text-xs font-medium me-2 px-5 py-2 rounded-full dark:bg-blue-900 dark:text-blue-300">
+                                {isAdmin ? "Admin" : "User"}
+                            </span>
                         </span>
                     </div>
                 </div>
