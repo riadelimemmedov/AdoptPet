@@ -1,9 +1,12 @@
+// !Contracts
 import * as pet_local from '../contracts/PetLocal.json' assert { type: 'json' };
+
+// ! Ethers
+import eth from "../ethers/ethers.js";
 import { ethers } from 'ethers';
 
-import eth from "../ethers/ethers.js";
 
-// !connect_contract
+// *connect_contract
 const connect_contract = async() => {
     const signer = eth.getSigner()
     const contract = new ethers.Contract(

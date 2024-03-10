@@ -1,14 +1,11 @@
 import { useEffect, useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { ethers } from 'ethers';
-import eth from '../../ethers/ethers';
-
-
+import {getSigner} from '../../helpers/get_signer';
 
 
 //*PetItem
-export function PetItem({isAuthenticated,contract,account,isAdmin}){
+export function PetItem({checkIsAuthenticated,isAuthenticated,contract,account,isAdmin}){
     const [petData,setPetData] = useState([])
     const [hasMore,setHasMore] = useState(true)
     const [page,setPage] = useState(1)
@@ -63,7 +60,7 @@ export function PetItem({isAuthenticated,contract,account,isAdmin}){
 
     //? addToCart
     const addToCart = async (e) => {
-        const is_auth = await isAuthenticated()
+        const is_auth = await checkIsAuthenticated()
 
         const is_exits_in_cart = await checkCartItems(e.target.getAttribute('pet-id'))
 
@@ -80,7 +77,7 @@ export function PetItem({isAuthenticated,contract,account,isAdmin}){
 
             // }
 
-            const signer = eth.getSigner(account)
+            const signer = getSigner(account)
             const result = await contract.connect(signer).addToCart(pet.id,pet.name,"red",parseInt(pet.price),pet.pet_photo_link)
             toast.success('Added to cart successfully')
         }
@@ -91,7 +88,7 @@ export function PetItem({isAuthenticated,contract,account,isAdmin}){
 
     // ?checkCartItems
     const checkCartItems = async (pet_id) => {
-        const signer = eth.getSigner(account)
+        const signer = getSigner(account)
         const pets = await contract.connect(signer).getCartItems()
         let is_exists = false
         pets.map((pet) => {

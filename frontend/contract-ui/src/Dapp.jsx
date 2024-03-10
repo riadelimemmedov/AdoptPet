@@ -12,6 +12,8 @@ import pet_local from '../contracts/PetLocal.json'
 // !Helpers
 import connect_contract from '../helpers/connect_contract';
 
+//! State
+// import useMoralisStore from '../state/store'
 
 // !Third part packages
 import { useMoralis } from "react-moralis";
@@ -28,14 +30,15 @@ function Dapp() {
     const [provider,setProvider] = useState(window.ethereum)
     const [isAdmin,setIsAdmin] = useState(false)
     const [reload,setReload] = useState(false)
-
-    //Moralis properties
-    const { web3,enableWeb3, account,Moralis } = useMoralis();
+    const [isAuthenticated,setIsAuthenticated] = useState(false)
 
 
     //reloadEffect
     const reloadEffect = useCallback(() => setReload(!reload),[reload])
 
+
+    //moralis
+    const { web3,account,Moralis } = useMoralis();
 
     //? checkWeb3
     const checkWeb3 = () => {
@@ -55,13 +58,15 @@ function Dapp() {
     }
 
     // ?isAuthenticated
-    const isAuthenticated = async () => {
+    const checkIsAuthenticated = async () => {
       if (typeof provider !== 'undefined') {
           await provider.request({method: "eth_requestAccounts"})
           const is_check = await checkNetwork()
+          setIsAuthenticated(is_check)
           return is_check
       } else {
           toast.error("MetaMask is not installed");
+          setIsAuthenticated(false)
           return false
       }
     }
@@ -122,10 +127,10 @@ function Dapp() {
           {/*<TxError/>*/}
           <br />
           <div className="navbar-container">
-            <Navbar isAuthenticated={isAuthenticated} account={account} isAdmin={isAdmin}/>
+            <Navbar checkIsAuthenticated={checkIsAuthenticated} isAuthenticated={isAuthenticated} account={account} isAdmin={isAdmin}/>
           </div>
           <div className="items">
-            <PetItem isAuthenticated={isAuthenticated} contract={contract} account={account} isAdmin={isAdmin}/>
+            <PetItem checkIsAuthenticated={checkIsAuthenticated} isAuthenticated={isAuthenticated} contract={contract} account={account} isAdmin={isAdmin}/>
           </div>
         </div>
         </>
