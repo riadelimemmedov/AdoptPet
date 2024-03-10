@@ -102,7 +102,7 @@ describe("PetAdoption", function () {
 
 			expect(account2).not.be.null
 			await expect(contract.addToCart(pet_id,pet_name,pet_color,pet_price,pet_photo)).not.to.be.reverted
-			await expect(contract.getCartItems()).not.be.null
+			expect(contract.getCartItems()).not.be.null
 		})
 		it("should match added and returned pet",async function(){
 			const {account2,contract} = await loadFixture(deployContractFixture)
@@ -127,4 +127,31 @@ describe("PetAdoption", function () {
 			expect(cartItems[0].photo).to.be.equal(pet_photo)
 		})
 	})
+
+	describe("Remove the cart",function(){
+		it("should remove the cart successfully",async function(){
+			const {account2,contract} = await loadFixture(deployContractFixture)
+
+			const pet_id = 1
+			const pet_name = "Rex"
+			const pet_color = "red"
+			const pet_price = 100
+			const pet_photo = "https://images.unsplash.com/photo-1600682011352-e448301668e7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1348&q=40"
+
+			expect(account2).not.be.null
+			await expect(contract.addToCart(pet_id,pet_name,pet_color,pet_price,pet_photo)).not.to.be.reverted // 0 index
+			await expect(contract.addToCart(pet_id,pet_name,pet_color,pet_price,pet_photo)).not.to.be.reverted // 1 index
+			await expect(contract.addToCart(pet_id,pet_name,pet_color,pet_price,pet_photo)).not.to.be.reverted// 2 index
+			expect(contract.getCartItems()).not.be.null
+
+			expect(await contract.getCartLength().then(value => parseInt(value.toString()))).equal(3)
+
+			await expect(contract.removeCart(0)).not.to.be.reverted
+			await expect(contract.removeCart(5)).to.be.revertedWith("Invalid index")
+
+			expect(await contract.getCartLength().then(value => parseInt(value.toString()))).equal(2)
+		})
+	})
+
+
 })

@@ -23,6 +23,7 @@ contract PetAdoption {
         petIndex = initialPetIndex;
     }
 
+    // addPet
     function addPet() public {
         require(
             owner == msg.sender,
@@ -31,6 +32,7 @@ contract PetAdoption {
         petIndex++;
     }
 
+    //adoptPet
     function adoptPet(uint adoptIdx) public {
         require(adoptIdx < petIndex, "Pet index out of the bounds!");
         require(
@@ -43,18 +45,22 @@ contract PetAdoption {
         allAdoptedPets.push(adoptIdx);
     }
 
+    //getOwner
     function getOwner() public view returns (address) {
         return owner;
     }
 
+    //getAllAdoptedPetsByOwner
     function getAllAdoptedPetsByOwner() public view returns (uint[] memory) {
         return ownerAddressToPetList[msg.sender];
     }
 
+    //getAllAdoptedPets
     function getAllAdoptedPets() public view returns (uint[] memory) {
         return allAdoptedPets;
     }
 
+    //addToCart
     function addToCart(
         uint256 _petId,
         string memory _petName,
@@ -72,7 +78,20 @@ contract PetAdoption {
         cart[msg.sender].push(newPet);
     }
 
+    //getCartItems
     function getCartItems() public view returns (Pet[] memory) {
         return cart[msg.sender];
+    }
+
+    //removeCart
+    function removeCart(uint256 index) public {
+        require(index < cart[msg.sender].length, "Invalid index");
+        cart[msg.sender][index] = cart[msg.sender][cart[msg.sender].length - 1];
+        cart[msg.sender].pop();
+    }
+
+    //getCartLength
+    function getCartLength() public view returns (uint256) {
+        return cart[msg.sender].length;
     }
 }
