@@ -60,8 +60,7 @@ export function PetItem({checkIsAuthenticated,isAuthenticated,contract,account,i
 
     //? addToCart
     const addToCart = async (e) => {
-        const is_auth = await checkIsAuthenticated()
-
+        const is_auth = isAuthenticated
         const is_exits_in_cart = await checkCartItems(e.target.getAttribute('pet-id'))
 
         if (is_auth && contract != null && !is_exits_in_cart){
@@ -120,7 +119,7 @@ export function PetItem({checkIsAuthenticated,isAuthenticated,contract,account,i
                                                             <span className="mb-1 block text-sm leading-6 text-indigo-500">{pet.name}</span>
                                                         </h3>
                                                         <div className="prose prose-slate prose-sm text-slate-600 dark:prose-dark">
-                                                            <p>{pet.description}</p>
+                                                            <p>{pet.description.substring(0,pet.description.length/2)}...</p>
                                                         </div>
                                                         <a className="group inline-flex items-center h-9 rounded-full text-sm font-semibold whitespace-nowrap px-3 focus:outline-none focus:ring-2 bg-slate-100 text-slate-700 hover:bg-slate-200 hover:text-slate-900 focus:ring-slate-500 dark:bg-slate-700 dark:text-slate-100 dark:hover:bg-slate-600 dark:hover:text-white dark:focus:ring-slate-500 mt-6" href="https://headlessui.dev">
                                                             Learn more
@@ -140,7 +139,7 @@ export function PetItem({checkIsAuthenticated,isAuthenticated,contract,account,i
                                                             </svg>
                                                         </a>
                                                         {
-                                                            !isAdmin ? (
+                                                            !isAdmin && isAuthenticated ? (
                                                                 <button onClick={addToCart} pet-id={pet.id} pet-slug={pet.slug} className="text-white w-55 bg-blue-700 hover:bg-blue-800 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800
                                                                     ml-2 group inline-flex items-center h-9 rounded-full text-sm font-semibold whitespace-nowrap px-3 pr-6 pl-4 focus:outline-none focus:ring-2 ">
                                                                     Add to cart

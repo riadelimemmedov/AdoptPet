@@ -1,5 +1,5 @@
 // ! React
-import { useEffect, useState,useRef } from 'react';
+import { useEffect, useState,useRef,useCallback } from 'react';
 
 //! Component
 import { Navbar } from "../components/Navbar";
@@ -21,6 +21,11 @@ export  default function Cart(){
     const [pets,setPets] = useState(null)
     const [paymentOption,setPaymentOption] = useState('ethereum')
     const [isAdopted,setIsAdopted] = useState(false)
+    const [signer,setSigner] = useState()
+    const [reload,setReload] = useState(false)
+
+    //reloadEffect
+    const reloadEffect = useCallback(() => setReload(!reload),[reload])
 
     //moralis
     const { web3,account,Moralis,isAuthenticated,user,authenticate } = useMoralis();
@@ -33,7 +38,7 @@ export  default function Cart(){
         const connected_contract = await connect_contract()
         const signer = getSigner(account)
         const pets = await connected_contract.connect(signer).getCartItems()
-        pets.length > 0 && (setPets(pets), setContract(connected_contract));
+        pets.length > 0 && (setPets(pets), setContract(connected_contract),setSigner(signer));
     }
 
     // ?handlePaymentOptionChanged
@@ -42,12 +47,24 @@ export  default function Cart(){
         setPaymentOption(selected_option)
     }
 
-    //? hideElement
-    const hideElement = () => {
+    //? removeCart
+    const removeCart = async (index) => {
+        console.log("🚀 ~ removeCart ~ index:", index)
         const element = elementRef.current;
-        gsap.to(element, { opacity: 0, duration: 1, onComplete: () => {
-          // Optionally, perform any additional actions after hiding the element
-        }});
+        const removed_pet = await contract.connect(signer).removeCart(index)
+
+        if (element) {
+            gsap.to(element, {
+                opacity: 0,
+                height: 0,
+                duration: 0.3,
+                onComplete: () => {
+                    // Remove the element from the DOM
+                    element.remove();
+                },
+            });
+        }
+        await getCartItems()
     ;}
 
     //useEffect
@@ -80,6 +97,7 @@ export  default function Cart(){
                                     pets && pets.length > 0 ? (
                                         pets.map((pet, index) => (
                                             <div key={index} className="mt-8 space-y-3 rounded-lg border bg-white px-2 py-4 sm:px-6" ref={elementRef}>
+                                                <p>Index value brat - {index}</p>
                                                 <div className="flex flex-col rounded-lg bg-white sm:flex-row">
                                                     <img className="m-2 h-24 mt-5 w-28 rounded-md border object-cover object-center" src={pet.photo} alt="" />
                                                     <div className="grid grid-cols-1 w-full px-4 py-4">
@@ -89,8 +107,7 @@ export  default function Cart(){
                                                     </div>
                                                 </div>
                                                 <div className="flex justify-end">
-                                                <button disabled type="button" className="text-white bg-slate-700 -mt-10 mr-4  focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 inline-flex items-center">
-
+                                                <button stype="button" className="text-white bg-slate-700 -mt-10 mr-4  focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 inline-flex items-center">
                                                     {
                                                         isAdopted ? (
                                                             <div>
@@ -108,6 +125,9 @@ export  default function Cart(){
                                                         :
                                                         <span>Adopt</span>
                                                     }
+                                                </button>
+                                                <button onClick={()=>removeCart(index)} stype="button" className="text-white bg-red-500 -mt-10 mr-4 -ml-2 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 dark:bg-red-600 dark:hover:bg-red-800 dark:focus:ring-red-800 inline-flex items-center">
+                                                    Remove cart
                                                 </button>
                                                 </div>
                                             </div>

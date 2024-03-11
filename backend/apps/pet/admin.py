@@ -25,6 +25,7 @@ class PetAdminForm(forms.ModelForm):
 class PetAdmin(admin.ModelAdmin):
     form = PetAdminForm
     list_display = [
+        "id",
         "name",
         "price",
         "age",

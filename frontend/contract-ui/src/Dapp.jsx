@@ -57,11 +57,48 @@ function Dapp() {
         Moralis.onAccountChanged(handleAccountsChanged);
     }
 
+
+    // ?getMoralisProvider
+    const getMoralisProvider = async() => {
+      return window.localStorage.getItem('provider')
+    }
+
+
+
+    //? checkMoralisWalletUIIsConnected
+    const checkMoralisWalletUIIsConnected = async() => {
+      const metamask = await getMoralisProvider()
+      if(metamask == null) {
+          toast.info("If you want see your balance please click connect button top right side")
+      }
+    }
+
+
+    // ?setAccountListener
+    const setAccountListener = async()=>{
+      provider._jsonRpcConnection.events.on('notification',(payload) => {
+        let count = 0
+        const { method,params } = payload
+
+        if(params.isUnlocked===false){
+          setIsAuthenticated(false)
+
+        }
+        else if(params.isUnlocked===true){
+          setIsAuthenticated(true)
+        }
+      })
+    }
+
+
     // ?isAuthenticated
     const checkIsAuthenticated = async () => {
       if (typeof provider !== 'undefined') {
           await provider.request({method: "eth_requestAccounts"})
           const is_check = await checkNetwork()
+          await checkMoralisWalletUIIsConnected()
+
+          console.log("🚀 ~ checkIsAuthenticated ~ is_check:", is_check)
           setIsAuthenticated(is_check)
           return is_check
       } else {
@@ -115,8 +152,11 @@ function Dapp() {
 
     //useEffect
     useEffect(()=>{
+      // setAccountListener()
       initContract()
       checkIsAdmin()
+      setAccountListener()
+      checkIsAuthenticated()
     },[account])
 
 
@@ -127,10 +167,10 @@ function Dapp() {
           {/*<TxError/>*/}
           <br />
           <div className="navbar-container">
-            <Navbar checkIsAuthenticated={checkIsAuthenticated} isAuthenticated={isAuthenticated} account={account} isAdmin={isAdmin}/>
+            <Navbar isAuthenticated={isAuthenticated} account={account} isAdmin={isAdmin}/>
           </div>
           <div className="items">
-            <PetItem checkIsAuthenticated={checkIsAuthenticated} isAuthenticated={isAuthenticated} contract={contract} account={account} isAdmin={isAdmin}/>
+            <PetItem isAuthenticated={isAuthenticated} contract={contract} account={account} isAdmin={isAdmin}/>
           </div>
         </div>
         </>
