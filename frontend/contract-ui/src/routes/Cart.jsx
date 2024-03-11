@@ -20,7 +20,7 @@ export  default function Cart(){
     const [provider,setProvider] = useState(window.ethereum)
     const [pets,setPets] = useState(null)
     const [paymentOption,setPaymentOption] = useState('ethereum')
-    const [isAdopted,setIsAdopted] = useState(false)
+    const [isAdopted,setIsAdopted] = useState()
     const [signer,setSigner] = useState()
     const [reload,setReload] = useState(false)
 
@@ -38,7 +38,8 @@ export  default function Cart(){
         const connected_contract = await connect_contract()
         const signer = getSigner(account)
         const pets = await connected_contract.connect(signer).getCartItems()
-        pets.length > 0 && (setPets(pets), setContract(connected_contract),setSigner(signer));
+        console.log("🚀 ~ getCartItems ~ pets:", pets)
+        pets.length > 0 ? (setPets(pets), setContract(connected_contract), setSigner(signer)) : reloadEffect();
     }
 
     // ?handlePaymentOptionChanged
@@ -50,9 +51,26 @@ export  default function Cart(){
     //? removeCart
     const removeCart = async (index) => {
         console.log("🚀 ~ removeCart ~ index:", index)
-        const element = elementRef.current;
-        const removed_pet = await contract.connect(signer).removeCart(index)
+        await contract.connect(signer).removeCart(index)
+        await removePet()
+        await getCartItems()
+    }
 
+    const adoptPet = async (index) => {
+        console.log("🚀 ~ adoptPet ~ index:", index)
+        const result = await contract.connect(signer).adoptPet(index)
+        console.log("🚀 ~ adoptPet ~ result:", result)
+        setIsAdopted(index)
+        setTimeout(async() => {
+            setIsAdopted()
+            await removeCart(index)
+        }, 3000);
+        // const alaalnin = await contract.connect(signer).getAllAdoptedPetsByOwner()
+        // console.log("🚀 ~ adoptPet ~ alaalnin:", alaalnin.toString())
+    }
+
+    const removePet = async () => {
+        const element = elementRef.current;
         if (element) {
             gsap.to(element, {
                 opacity: 0,
@@ -64,8 +82,7 @@ export  default function Cart(){
                 },
             });
         }
-        await getCartItems()
-    ;}
+    }
 
     //useEffect
     useEffect(()=>{
@@ -88,7 +105,7 @@ export  default function Cart(){
                 </div>
             </div>
             {
-                contract != null ? (
+                contract != null || pets != null ? (
                     <div className="grid sm:px-10 lg:grid-cols-2 lg:px-20 xl:px-32 mt-10">
                         <div className="px-4 pt-8">
                             <p className="text-xl font-medium">Order Summary</p>
@@ -107,9 +124,9 @@ export  default function Cart(){
                                                     </div>
                                                 </div>
                                                 <div className="flex justify-end">
-                                                <button stype="button" className="text-white bg-slate-700 -mt-10 mr-4  focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 inline-flex items-center">
+                                                <button onClick={()=>adoptPet(index)} stype="button" className="text-white bg-slate-700 -mt-10 mr-4  focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 inline-flex items-center">
                                                     {
-                                                        isAdopted ? (
+                                                        isAdopted == index ? (
                                                             <div>
                                                                 <svg aria-hidden="true" role="status" className="inline w-4 h-4 me-3 text-white animate-spin" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                                     <path
@@ -190,7 +207,9 @@ export  default function Cart(){
                     )
                 :
                 (
-                    null
+                    <div class="p-10 text-sm text-yellow-800 rounded-lg bg-yellow-50 text-center mt-20 dark:bg-gray-800 dark:text-yellow-300" role="alert">
+                        <span class="font-medium text-centers">You don't have have any product on your cart</span>. Please first add pet to cart.
+                    </div>
                 )
             }
         </>
