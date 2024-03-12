@@ -51,7 +51,6 @@ class PetManager(models.Manager):
 # Create your models here.
 # !Pet
 class Pet(TimeStampedModel, LifecycleModel):
-    # pet_index = models.AutoField(primary_key=True, blank=True, null=True)
     name = models.CharField(_("Name"), max_length=50)
     age = models.IntegerField(_("Age"))
     breed = models.CharField(_("Breed"), max_length=50)
@@ -84,7 +83,6 @@ class Pet(TimeStampedModel, LifecycleModel):
     city = models.CharField(_("City"), max_length=50)
     status = models.BooleanField(_("Status"), default=True)
     vaccinated = models.BooleanField(_("Vaccinated"), default=True)
-    pet_index = models.IntegerField(_("Pet index"), unique=True, null=True)
     price = MoneyField(
         _("Price"),
         max_digits=14,
