@@ -7,12 +7,12 @@ on:
       - ".github/workflows/backend.yml"
 
 env:
-  SECRET_KEY: django-insecure-97(!!1=_(2xgj%)pp2&6bn8x@0^g6b1ps5ea24*i2tnc-!3%tq
-  ENVIRONMENT: LOCAL
-  USE_S3: False
-  REDIS_HOST: redis
-  REDIS_PORT: 6379
-  REDIS_DB: 1
+  SECRET_KEY: ${{ secrets.SECRET_KEY }}
+  ENVIRONMENT: ${{ secrets.ENVIRONMENT }}
+  USE_S3: ${{ secrets.USE_S3 }}
+  REDIS_HOST: ${{ secrets.REDIS_HOST }}
+  REDIS_PORT: ${{ secrets.REDIS_PORT }}
+  REDIS_DB: ${{ secrets.REDIS_DB }}
 
 jobs:
   test:
