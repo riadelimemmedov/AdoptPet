@@ -18,15 +18,7 @@ export function PetItem({checkIsAuthenticated,isAuthenticated,contract,account,i
         setTimeout(() => {
             getPetData()
         }, 1500);
-        showMessage()
     },[page])
-
-    //? showMessage
-    const showMessage = () => {
-        if(document.referrer.includes('cart')){
-            toast.success('Adopted pet successfully')
-        }
-    }
 
 
     // ?getPetData

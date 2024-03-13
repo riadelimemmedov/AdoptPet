@@ -16,9 +16,6 @@ import { toast } from 'react-toastify'
 import { useNavigate } from "react-router-dom";
 
 
-
-
-
 // *Cart
 export  default function Cart(){
     const [contract,setContract] = useState(null)
@@ -46,7 +43,6 @@ export  default function Cart(){
         const connected_contract = await connect_contract()
         const signer = getSigner(account)
         const pets = await connected_contract.connect(signer).getCartItems()
-        console.log("🚀 ~ getCartItems ~ pets:", pets)
         return pets.length > 0 ? (setPets(pets), setContract(connected_contract), setSigner(signer),false) : true;
     }
 
@@ -61,7 +57,8 @@ export  default function Cart(){
         await contract.connect(signer).removeCart(index)
         await removePet()
         if(await getCartItems()){
-            setTimeout(()=>navigate("/"),1500)
+            toast.success('Adopted Pet Successesfully')
+            setTimeout(()=>navigate("/"),3000)
         }
     }
 
@@ -183,10 +180,8 @@ export  default function Cart(){
                                         </svg>
                                     </div>
                                 </div>
-
-
                             </div>
-                            <button onClick={() => adoptPet()} className="mt-4 mb-8 w-full rounded-md bg-gray-900 px-6 py-3 font-medium text-white">Check Payment</button>
+                            <button onClick={() => adoptPet()} className="mt-4 mb-8 w-full rounded-md bg-gray-900 px-6 py-3 font-medium text-white">Adopt</button>
                         </div>
                     </div>
                     )
