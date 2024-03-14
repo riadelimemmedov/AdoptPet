@@ -19,7 +19,7 @@ class OrderView(APIView):
         domain_url = "http://localhost:8001/"
 
         try:
-            # create new checkout session
+            # create new checkout session for payment
             checkout_session = stripe.checkout.Session.create(
                 success_url=domain_url + "success?session_id={CHECKOUT_SESSION_ID}",
                 cancel_url=domain_url + "canceled",
