@@ -4,6 +4,31 @@ info:
   version: 1.0.0
   description: This project purpose creating ecommerce api for business company
 paths:
+  /orders/:
+    get:
+      operationId: orders_retrieve
+      description: Order
+      tags:
+      - orders
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+    post:
+      operationId: orders_create
+      description: Order
+      tags:
+      - orders
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
   /pets/:
     get:
       operationId: pets_retrieve
@@ -225,6 +250,9 @@ components:
     Pet:
       type: object
       properties:
+        id:
+          type: integer
+          readOnly: true
         name:
           type: string
           maxLength: 50
@@ -252,9 +280,12 @@ components:
         pet_photo_url:
           type: string
           format: uri
-          nullable: true
           title: Pet photo
           pattern: (?:png|jpg|jpeg)$
+        pet_photo_link:
+          type: string
+          format: uri
+          maxLength: 200
         location:
           type: string
           maxLength: 50
@@ -265,6 +296,15 @@ components:
           type: boolean
         vaccinated:
           type: boolean
+        price_currency:
+          type: string
+          readOnly: true
+          nullable: true
+        price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,12}(?:\.\d{0,2})?$
+          nullable: true
         description:
           type: string
           maxLength: 150
@@ -273,8 +313,10 @@ components:
       - breed
       - city
       - description
+      - id
       - location
       - name
+      - price_currency
       - slug
       - weight
     Upload:

@@ -63,7 +63,13 @@ THIRD_PARTY_APPS = [
 ]
 
 # !Created Apps
-CREATED_APPS = ["apps.users", "apps.user_profile", "apps.pet", "apps.upload"]
+CREATED_APPS = [
+    "apps.users",
+    "apps.user_profile",
+    "apps.pet",
+    "apps.upload",
+    "apps.order",
+]
 
 # !Installed Apps
 INSTALLED_APPS = DEFAULT_APPS + CREATED_APPS + THIRD_PARTY_APPS
