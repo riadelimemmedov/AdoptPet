@@ -34,7 +34,6 @@ class OrderView(APIView):
                     }
                 ],
             )
-            print("checkout_session ", checkout_session)
             return Response({"sessionId": checkout_session["id"]})
         except Exception as e:
             print("e ", e)

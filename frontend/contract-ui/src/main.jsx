@@ -10,6 +10,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 import Cart from './routes/Cart'
 import PaymentSuccessCard from './components/PaymentSuccsess'
+import PaymentCancelledCard from './components/PaymentCancelled'
 
 
 ReactDOM.createRoot(document.getElementById('root')).render(
@@ -19,6 +20,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           <Route exact path="/" element={<App/>}/>
           <Route exact path="cart" element={<Cart/>}/>
           <Route exact path="success" element={<PaymentSuccessCard/>}/>
+          <Route exact path="canceled" element={<PaymentCancelledCard/>}/>
         </Routes>
       </BrowserRouter>
       <ToastContainer />

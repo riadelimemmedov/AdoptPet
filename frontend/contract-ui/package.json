@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "dotenv": "^16.4.5",
+    "email-validator": "^2.0.4",
     "ethers": "^5.7.2",
     "gsap": "^3.12.5",
     "moralis-v1": "^1.13.0",

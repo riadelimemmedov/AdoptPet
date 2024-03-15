@@ -1,12 +1,47 @@
-import React from 'react';
-import {Link} from 'react-router-dom'
+import React, { useEffect, useState } from 'react';
+import {Link,useLocation} from 'react-router-dom'
+import connect_contract from '../../helpers/connect_contract';
+import { getSigner } from '../../helpers/get_signer';
+import { useMoralis } from "react-moralis";
+import { Navbar } from './Navbar';
 
 
 // *PaymentSuccessCard
 const PaymentSuccessCard = () => {
+    // Moralis
+    const { web3,account } = useMoralis();
+
+    // getPaymentSessionId
+    const getPaymentSessionId = () => {
+        const queryString = window.location.search;
+        const params = new URLSearchParams(queryString);
+        return params.get('session_id');
+    }
+
+    // removePetsFromCard
+    const removePetsFromCard = async () => {
+        if(getPaymentSessionId() != null){
+            const connected_contract = await connect_contract()
+            const signer = getSigner(account)
+            const pets = await connected_contract.connect(signer).getCartItems()
+            pets.length>0&&pets.forEach(async (pet,index) => {
+                await connected_contract.connect(signer).removeCart(index)
+            })
+        }
+        else{
+            return null
+        }
+    }
+
+    useEffect(()=>{
+        removePetsFromCard()
+    },[])
+
+
     //return jsx to client
     return (
         <>
+            <Navbar/>
             <div class="bg-white p-6  md:mx-auto justify-center mt-20">
                 <svg viewBox="0 0 24 24" class="text-green-600 w-16 h-16 mx-auto my-6">
                     <path fill="currentColor"

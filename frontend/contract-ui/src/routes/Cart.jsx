@@ -7,6 +7,8 @@ import { Navbar } from "../components/Navbar";
 // !Helpers methods
 import connect_contract from '../../helpers/connect_contract';
 import {getSigner} from '../../helpers/get_signer';
+import getStripePublishableKey from '../../helpers/init_stripe';
+
 
 
 // !Third part packages
@@ -14,13 +16,11 @@ import { useMoralis } from "react-moralis";
 import { gsap } from "gsap";
 import { toast } from 'react-toastify'
 import { useNavigate } from "react-router-dom";
-import getStripePublishableKey from '../../helpers/init_stripe';
-
-
+import validator from 'email-validator';
 
 
 // *Cart
-export  default function Cart(){
+export default function Cart(){
     const [contract,setContract] = useState(null)
     const [provider,setProvider] = useState(window.ethereum)
     const [pets,setPets] = useState(null)
@@ -28,6 +28,7 @@ export  default function Cart(){
     const [signer,setSigner] = useState()
     const [reload,setReload] = useState(false)
     const [paymentIsStart,setPaymentIsStart] = useState(false)
+    const [email,setEmail] = useState(null)
 
     //mavigate
     const navigate = useNavigate();
@@ -37,6 +38,20 @@ export  default function Cart(){
 
     //moralis
     const { web3,account,Moralis,isAuthenticated,user,authenticate } = useMoralis();
+
+
+    //? showMessage
+    const showMessage = (message_text,message_type) => {
+        if(message_type == "success"){
+            toast.success(message_text)
+        }
+        else if(message_type == "error"){
+            toast.error(message_text)
+        }
+        else if(message_type == "info"){
+            toast.warning(message_text)
+        }
+    }
 
     // ?gsap
     const elementRef = useRef(null);
@@ -60,19 +75,25 @@ export  default function Cart(){
         await contract.connect(signer).removeCart(index)
         await removePet()
         if(await getCartItems()){
+            setTimeout(()=>navigate("/"),0)
             setPaymentIsStart(true)
-            toast.success('Adopted Pet Successesfully')
-            setTimeout(()=>navigate("/"),3000)
         }
     }
 
     // ?adoptPet
     const adoptPet = async () => {
-        setPaymentIsStart(true)
-        pets.map(async(pet,index) => {
-            await contract.connect(signer).adoptPet(index)
-            await removeCart(index >= 1 ? index-1 : 0)
-        })
+        const {isValidEmail,isValidPaymentMethod:ethereum} = checkPaymentCredentials(paymentOption,web3)
+        const isCheckedPaymentCredentials = isValidEmail && ethereum ? true : false
+        if(isCheckedPaymentCredentials){
+            setPaymentIsStart(true)
+            pets.map(async(pet,index) => {
+                await contract.connect(signer).adoptPet(index)
+                await removeCart(index >= 1 ? index-1 : 0)
+            })
+        }
+        else{
+            setPaymentIsStart(false)
+        }
     }
 
     // ?removePet
@@ -91,11 +112,43 @@ export  default function Cart(){
         }
     }
 
+    // ?validateEmail
+    const validateEmail = () => {
+        const isValidEmail = validator.validate(email);
+        if(!isValidEmail) {
+            showMessage('Invalid email address', 'error')
+            return false
+        }
+        return true
+    }
+
+    // ?validatePaymentMethod
+    const validatePaymentMethod = (payment_method,wallet_public_key=null) => {
+        if(payment_method=='ethereum' && wallet_public_key == null){
+            return null
+        }
+        else if(payment_method=='stripe' && wallet_public_key){
+            const stripe = getStripePublishableKey()
+            return stripe
+        }
+    }
+
+    //? checkPaymentCredentials
+    const checkPaymentCredentials = (payment_method,wallet_public_key=null) => {//ethereum or stripe
+        const isValidEmail = validateEmail()
+        const isValidPaymentMethod = validatePaymentMethod(payment_method, wallet_public_key)
+        if(isValidEmail && isValidPaymentMethod){
+            return {isValidEmail,isValidPaymentMethod}
+        }
+    }
+
     //?handlePurchase
     const handlePurchase = () =>{
-        const stripe = getStripePublishableKey()
-        setPaymentIsStart(true)
-        fetch('http://localhost:8000/orders/create-checkout-session', {
+        const {isValidEmail,isValidPaymentMethod:stripe} = checkPaymentCredentials(paymentOption,true)
+        const isCheckedPaymentCredentials = isValidEmail && stripe ? true : false
+        if(isCheckedPaymentCredentials){
+            setPaymentIsStart(true)
+            fetch('http://localhost:8000/orders/create-checkout-session', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -112,6 +165,11 @@ export  default function Cart(){
             .then((res) => {
                 console.log(res);
             });
+        }
+        else{
+            return null
+        }
+
     }
 
     //useEffect
@@ -201,7 +259,7 @@ export  default function Cart(){
                             <div className="">
                                 <label for="email" className="mt-4 mb-2 block text-sm font-medium">Email</label>
                                 <div className="relative">
-                                    <input type="text" id="email" name="email" className="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500" placeholder="your.email@gmail.com" required/>
+                                    <input onChange={(e)=>setEmail(e.target.value)} type="text" id="email" name="email" className="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500" placeholder="your.email@gmail.com" required/>
                                     <div className="pointer-events-none absolute inset-y-0 left-0 inline-flex items-center px-3">
                                         <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
