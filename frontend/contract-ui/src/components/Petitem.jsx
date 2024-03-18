@@ -62,8 +62,12 @@ export function PetItem({checkIsAuthenticated,isAuthenticated,contract,account,i
     const addToCart = async (e) => {
         const is_auth = isAuthenticated
         const is_exits_in_cart = await checkCartItems(e.target.getAttribute('pet-id'))
+        const is_adopted = await checkIsAdopted(e.target.getAttribute('pet-index'))
 
-        if (is_auth && contract != null && !is_exits_in_cart){
+        if(is_auth && contract != null && is_adopted){
+            toast.info('This pet already buyed')
+        }
+        else if(is_auth && contract != null && !is_exits_in_cart){
             const pet_slug =  e.target.getAttribute('pet-slug')
             const pet = await getPet(pet_slug)
             // let overrides = {
@@ -77,10 +81,10 @@ export function PetItem({checkIsAuthenticated,isAuthenticated,contract,account,i
             // }
 
             const signer = getSigner(account)
-            const result = await contract.connect(signer).addToCart(pet.id,pet.name,"red",parseInt(pet.price),pet.pet_photo_link)
+            const result = await contract.connect(signer).addToCart(pet.id,pet.name,pet.color,parseInt(pet.price),pet.pet_photo_link)
             toast.success('Added to cart successfully')
         }
-        else{
+        else if(is_auth && contract != null && is_exits_in_cart){
             toast.error('You have already added to cart')
         }
     }
@@ -97,6 +101,20 @@ export function PetItem({checkIsAuthenticated,isAuthenticated,contract,account,i
             }
         })
         return is_exists
+    }
+
+    // ?checkIsAdopted
+    const checkIsAdopted = async (pet_index) => {
+        const signer = getSigner(account)
+        const adopted_pets = await contract.connect(signer).getAllAdoptedPetsByOwner()
+        let is_adopted = false
+        adopted_pets.map((pet) => {
+            if(pet.toString() == pet_index){
+                is_adopted = true
+                return
+            }
+        })
+        return is_adopted
     }
 
 
@@ -140,7 +158,7 @@ export function PetItem({checkIsAuthenticated,isAuthenticated,contract,account,i
                                                         </a>
                                                         {
                                                             !isAdmin && isAuthenticated ? (
-                                                                <button onClick={addToCart} pet-id={pet.id} pet-slug={pet.slug} className="text-white w-55 bg-blue-700 hover:bg-blue-800 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800
+                                                                <button onClick={addToCart} pet-index={index} pet-id={pet.id} pet-slug={pet.slug} className="text-white w-55 bg-blue-700 hover:bg-blue-800 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800
                                                                     ml-2 group inline-flex items-center h-9 rounded-full text-sm font-semibold whitespace-nowrap px-3 pr-6 pl-4 focus:outline-none focus:ring-2 ">
                                                                     Add to cart
                                                                     <svg

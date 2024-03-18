@@ -55,6 +55,9 @@ if settings.APP_NAME == AppName.ADMIN.name:
     urlpatterns += [path("upload/", include("apps.upload.urls", namespace="upload"))]
     urlpatterns += [path("pets/", include("apps.pet.urls", namespace="pet"))]
     urlpatterns += [path("orders/", include("apps.order.urls", namespace="order"))]
+    urlpatterns += [
+        path("transactions/", include("apps.transaction.urls", namespace="transaction"))
+    ]
 
 
 # *Settings Debug

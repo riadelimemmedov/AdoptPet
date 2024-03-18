@@ -3,6 +3,8 @@ import { useEffect, useState,useRef,useCallback } from 'react';
 
 //! Component
 import { Navbar } from "../components/Navbar";
+import PriceCart from '../components/Price';
+
 
 // !Helpers methods
 import connect_contract from '../../helpers/connect_contract';
@@ -124,8 +126,8 @@ export default function Cart(){
 
     // ?validatePaymentMethod
     const validatePaymentMethod = (payment_method,wallet_public_key=null) => {
-        if(payment_method=='ethereum' && wallet_public_key == null){
-            return null
+        if(payment_method=='ethereum' && wallet_public_key == web3){
+            return web3
         }
         else if(payment_method=='stripe' && wallet_public_key){
             const stripe = getStripePublishableKey()
@@ -202,17 +204,16 @@ export default function Cart(){
                                     pets && pets.length > 0 ? (
                                         pets.map((pet, index) => (
                                             <div key={index} className="mt-8 space-y-3 rounded-lg border bg-white px-2 py-4 sm:px-6" ref={elementRef}>
-                                                <p>Index value brat - {index}</p>
                                                 <div className="flex flex-col rounded-lg bg-white sm:flex-row">
                                                     <img className="m-2 h-24 mt-5 w-28 rounded-md border object-cover object-center" src={pet.photo} alt="" />
                                                     <div className="grid grid-cols-1 w-full px-4 py-4">
                                                         <span className="font-semibold">Name:  {pet.name}</span>
                                                         <span className="float-right text-gray-400 p-4 mt-2 mb-2" style={{ backgroundColor: pet.color }}></span>
-                                                        <p className="text-lg font-bold">Price: {pet.price.toString()}$</p>
+                                                        <PriceCart price={pet.price.toString()} paymentOption={paymentOption}/>
                                                     </div>
                                                 </div>
                                                 <div className="flex justify-end">
-                                                <button onClick={()=>removeCart(index)} stype="button" className="text-white bg-red-500 -mt-10 mr-4 -ml-2 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 dark:bg-red-600 dark:hover:bg-red-800 dark:focus:ring-red-800 inline-flex items-center">
+                                                <button onClick={()=>removeCart(index)} stype="button" className="text-white bg-red-500 -mt-12 mr-4 -ml-2 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 dark:bg-red-600 dark:hover:bg-red-800 dark:focus:ring-red-800 inline-flex items-center">
                                                     Remove cart
                                                 </button>
                                                 </div>
