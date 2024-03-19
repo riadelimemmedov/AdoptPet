@@ -1,5 +1,5 @@
 #!/bin/sh
-APP_NAMES=("users" "user_profile" "pet" "upload")
+APP_NAMES=("users" "user_profile" "pet" "upload" "order" "transaction")
 
 for APP_NAME in "${APP_NAMES[@]}"; do
     # Run makemigrations for specific apps

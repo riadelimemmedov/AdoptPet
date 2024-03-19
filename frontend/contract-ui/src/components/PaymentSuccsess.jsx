@@ -4,12 +4,15 @@ import connect_contract from '../../helpers/connect_contract';
 import { getSigner } from '../../helpers/get_signer';
 import { useMoralis } from "react-moralis";
 import { Navbar } from './Navbar';
+import usePetStore from '../../state/store';
 
 
 // *PaymentSuccessCard
 const PaymentSuccessCard = () => {
     // Moralis
     const { web3,account } = useMoralis();
+
+    const {confirmations} = usePetStore()
 
     // getPaymentSessionId
     const getPaymentSessionId = () => {
@@ -33,6 +36,7 @@ const PaymentSuccessCard = () => {
         }
     }
 
+    //useEffect
     useEffect(()=>{
         removePetsFromCard()
     },[])
@@ -41,7 +45,6 @@ const PaymentSuccessCard = () => {
     //return jsx to client
     return (
         <>
-            <Navbar/>
             <div class="bg-white p-6  md:mx-auto justify-center mt-20">
                 <svg viewBox="0 0 24 24" class="text-green-600 w-16 h-16 mx-auto my-6">
                     <path fill="currentColor"

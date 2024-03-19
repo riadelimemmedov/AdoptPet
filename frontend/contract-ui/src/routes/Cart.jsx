@@ -19,6 +19,7 @@ import { gsap } from "gsap";
 import { toast } from 'react-toastify'
 import { useNavigate } from "react-router-dom";
 import validator from 'email-validator';
+import usePetStore from '../../state/store';
 
 
 // *Cart
@@ -40,6 +41,8 @@ export default function Cart(){
 
     //moralis
     const { web3,account,Moralis,isAuthenticated,user,authenticate } = useMoralis();
+
+    const {setFromUser,setConfirmations,setValue,setAdoptedPetSlug,setPaymentOptions,from_user} = usePetStore()
 
 
     //? showMessage
@@ -155,7 +158,7 @@ export default function Cart(){
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ book_id: 1 }),
+                body: JSON.stringify({ pets: pets,from_user:account }),
             })
             .then((result) => {
                 return result.json()

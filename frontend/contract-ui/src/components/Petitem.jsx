@@ -81,7 +81,7 @@ export function PetItem({checkIsAuthenticated,isAuthenticated,contract,account,i
             // }
 
             const signer = getSigner(account)
-            const result = await contract.connect(signer).addToCart(pet.id,pet.name,pet.color,parseInt(pet.price),pet.pet_photo_link)
+            const result = await contract.connect(signer).addToCart(pet.id,pet.slug,pet.name,pet.color,parseInt(pet.price),pet.pet_photo_link)
             toast.success('Added to cart successfully')
         }
         else if(is_auth && contract != null && is_exits_in_cart){

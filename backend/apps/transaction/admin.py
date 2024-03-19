@@ -28,15 +28,8 @@ class TransactionModelForm(forms.ModelForm):
 # !TransactionalAdmin
 class TransactionalAdmin(admin.ModelAdmin):
     form = TransactionModelForm
-    list_display = [
-        "from_user",
-        "confirmations",
-        "value",
-        "adopted_pet_slug",
-        "created",
-        "modified",
-    ]
-    list_display_links = ["from_user", "confirmations"]
+    list_display = ["from_user", "value", "adopted_pet_slug", "created", "session_id"]
+    list_display_links = ["from_user", "session_id"]
 
 
 admin.site.register(Transaction, TransactionalAdmin)
