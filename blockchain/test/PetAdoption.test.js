@@ -95,13 +95,14 @@ describe("PetAdoption", function () {
 			const {account2,contract} = await loadFixture(deployContractFixture)
 
 			const pet_id = 1
+			const pet_slug = "rex_1"
 			const pet_name = "Rex"
 			const pet_color = "red"
 			const pet_price = 100
 			const pet_photo = "https://images.unsplash.com/photo-1600682011352-e448301668e7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1348&q=40"
 
 			expect(account2).not.be.null
-			await expect(contract.addToCart(pet_id,pet_name,pet_color,pet_price,pet_photo)).not.to.be.reverted
+			await expect(contract.addToCart(pet_id,pet_slug,pet_name,pet_color,pet_price,pet_photo)).not.to.be.reverted
 			expect(contract.getCartItems()).not.be.null
 		})
 		it("should match added and returned pet",async function(){
@@ -109,18 +110,21 @@ describe("PetAdoption", function () {
 
 
 			const pet_id = 1
+			const pet_slug = "rex_1"
 			const pet_name = "Rex"
 			const pet_color = "red"
 			const pet_price = 100
 			const pet_photo = "https://images.unsplash.com/photo-1600682011352-e448301668e7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1348&q=40"
 
 			await expect(contract.connect(account2)).not.to.be.reverted
-			await expect(contract.connect(account2).addToCart(pet_id, pet_name, pet_color, pet_price, pet_photo)).not.to.be.reverted
+			await expect(contract.connect(account2).addToCart(pet_id,pet_slug,pet_name, pet_color, pet_price, pet_photo)).not.to.be.reverted
 
 			const cartItems = await contract.connect(account2).getCartItems()
+
 			expect(account2).not.be.null
 			expect(cartItems.length).to.be.equal(1)
 			expect(cartItems[0].id).to.be.equal(pet_id)
+			expect(cartItems[0].slug).to.be.equal(pet_slug)
 			expect(cartItems[0].name).to.be.equal(pet_name)
 			expect(cartItems[0].color).to.be.equal(pet_color)
 			expect(cartItems[0].price).to.be.equal(pet_price)
@@ -133,15 +137,16 @@ describe("PetAdoption", function () {
 			const {account2,contract} = await loadFixture(deployContractFixture)
 
 			const pet_id = 1
+			const pet_slug = "rex_1"
 			const pet_name = "Rex"
 			const pet_color = "red"
 			const pet_price = 100
 			const pet_photo = "https://images.unsplash.com/photo-1600682011352-e448301668e7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1348&q=40"
 
 			expect(account2).not.be.null
-			await expect(contract.addToCart(pet_id,pet_name,pet_color,pet_price,pet_photo)).not.to.be.reverted // 0 index
-			await expect(contract.addToCart(pet_id,pet_name,pet_color,pet_price,pet_photo)).not.to.be.reverted // 1 index
-			await expect(contract.addToCart(pet_id,pet_name,pet_color,pet_price,pet_photo)).not.to.be.reverted// 2 index
+			await expect(contract.addToCart(pet_id,pet_slug,pet_name,pet_color,pet_price,pet_photo)).not.to.be.reverted // 0 index
+			await expect(contract.addToCart(pet_id,pet_slug,pet_name,pet_color,pet_price,pet_photo)).not.to.be.reverted // 1 index
+			await expect(contract.addToCart(pet_id,pet_slug,pet_name,pet_color,pet_price,pet_photo)).not.to.be.reverted// 2 index
 			expect(contract.getCartItems()).not.be.null
 
 			expect(await contract.getCartLength().then(value => parseInt(value.toString()))).equal(3)
