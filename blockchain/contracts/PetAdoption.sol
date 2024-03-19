@@ -11,6 +11,7 @@ contract PetAdoption {
 
     struct Pet {
         uint256 id;
+        string slug;
         string name;
         string color;
         uint256 price;
@@ -63,6 +64,7 @@ contract PetAdoption {
     //addToCart
     function addToCart(
         uint256 _petId,
+        string memory _petSlug,
         string memory _petName,
         string memory _petColor,
         uint256 _petPrice,
@@ -70,6 +72,7 @@ contract PetAdoption {
     ) public {
         Pet memory newPet = Pet(
             _petId,
+            _petSlug,
             _petName,
             _petColor,
             _petPrice,
