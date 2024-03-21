@@ -6,13 +6,14 @@ from faker import Faker
 
 from abstract.constants import Genders, GendersPet, Status, Types
 from apps.pet.models import Pet
+from apps.transaction.models import Transaction
 from apps.user_profile.models import Profile
+from config.helpers import generate_metamask_address, generate_session_id
 
 # Faker
 faker = Faker()
 
 # *User
-
 User = get_user_model()
 
 
@@ -108,3 +109,28 @@ class PetFactoryEndToEnd(factory.django.DjangoModelFactory):
         lambda _: faker.boolean(chance_of_getting_true=50)
     )
     description = factory.LazyAttribute(lambda _: faker.text(max_nb_chars=150))
+
+
+# !TransactionFactory
+class TransactionFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = Transaction
+
+    from_user = factory.LazyAttribute(lambda _: generate_metamask_address())
+    confirmations = factory.LazyAttribute(lambda _: faker.random_int(min=0, max=1))
+    value = factory.LazyAttribute(
+        lambda _: str(
+            faker.pyfloat(
+                positive=True,
+                right_digits=2,
+                left_digits=4,
+                min_value=25,
+                max_value=9999,
+            )
+        )
+    )
+    adopted_pet_slug = factory.LazyAttribute(lambda _: faker.slug())
+    payment_options = factory.LazyAttribute(
+        lambda _: faker.random_element(["STRIPE", "ETHEREUM"])
+    )
+    session_id = factory.LazyAttribute(lambda _: generate_session_id())

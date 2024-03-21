@@ -2,6 +2,11 @@ import re
 
 from django.core.cache import cache
 from django.core.exceptions import ValidationError
+from eth_utils import keccak, to_checksum_address
+from faker import Faker
+
+# faker instance
+faker = Faker()
 
 
 # ? setFullName
@@ -32,3 +37,19 @@ def show_toolbar(request):
 # ?check_cache
 def clear_cache_put(cache_key: str):
     cache.delete(cache_key)
+
+
+# ?generate_metamask_address
+def generate_metamask_address():
+    fake = Faker()
+    private_key = fake.sha256()  # Generate a random private key
+    public_key = keccak(bytes.fromhex(private_key[2:]))[-20:]  # Generate the public key
+    address = to_checksum_address(public_key.hex())
+    return address
+
+
+# ? generate_session_id
+def generate_session_id() -> str:
+    random_letters = faker.random_letters(length=30)
+    value = "cs_test_{}".format("".join(random_letters))
+    return value

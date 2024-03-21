@@ -22,5 +22,9 @@ class Transaction(TimeStampedModel):
         verbose_name = "Transaction"
         verbose_name_plural = "Transactions"
 
+    def save(self, *args, **kwargs):
+        self.from_user = self.from_user.lower()
+        super(Transaction, self).save(*args, **kwargs)
+
     def __str__(self):
-        return f"{self.from_user} -- {self.value} -- {self.value}"
+        return f"{self.from_user} -- {self.value} -- {self.payment_options}"

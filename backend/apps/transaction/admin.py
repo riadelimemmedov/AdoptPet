@@ -31,5 +31,9 @@ class TransactionalAdmin(admin.ModelAdmin):
     list_display = ["from_user", "value", "adopted_pet_slug", "created", "session_id"]
     list_display_links = ["from_user", "session_id"]
 
+    def save_model(self, request, obj, form, change):
+        obj.from_user = obj.from_user.lower()
+        obj.save()
+
 
 admin.site.register(Transaction, TransactionalAdmin)
