@@ -4,5 +4,5 @@ from .views import OrderView
 
 app_name = "order"
 urlpatterns = [
-    path("create-checkout-session", OrderView.as_view(), name="orders"),
+    path("create-checkout-session/", OrderView.as_view(), name="orders"),
 ]

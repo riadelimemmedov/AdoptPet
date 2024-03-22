@@ -3,6 +3,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from .models import Transaction
 from .serializers import TransactionSerializer
 
 # Create your views here.
@@ -13,7 +14,9 @@ class TransactionView(APIView):
     serializer_class = TransactionSerializer
 
     def get(self, request):
-        return Response({"message": "Transaction successfull"})
+        transactions_object = Transaction.objects.all()
+        serializer = self.serializer_class(transactions_object, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request, format=None):
         serializer = self.serializer_class(data=request.data)

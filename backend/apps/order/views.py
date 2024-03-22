@@ -1,7 +1,7 @@
 import json
 
 from django.contrib.auth.models import User
-from rest_framework import authentication, permissions
+from rest_framework import authentication, permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -49,6 +49,8 @@ class OrderView(APIView):
             save_transaction(
                 checkout_session["id"], pet_data, body["from_user"], "STRIPE"
             )
-            return Response({"sessionId": checkout_session["id"]})
+            return Response(
+                {"sessionId": checkout_session["id"]}, status=status.HTTP_201_CREATED
+            )
         except Exception:
             return Response({"message": "Please try again"})

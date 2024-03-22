@@ -16,7 +16,7 @@ from infrastructure.test_data_clear import TruncateTestData
 pytestmark = pytest.mark.django_db
 
 
-# !TestPetManagers
+# !TestPetEndpoints
 class TestPetEndpoints:
     endpoint = "/pets/"
 
