@@ -21,12 +21,42 @@ class TestTransactionEndpoints:
     endpoint = "/transactions/"
 
     def test_return_all_transactions(self, transaction_factory, api_client):
+        """
+        Test the API's ability to return all transactions in a batch.
+
+        Args:
+            self: The instance of the test case.
+            transaction_factory: The transaction factory used to generate the test data.
+            api_client: The API client used to make the HTTP request.
+
+        Returns:
+            None
+
+        Raises:
+            AssertionError: If the response status code is not HTTP 200 (OK) or if the length of the returned JSON content is not equal to the number of transactions created.
+
+        """
         transaction_factory.create_batch(4)
         response = api_client().get(self.endpoint, format="json")
         assert response.status_code == status.HTTP_200_OK
         assert len(json.loads(response.content)) == 4
 
     def test_create_transaction(self, transaction_factory, api_client):
+        """
+        Test the API's ability to create a new transaction.
+
+        Args:
+            self: The instance of the test case.
+            transaction_factory: The transaction factory used to generate the test data.
+            api_client: The API client used to make the HTTP request.
+
+        Returns:
+            None
+
+        Raises:
+            AssertionError: If the response status code is not HTTP 201 (Created).
+
+        """
         data = {
             "from_user": "0x3c44cdddb6a900fa2b585dd299e03d12fa4293bc",
             "confirmations": 1,

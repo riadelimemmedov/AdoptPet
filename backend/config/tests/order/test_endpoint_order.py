@@ -20,7 +20,21 @@ pytestmark = pytest.mark.django_db
 class TestOrderEndpoints:
     endpoint = "/orders/create-checkout-session/"
 
-    def test_create_pet(self, pet_factory_end_to_end, api_client):
+    def test_create_order(self, api_client):
+        """
+        Test the creation of an order using the provided API client.
+
+        Args:
+            self: The instance of the test case.
+            api_client: The API client used to make the HTTP request.
+
+        Returns:
+            None
+
+        Raises:
+            AssertionError: If the response status code is not HTTP 201 (Created).
+
+        """
         data = b'{"pets":[[{"type":"BigNumber","hex":"0x02"},"rocky","Rocky","#FF29C4",{"type":"BigNumber","hex":"0x23"},"https://images.unsplash.com/photo-1537019575197-df34a13f342c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1338&q=40"],[{"type":"BigNumber","hex":"0x01"},"frieda","Frieda","#D92DFF",{"type":"BigNumber","hex":"0x20"},"https://images.unsplash.com/photo-1600682011352-e448301668e7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1348&q=40"]],"from_user":"0x3c44cdddb6a900fa2b585dd299e03d12fa4293bc"}'
         response = api_client().post(
             self.endpoint,
