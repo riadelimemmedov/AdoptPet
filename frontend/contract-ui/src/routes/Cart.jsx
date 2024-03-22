@@ -42,6 +42,7 @@ export default function Cart(){
     //moralis
     const { web3,account,Moralis,isAuthenticated,user,authenticate } = useMoralis();
 
+    //store
     const {setFromUser,setConfirmations,setValue,setAdoptedPetSlug,setPaymentOptions,from_user} = usePetStore()
 
 
@@ -153,7 +154,7 @@ export default function Cart(){
         const isCheckedPaymentCredentials = isValidEmail && stripe ? true : false
         if(isCheckedPaymentCredentials){
             setPaymentIsStart(true)
-            fetch('http://localhost:8000/orders/create-checkout-session', {
+            fetch('http://localhost:8000/orders/create-checkout-session/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
