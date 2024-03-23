@@ -54,8 +54,8 @@ jobs:
         run: |
           python -m poetry install
 
-      - name: Run tests
-        run: poetry run pytest -s
+      - name: Run tests paralel
+        run: poetry run pytest -n auto
 
       - name: Run tests with pytest
         run: poetry run pytest --cov=./ --cov-report=xml

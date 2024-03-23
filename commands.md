@@ -33,6 +33,8 @@ Backend
   - `poetry run pytest -k`
 - Run tests until failure:
   - `poetry run pytest -x`
+- Run tests paralel:
+  - `poetry run pytest -n auto`
 - Format code using Black:
   - `poetry run black .`
 - Generate html for covering tests:
