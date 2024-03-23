@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import {getSigner} from '../../helpers/get_signer';
+import {getSigner} from '../../helpers/get_signer'
 
 
 //*PetItem
