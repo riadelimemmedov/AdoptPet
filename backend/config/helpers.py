@@ -48,6 +48,11 @@ def generate_metamask_address():
     return address
 
 
+# ?append_trailing_slash
+def append_trailing_slash(url):
+    return url if url[-1] == "/" else url + "/"
+
+
 # ? generate_session_id
 def generate_session_id() -> str:
     random_letters = faker.random_letters(length=30)

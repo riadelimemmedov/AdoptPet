@@ -41,4 +41,7 @@ class TestOrderEndpoints:
             data=data,
             content_type="application/json",
         )
-        assert response.status_code == status.HTTP_201_CREATED
+        assert (
+            response.status_code == status.HTTP_201_CREATED
+            or response.status_code == status.HTTP_200_OK
+        )

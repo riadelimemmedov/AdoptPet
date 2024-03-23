@@ -13,8 +13,8 @@ from .managers import CustomUserManager
 
 # !CustomUser
 class CustomUser(AbstractBaseUser, PermissionsMixin):
-    username = None
-    email = models.EmailField(_("Email address"), unique=True)
+    # username = None
+    email = models.EmailField(_("Email address"), unique=True, null=True)
     wallet_address = models.CharField(
         _("Wallet address"),
         unique=True,
@@ -27,8 +27,9 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(_("Is staff"), default=False)
     is_active = models.BooleanField(_("Is active"), default=True)
     date_joined = models.DateTimeField(_("Date joined"), default=timezone.now)
+    username = models.CharField(_("Username"), max_length=100, unique=True, null=True)
 
-    USERNAME_FIELD = "email"
+    USERNAME_FIELD = "username"
     REQUIRED_FIELDS = []
 
     objects = CustomUserManager()

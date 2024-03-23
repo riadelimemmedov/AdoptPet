@@ -4,15 +4,185 @@ info:
   version: 1.0.0
   description: This project purpose creating ecommerce api for business company
 paths:
-  /orders/create-checkout-session:
+  /api/auth/login/:
+    post:
+      operationId: api_auth_login_create
+      description: |-
+        Check the credentials and return the REST Token
+        if the credentials are valid and authenticated.
+        Calls Django Auth login method to register User ID
+        in Django session framework
+
+        Accept the following POST parameters: username, password
+        Return the REST Framework Token Object's key.
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Login'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Login'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Login'
+        required: true
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Token'
+          description: ''
+  /api/auth/logout/:
+    post:
+      operationId: api_auth_logout_create
+      description: |-
+        Calls Django logout method and delete the Token object
+        assigned to the current User object.
+
+        Accepts/Returns nothing.
+      tags:
+      - api
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestAuthDetail'
+          description: ''
+  /api/auth/register/:
+    post:
+      operationId: api_auth_register_create
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Register'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Register'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Register'
+        required: true
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Token'
+          description: ''
+  /api/auth/user/:
+    get:
+      operationId: api_auth_user_retrieve
+      description: |-
+        Reads and updates UserModel fields
+        Accepts GET, PUT, PATCH methods.
+
+        Default accepted fields: username, first_name, last_name
+        Default display fields: pk, username, email, first_name, last_name
+        Read-only fields: pk, email
+
+        Returns UserModel fields.
+      tags:
+      - api
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDetails'
+          description: ''
+    put:
+      operationId: api_auth_user_update
+      description: |-
+        Reads and updates UserModel fields
+        Accepts GET, PUT, PATCH methods.
+
+        Default accepted fields: username, first_name, last_name
+        Default display fields: pk, username, email, first_name, last_name
+        Read-only fields: pk, email
+
+        Returns UserModel fields.
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserDetails'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserDetails'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserDetails'
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDetails'
+          description: ''
+    patch:
+      operationId: api_auth_user_partial_update
+      description: |-
+        Reads and updates UserModel fields
+        Accepts GET, PUT, PATCH methods.
+
+        Default accepted fields: username, first_name, last_name
+        Default display fields: pk, username, email, first_name, last_name
+        Read-only fields: pk, email
+
+        Returns UserModel fields.
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUserDetails'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUserDetails'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUserDetails'
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDetails'
+          description: ''
+  /orders/create-checkout-session/:
     post:
       operationId: orders_create_checkout_session_create
       description: Order
       tags:
       - orders
       security:
-      - cookieAuth: []
-      - basicAuth: []
+      - tokenAuth: []
       - {}
       responses:
         '200':
@@ -31,8 +201,7 @@ paths:
       tags:
       - pets
       security:
-      - cookieAuth: []
-      - basicAuth: []
+      - tokenAuth: []
       - {}
       responses:
         '200':
@@ -67,8 +236,7 @@ paths:
               $ref: '#/components/schemas/Pet'
         required: true
       security:
-      - cookieAuth: []
-      - basicAuth: []
+      - tokenAuth: []
       - {}
       responses:
         '200':
@@ -90,8 +258,7 @@ paths:
       tags:
       - pets
       security:
-      - cookieAuth: []
-      - basicAuth: []
+      - tokenAuth: []
       - {}
       responses:
         '204':
@@ -117,8 +284,7 @@ paths:
       tags:
       - pets
       security:
-      - cookieAuth: []
-      - basicAuth: []
+      - tokenAuth: []
       - {}
       responses:
         '200':
@@ -159,8 +325,7 @@ paths:
               $ref: '#/components/schemas/Pet'
         required: true
       security:
-      - cookieAuth: []
-      - basicAuth: []
+      - tokenAuth: []
       - {}
       responses:
         '200':
@@ -189,25 +354,52 @@ paths:
       tags:
       - pets
       security:
-      - cookieAuth: []
-      - basicAuth: []
+      - tokenAuth: []
       - {}
       responses:
         '204':
           description: No response body
-  /transactions/create-checkout-session:
-    post:
-      operationId: transactions_create_checkout_session_create
-      description: Order
+  /transactions/:
+    get:
+      operationId: transactions_retrieve
       tags:
       - transactions
       security:
-      - cookieAuth: []
-      - basicAuth: []
+      - tokenAuth: []
       - {}
       responses:
         '200':
-          description: No response body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transaction'
+          description: ''
+    post:
+      operationId: transactions_create
+      tags:
+      - transactions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Transaction'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Transaction'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Transaction'
+        required: true
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transaction'
+          description: ''
   /upload/image/:
     post:
       operationId: upload_image_create
@@ -226,8 +418,7 @@ paths:
               $ref: '#/components/schemas/Upload'
         required: true
       security:
-      - cookieAuth: []
-      - basicAuth: []
+      - tokenAuth: []
       - {}
       responses:
         '200':
@@ -248,6 +439,39 @@ components:
       type: string
       description: "* `MALE` - male\n* `FEMALE` - female\n* `Neutered ` - neutered\
         \ \n* `Spayed` - spayed\n* `Other` - other"
+    Login:
+      type: object
+      properties:
+        username:
+          type: string
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+      required:
+      - password
+    PatchedUserDetails:
+      type: object
+      description: User model w/o password
+      properties:
+        pk:
+          type: integer
+          readOnly: true
+          title: ID
+        email:
+          type: string
+          format: email
+          readOnly: true
+          title: Email address
+    PaymentOptionsEnum:
+      enum:
+      - STRIPE
+      - ETHEREUM
+      type: string
+      description: |-
+        * `STRIPE` - stripe
+        * `ETHEREUM` - ethereum
     Pet:
       type: object
       properties:
@@ -320,6 +544,84 @@ components:
       - price_currency
       - slug
       - weight
+    Register:
+      type: object
+      properties:
+        username:
+          type: string
+          maxLength: 100
+          minLength: 1
+        email:
+          type: string
+          format: email
+        password1:
+          type: string
+          writeOnly: true
+        password2:
+          type: string
+          writeOnly: true
+      required:
+      - password1
+      - password2
+      - username
+    RestAuthDetail:
+      type: object
+      properties:
+        detail:
+          type: string
+          readOnly: true
+      required:
+      - detail
+    Token:
+      type: object
+      description: Serializer for Token model.
+      properties:
+        key:
+          type: string
+          maxLength: 40
+      required:
+      - key
+    Transaction:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        from_user:
+          type: string
+        confirmations:
+          type: string
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        modified:
+          type: string
+          format: date-time
+          readOnly: true
+        value:
+          type: string
+          maxLength: 100
+        adopted_pet_slug:
+          type: string
+          title: Adopted slug
+          maxLength: 100
+        payment_options:
+          $ref: '#/components/schemas/PaymentOptionsEnum'
+        session_id:
+          type: string
+          nullable: true
+          title: Session
+          maxLength: 100
+      required:
+      - adopted_pet_slug
+      - confirmations
+      - created
+      - from_user
+      - id
+      - modified
+      - payment_options
+      - value
     Upload:
       type: object
       properties:
@@ -337,11 +639,25 @@ components:
       - file
       - id
       - upload_at
+    UserDetails:
+      type: object
+      description: User model w/o password
+      properties:
+        pk:
+          type: integer
+          readOnly: true
+          title: ID
+        email:
+          type: string
+          format: email
+          readOnly: true
+          title: Email address
+      required:
+      - email
+      - pk
   securitySchemes:
-    basicAuth:
-      type: http
-      scheme: basic
-    cookieAuth:
+    tokenAuth:
       type: apiKey
-      in: cookie
-      name: sessionid
+      in: header
+      name: Authorization
+      description: Token-based authentication with required prefix "Token"

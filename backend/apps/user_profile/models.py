@@ -8,7 +8,7 @@ from django_extensions.db.models import TimeStampedModel
 
 from abstract.constants import Genders, Status, Types
 from apps.users.models import CustomUser
-from config.helpers import setFullName
+from config.helpers import is_valid_wallet_address, setFullName
 
 # Create your models here.
 
@@ -52,7 +52,7 @@ class Profile(TimeStampedModel):
         _("First name"), max_length=150, blank=True, null=True
     )
     last_name = models.CharField(_("Last name"), max_length=150, blank=True, null=True)
-    full_name = models.CharField(_("Full name"), max_length=150, blank=True)
+    # full_name = models.CharField(_("Full name"), max_length=150, blank=True)
     profile_key = RandomCharField(
         _("Profile key"), length=12, unique=True, blank=True, include_alpha=True
     )
@@ -60,6 +60,15 @@ class Profile(TimeStampedModel):
     city = models.CharField(_("City"), max_length=50, null=True, blank=True)
     adress = models.CharField(_("Adress"), max_length=50, null=True, blank=True)
     additional_information = models.TextField(_("Additional Information"), blank=True)
+    wallet_address = models.CharField(
+        _("Wallet address"),
+        unique=True,
+        db_index=True,
+        max_length=100,
+        blank=True,
+        null=True,
+        validators=[is_valid_wallet_address],
+    )
     is_active = models.BooleanField(_("Is active"), default=False)
 
     objects = ProfileManager()
@@ -97,24 +106,22 @@ class Profile(TimeStampedModel):
         verbose_name_plural = _("Profiles")
 
     def save(self, *args, **kwargs):
-        if not self.full_name:
-            full_name = setFullName(
-                self.first_name if self.first_name is not None else "",
-                self.last_name if self.last_name is not None else "",
-            )
-            is_exists = __class__.objects.filter(full_name=full_name).exists()
+        if not self.user.username:
+            is_exists = __class__.objects.filter(user=self.user.username).exists()
             if is_exists:
-                self.full_name = f"{full_name}_{self.profile_key}"
+                self.user.username = f"{self.user.username}_{self.profile_key}"
             else:
-                self.full_name = f"{full_name}"
-            self.slug = slugify(self.full_name)
+                self.user.username = f"{self.user.username}"
+            self.slug = slugify(self.user.username)
+        else:
+            self.slug = slugify(self.user.username)
         super(Profile, self).save(*args, **kwargs)
 
-    def get_full_name(self):
-        return self.full_name
+    def get_user_name(self):
+        return self.user.username
 
     def __str__(self):
-        return self.full_name
+        return self.user.username
 
 
 # create_user_profile

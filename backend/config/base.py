@@ -5,7 +5,10 @@ from pathlib import Path
 from decouple import config
 from django.utils.translation import gettext_lazy as _
 
-from .helpers import show_toolbar
+from .helpers import append_trailing_slash, show_toolbar
+
+# !SITE_ID
+SITE_ID = 1
 
 # !Your everywhere service name
 SITE_NAME = ""  # Domain Name
@@ -41,6 +44,7 @@ else:
 DEFAULT_APPS = [
     "jet.dashboard",
     "jet",
+    "django.contrib.sites",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -54,13 +58,24 @@ THIRD_PARTY_APPS = [
     "django_cleanup",
     "django_extensions",
     "rest_framework",
+    "rest_framework.authtoken",
     "drf_spectacular",
     "djmoney",
     "colorfield",
     "storages",
     "debug_toolbar",
     "corsheaders",
+    "allauth",
+    "allauth.account",
+    "allauth.socialaccount",
+    "dj_rest_auth",
+    "dj_rest_auth.registration",
 ]
+
+# AUTHENTICATION_BACKENDS = [
+#     "allauth.account.auth_backends.AuthenticationBackend",
+#     "django.contrib.auth.backends.ModelBackend",
+# ]
 
 # !Created Apps
 CREATED_APPS = [
@@ -70,6 +85,7 @@ CREATED_APPS = [
     "apps.upload",
     "apps.order",
     "apps.transaction",
+    "apps.authentication",
 ]
 
 # !Installed Apps
@@ -78,6 +94,26 @@ INSTALLED_APPS = DEFAULT_APPS + CREATED_APPS + THIRD_PARTY_APPS
 
 # !AUTH_USER_MODEL
 AUTH_USER_MODEL = "users.CustomUser"
+
+
+# <EMAIL_CONFIRM_REDIRECT_BASE_URL>/<key>
+# EMAIL_CONFIRM_REDIRECT_BASE_URL = append_trailing_slash(
+#     "http://localhost:8001/"  # http://localhost:3000/email/confirm/ => If you see works everthing expected implement this url to react side on frontend
+# )
+# # <PASSWORD_RESET_CONFIRM_REDIRECT_BASE_URL>/<uidb64>/<token>/
+# PASSWORD_RESET_CONFIRM_REDIRECT_BASE_URL = append_trailing_slash(
+#     "http://localhost:8001/"  # "http://localhost:3000/password-reset/confirm/" => If you see works everthing expected implement this url to react side on frontend
+# )
+
+# !Dj Rest Auth Configuration
+ACCOUNT_EMAIL_VERIFICATION = None
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = True
+ACCOUNT_UNIQUE_EMAIL = True
+
+REST_AUTH_REGISTER_SERIALIZERS = {
+    "REGISTER_SERIALIZER": "apps.authentication.serializers.CustomRegisterSerializer",
+}
 
 
 # !Middleware
@@ -252,6 +288,9 @@ JET_THEMES = [
 # !Rest Framework
 REST_FRAMEWORK = {
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.TokenAuthentication",
+    ],
 }
 
 # !SPECTACULAR_SETTINGS

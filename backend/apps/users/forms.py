@@ -7,11 +7,11 @@ from .models import CustomUser
 class CustomUserCreationForm(UserCreationForm):
     class Meta:
         model = CustomUser
-        fields = ("email",)
+        exclude = ("email",)
 
 
 # !CustomUserChangeForm
 class CustomUserChangeForm(UserChangeForm):
     class Meta:
         model = CustomUser
-        fields = ("email",)
+        exclude = ("email",)
