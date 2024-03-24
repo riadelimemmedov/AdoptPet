@@ -43,6 +43,7 @@ eth-hash = {extras = ["pycryptodome"], version = "^0.7.0"}
 pytest-xdist = "^3.5.0"
 django-allauth = "0.52.0"
 dj-rest-auth = {version = "4.0.0", extras = ["with-social"]}
+djangorestframework-simplejwt = "5.2.2"
 
 
 [tool.poetry.group.dev.dependencies]

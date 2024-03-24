@@ -10,12 +10,12 @@ from .models import Profile
 class ProfileAdmin(admin.ModelAdmin):
     list_display = [
         "user",
+        "full_name",
         "country",
         "city",
         "adress",
         "slug",
         "created",
         "modified",
-        "wallet_address",
     ]
-    list_display_links = ["user", "wallet_address"]
+    list_display_links = ["user", "full_name"]

@@ -58,9 +58,9 @@ if settings.APP_NAME == AppName.ADMIN.name:
     urlpatterns += [
         path("transactions/", include("apps.transaction.urls", namespace="transaction"))
     ]
-    urlpatterns += [
-        path("api/auth/", include("apps.authentication.urls", namespace="auth"))
-    ]
+    # urlpatterns += [
+    #     path("api/auth/", include("apps.authentication.urls", namespace="auth"))
+    # ]
 
 
 # *Settings Debug

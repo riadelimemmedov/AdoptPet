@@ -13,7 +13,7 @@ from .managers import CustomUserManager
 
 # !CustomUser
 class CustomUser(AbstractBaseUser, PermissionsMixin):
-    # username = None
+    username = None
     email = models.EmailField(_("Email address"), unique=True, null=True)
     wallet_address = models.CharField(
         _("Wallet address"),
@@ -29,7 +29,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     date_joined = models.DateTimeField(_("Date joined"), default=timezone.now)
     username = models.CharField(_("Username"), max_length=100, unique=True, null=True)
 
-    USERNAME_FIELD = "username"
+    USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
 
     objects = CustomUserManager()

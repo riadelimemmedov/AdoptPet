@@ -1,10 +1,19 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
+from apps.user_profile.models import Profile
+
 from .forms import CustomUserChangeForm, CustomUserCreationForm
 from .models import CustomUser
 
 # Register your models here.
+
+
+# !ProfileInline
+class ProfileInline(admin.StackedInline):
+    model = Profile
+    can_delete = False
+    verbose_name_plural = "Profiles"
 
 
 # !CustomUserAdmin
@@ -52,6 +61,7 @@ class CustomUserAdmin(UserAdmin):
     )
     search_fields = ("email",)
     ordering = ("email",)
+    inlines = (ProfileInline,)
 
 
 admin.site.register(CustomUser, CustomUserAdmin)
