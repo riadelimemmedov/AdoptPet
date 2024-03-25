@@ -51,7 +51,7 @@ if settings.APP_NAME == AppName.ADMIN.name:
         ),
     ]
     urlpatterns += i18n_patterns(path("admin/", admin.site.urls))
-    # urlpatterns += [path("users/", include("apps.users.urls", namespace="users"))]
+    urlpatterns += [path("users/", include("apps.users.urls", namespace="users"))]
     urlpatterns += [path("upload/", include("apps.upload.urls", namespace="upload"))]
     urlpatterns += [path("pets/", include("apps.pet.urls", namespace="pet"))]
     urlpatterns += [path("orders/", include("apps.order.urls", namespace="order"))]

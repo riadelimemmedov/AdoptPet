@@ -4,177 +4,6 @@ info:
   version: 1.0.0
   description: This project purpose creating ecommerce api for business company
 paths:
-  /api/auth/login/:
-    post:
-      operationId: api_auth_login_create
-      description: |-
-        Check the credentials and return the REST Token
-        if the credentials are valid and authenticated.
-        Calls Django Auth login method to register User ID
-        in Django session framework
-
-        Accept the following POST parameters: username, password
-        Return the REST Framework Token Object's key.
-      tags:
-      - api
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Login'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/Login'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/Login'
-        required: true
-      security:
-      - tokenAuth: []
-      - {}
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Token'
-          description: ''
-  /api/auth/logout/:
-    post:
-      operationId: api_auth_logout_create
-      description: |-
-        Calls Django logout method and delete the Token object
-        assigned to the current User object.
-
-        Accepts/Returns nothing.
-      tags:
-      - api
-      security:
-      - tokenAuth: []
-      - {}
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/RestAuthDetail'
-          description: ''
-  /api/auth/register/:
-    post:
-      operationId: api_auth_register_create
-      tags:
-      - api
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Register'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/Register'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/Register'
-        required: true
-      security:
-      - tokenAuth: []
-      - {}
-      responses:
-        '201':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Token'
-          description: ''
-  /api/auth/user/:
-    get:
-      operationId: api_auth_user_retrieve
-      description: |-
-        Reads and updates UserModel fields
-        Accepts GET, PUT, PATCH methods.
-
-        Default accepted fields: username, first_name, last_name
-        Default display fields: pk, username, email, first_name, last_name
-        Read-only fields: pk, email
-
-        Returns UserModel fields.
-      tags:
-      - api
-      security:
-      - tokenAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserDetails'
-          description: ''
-    put:
-      operationId: api_auth_user_update
-      description: |-
-        Reads and updates UserModel fields
-        Accepts GET, PUT, PATCH methods.
-
-        Default accepted fields: username, first_name, last_name
-        Default display fields: pk, username, email, first_name, last_name
-        Read-only fields: pk, email
-
-        Returns UserModel fields.
-      tags:
-      - api
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UserDetails'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/UserDetails'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/UserDetails'
-      security:
-      - tokenAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserDetails'
-          description: ''
-    patch:
-      operationId: api_auth_user_partial_update
-      description: |-
-        Reads and updates UserModel fields
-        Accepts GET, PUT, PATCH methods.
-
-        Default accepted fields: username, first_name, last_name
-        Default display fields: pk, username, email, first_name, last_name
-        Read-only fields: pk, email
-
-        Returns UserModel fields.
-      tags:
-      - api
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PatchedUserDetails'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/PatchedUserDetails'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/PatchedUserDetails'
-      security:
-      - tokenAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserDetails'
-          description: ''
   /orders/create-checkout-session/:
     post:
       operationId: orders_create_checkout_session_create
@@ -182,7 +11,8 @@ paths:
       tags:
       - orders
       security:
-      - tokenAuth: []
+      - jwtAuth: []
+      - cookieAuth: []
       - {}
       responses:
         '200':
@@ -201,7 +31,8 @@ paths:
       tags:
       - pets
       security:
-      - tokenAuth: []
+      - jwtAuth: []
+      - cookieAuth: []
       - {}
       responses:
         '200':
@@ -236,7 +67,8 @@ paths:
               $ref: '#/components/schemas/Pet'
         required: true
       security:
-      - tokenAuth: []
+      - jwtAuth: []
+      - cookieAuth: []
       - {}
       responses:
         '200':
@@ -258,7 +90,8 @@ paths:
       tags:
       - pets
       security:
-      - tokenAuth: []
+      - jwtAuth: []
+      - cookieAuth: []
       - {}
       responses:
         '204':
@@ -284,7 +117,8 @@ paths:
       tags:
       - pets
       security:
-      - tokenAuth: []
+      - jwtAuth: []
+      - cookieAuth: []
       - {}
       responses:
         '200':
@@ -325,7 +159,8 @@ paths:
               $ref: '#/components/schemas/Pet'
         required: true
       security:
-      - tokenAuth: []
+      - jwtAuth: []
+      - cookieAuth: []
       - {}
       responses:
         '200':
@@ -354,7 +189,8 @@ paths:
       tags:
       - pets
       security:
-      - tokenAuth: []
+      - jwtAuth: []
+      - cookieAuth: []
       - {}
       responses:
         '204':
@@ -365,7 +201,8 @@ paths:
       tags:
       - transactions
       security:
-      - tokenAuth: []
+      - jwtAuth: []
+      - cookieAuth: []
       - {}
       responses:
         '200':
@@ -391,7 +228,8 @@ paths:
               $ref: '#/components/schemas/Transaction'
         required: true
       security:
-      - tokenAuth: []
+      - jwtAuth: []
+      - cookieAuth: []
       - {}
       responses:
         '200':
@@ -418,7 +256,8 @@ paths:
               $ref: '#/components/schemas/Upload'
         required: true
       security:
-      - tokenAuth: []
+      - jwtAuth: []
+      - cookieAuth: []
       - {}
       responses:
         '200':
@@ -427,8 +266,197 @@ paths:
               schema:
                 $ref: '#/components/schemas/Upload'
           description: ''
+  /users/:
+    get:
+      operationId: users_retrieve
+      description: Get, Update user information
+      tags:
+      - users
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomUser'
+          description: ''
+    put:
+      operationId: users_update
+      description: Get, Update user information
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomUser'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CustomUser'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CustomUser'
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomUser'
+          description: ''
+    patch:
+      operationId: users_partial_update
+      description: Get, Update user information
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedCustomUser'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedCustomUser'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedCustomUser'
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomUser'
+          description: ''
+  /users/login/:
+    post:
+      operationId: users_login_create
+      description: An endpoint to authenticate existing users using their email and
+        password.
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserLogin'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserLogin'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserLogin'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserLogin'
+          description: ''
+  /users/logout/:
+    post:
+      operationId: users_logout_create
+      description: An endpoint to logout users.
+      tags:
+      - users
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+  /users/register/:
+    post:
+      operationId: users_register_create
+      description: An endpoint for the client to create a new User.
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRegisteration'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserRegisteration'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserRegisteration'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserRegisteration'
+          description: ''
+  /users/token/refresh/:
+    post:
+      operationId: users_token_refresh_create
+      description: |-
+        Takes a refresh type JSON web token and returns an access type JSON web
+        token if the refresh token is valid.
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenRefresh'
+          description: ''
 components:
   schemas:
+    CustomUser:
+      type: object
+      description: Serializer class to serialize CustomUser model.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        username:
+          type: string
+          nullable: true
+          maxLength: 100
+        email:
+          type: string
+          format: email
+          nullable: true
+          title: Email address
+          maxLength: 254
+        wallet_address:
+          type: string
+          nullable: true
+          maxLength: 100
+      required:
+      - id
     GenderEnum:
       enum:
       - MALE
@@ -439,31 +467,27 @@ components:
       type: string
       description: "* `MALE` - male\n* `FEMALE` - female\n* `Neutered ` - neutered\
         \ \n* `Spayed` - spayed\n* `Other` - other"
-    Login:
+    PatchedCustomUser:
       type: object
+      description: Serializer class to serialize CustomUser model.
       properties:
-        username:
-          type: string
-        email:
-          type: string
-          format: email
-        password:
-          type: string
-      required:
-      - password
-    PatchedUserDetails:
-      type: object
-      description: User model w/o password
-      properties:
-        pk:
+        id:
           type: integer
           readOnly: true
-          title: ID
+        username:
+          type: string
+          nullable: true
+          maxLength: 100
         email:
           type: string
           format: email
-          readOnly: true
+          nullable: true
           title: Email address
+          maxLength: 254
+        wallet_address:
+          type: string
+          nullable: true
+          maxLength: 100
     PaymentOptionsEnum:
       enum:
       - STRIPE
@@ -544,43 +568,17 @@ components:
       - price_currency
       - slug
       - weight
-    Register:
+    TokenRefresh:
       type: object
       properties:
-        username:
-          type: string
-          maxLength: 100
-          minLength: 1
-        email:
-          type: string
-          format: email
-        password1:
-          type: string
-          writeOnly: true
-        password2:
-          type: string
-          writeOnly: true
-      required:
-      - password1
-      - password2
-      - username
-    RestAuthDetail:
-      type: object
-      properties:
-        detail:
+        access:
           type: string
           readOnly: true
-      required:
-      - detail
-    Token:
-      type: object
-      description: Serializer for Token model.
-      properties:
-        key:
+        refresh:
           type: string
-          maxLength: 40
       required:
-      - key
+      - access
+      - refresh
     Transaction:
       type: object
       properties:
@@ -639,25 +637,53 @@ components:
       - file
       - id
       - upload_at
-    UserDetails:
+    UserLogin:
       type: object
-      description: User model w/o password
+      description: Serializer class to authenticate users with email and password.
       properties:
-        pk:
+        email:
+          type: string
+        password:
+          type: string
+          writeOnly: true
+      required:
+      - email
+      - password
+    UserRegisteration:
+      type: object
+      description: Serializer class to serialize registration requests and create
+        a new user.
+      properties:
+        id:
           type: integer
           readOnly: true
-          title: ID
+        username:
+          type: string
+          nullable: true
+          maxLength: 100
         email:
           type: string
           format: email
-          readOnly: true
+          nullable: true
           title: Email address
+          maxLength: 254
+        password:
+          type: string
+          writeOnly: true
+          maxLength: 128
+        wallet_address:
+          type: string
+          nullable: true
+          maxLength: 100
       required:
-      - email
-      - pk
+      - id
+      - password
   securitySchemes:
-    tokenAuth:
+    cookieAuth:
       type: apiKey
-      in: header
-      name: Authorization
-      description: Token-based authentication with required prefix "Token"
+      in: cookie
+      name: sessionid
+    jwtAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

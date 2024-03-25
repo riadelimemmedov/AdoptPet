@@ -11,7 +11,7 @@ def validate_confirmations(value):
     return value
 
 
-# ?validate_from_user
-def validate_from_user(value):
+# ?validate_wallet_address
+def validate_wallet_address(value):
     pattern = re.compile("^0x[a-fA-F0-9]{40}$")
     return bool(pattern.match(f"{value}"))

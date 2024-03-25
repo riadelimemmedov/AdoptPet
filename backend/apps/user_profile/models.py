@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from django.core.validators import FileExtensionValidator
 from django.db import models
 from django.db.models.signals import post_save
@@ -11,6 +12,8 @@ from apps.users.models import CustomUser
 from config.helpers import setFullName
 
 # Create your models here.
+
+User = get_user_model()
 
 
 # *ActiveQueryset
@@ -98,15 +101,15 @@ class Profile(TimeStampedModel):
 
     def save(self, *args, **kwargs):
         if not self.full_name:
-            full_name = setFullName(
-                self.first_name if self.first_name is not None else "",
-                self.last_name if self.last_name is not None else "",
-            )
-            is_exists = __class__.objects.filter(full_name=full_name).exists()
+            # full_name = setFullName(
+            #     self.first_name if self.first_name is not None else "",
+            #     self.last_name if self.last_name is not None else "",
+            # )
+            is_exists = User.objects.filter(username=self.user.username).exists()
             if is_exists:
-                self.full_name = f"{full_name}_{self.profile_key}"
+                self.full_name = f"{self.user.username}_{self.profile_key}"
             else:
-                self.full_name = f"{full_name}"
+                self.full_name = f"{self.user.username}"
             self.slug = slugify(self.full_name)
         super(Profile, self).save(*args, **kwargs)
 

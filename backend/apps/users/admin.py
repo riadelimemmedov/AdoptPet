@@ -21,13 +21,14 @@ class CustomUserAdmin(UserAdmin):
     add_form = CustomUserCreationForm
     form = CustomUserChangeForm
     model = CustomUser
-    list_display_links = ["id", "email", "wallet_address"]
+    list_display_links = ["id", "email", "wallet_address", "username"]
     list_display = (
         "id",
         "email",
         "wallet_address",
         "is_staff",
         "is_active",
+        "username",
     )
     list_filter = (
         "email",
@@ -36,7 +37,7 @@ class CustomUserAdmin(UserAdmin):
         "is_active",
     )
     fieldsets = (
-        (None, {"fields": ("email", "wallet_address", "password")}),
+        (None, {"fields": ("email", "wallet_address", "password", "username")}),
         (
             "Permissions",
             {"fields": ("is_staff", "is_active", "groups", "user_permissions")},
@@ -55,6 +56,8 @@ class CustomUserAdmin(UserAdmin):
                     "is_active",
                     "groups",
                     "user_permissions",
+                    "wallet_address",
+                    "username",
                 ),
             },
         ),

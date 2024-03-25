@@ -2,7 +2,7 @@ from django import forms
 from django.contrib import admin
 
 from .models import Transaction
-from .validate_field import validate_confirmations, validate_from_user
+from .validate_field import validate_confirmations, validate_wallet_address
 
 # Register your models here.
 
@@ -21,7 +21,7 @@ class TransactionModelForm(forms.ModelForm):
             return
         if not validate_confirmations(confirmations):
             self.add_error("confirmations", "Confirmations value 1 or 0")
-        if not validate_from_user(from_user):
+        if not validate_wallet_address(from_user):
             self.add_error("from_user", "Please input valid wallet address")
 
 

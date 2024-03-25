@@ -20,7 +20,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         unique=True,
         db_index=True,
         max_length=100,
-        blank=True,
+        blank=False,
         null=True,
         validators=[is_valid_wallet_address],
     )
