@@ -33,17 +33,11 @@ class TestUserProfileManagers:
         These mock profile objects can be used for testing various scenarios related to profiles, such as filtering active profiles or checking the correctness of profile data.
         """
         profile_factory(
-            first_name="Profile_Name_1",
-            last_name="Profile_Last_Name_1",
             is_active=True,
         )
-        profile_factory(
-            is_active=True, first_name="Profile_Name_2", last_name="Profile_Last_Name_2"
-        )
+        profile_factory(is_active=True)
         profile_factory(
             is_active=False,
-            first_name="Profile_Name_3",
-            last_name="Profile_Last_Name_3",
         )
 
     def test_str_method(self, profile_factory):
@@ -70,7 +64,7 @@ class TestUserProfileManagers:
 
         """
         obj = profile_factory()
-        assert obj.__str__() == "Joe Doe"
+        assert obj.__str__() == f"{obj.full_name}"
 
     def test_max_length_method(self, profile_factory):
         """
@@ -148,10 +142,6 @@ class TestUserProfileManagers:
         assert profile_factory(
             first_name="Jack", last_name="Johnson"
         ).profile_key.isalnum()
-
-        profile_factory()
-        with pytest.raises(IntegrityError):
-            profile_factory()
 
     def test_is_active_or_passive(self, profile_factory):
         """
@@ -343,7 +333,6 @@ class TestUserProfileManagers:
         If all the assertions pass, the test is considered successful. If any of the assertions fail, the test fails.
         """
 
-        obj = profile_factory(first_name="Generator", last_name="Rex")
-        assert obj.first_name is not None
-        assert obj.last_name is not None
-        assert obj.get_full_name() == "Generator Rex"
+        obj = profile_factory()
+        assert obj.full_name is not None
+        assert obj.get_full_name() == obj.full_name

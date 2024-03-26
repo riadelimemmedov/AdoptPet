@@ -1,3 +1,6 @@
+import random
+import string
+
 import factory
 from django.contrib.auth import get_user_model
 from django.core.files.uploadedfile import SimpleUploadedFile
@@ -23,6 +26,7 @@ class UserFactory(factory.django.DjangoModelFactory):
         model = User
 
     email = factory.Sequence(lambda n: "normal_user{}@gmail.com".format(n))
+    username = factory.Sequence(lambda n: faker.name())
     password = "foo12345"
     is_active = True
 
@@ -50,13 +54,14 @@ class ProfileFactory(factory.django.DjangoModelFactory):
 
     user = factory.SubFactory(UserFactory)
 
-    first_name = "Joe"
-    last_name = "Doe"
-    profile_key = "abc123"
-    account_type = Types[1][0]
-    status = Status[1][0]
-    gender = Genders[1][0]
-    is_active = False
+    # first_name = faker.name()
+    # last_name = faker.name()
+    profile_key = "".join(random.choices(string.ascii_letters + string.digits, k=12))
+    slug = faker.random_letters(length=12)
+    # account_type = Types[1][0]
+    # status = Status[1][0]
+    # gender = Genders[1][0]
+    # is_active = False
 
 
 # !PetFactory

@@ -48,7 +48,16 @@ class TestUserAuthenticationEndpoints:
             "wallet_address": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
         }
 
-    def test_register(self, api_client):
+    @pytest.fixture
+    def register_response(self, api_client):
+        payload = self.get_register_payload()
+
+        response = api_client().post(
+            f"{self.endpoint}/register/", payload, format="json"
+        )
+        yield payload, response
+
+    def test_register(self, register_response):
         """
         Test the registration endpoint.
 
@@ -65,11 +74,7 @@ class TestUserAuthenticationEndpoints:
         Raises:
             AssertionError: If any of the assertions fail.
         """
-        payload = self.get_register_payload()
-
-        response = api_client().post(
-            f"{self.endpoint}/register/", payload, format="json"
-        )
+        payload, response = register_response
         assert response.status_code == status.HTTP_201_CREATED
         assert response.data["id"] is not None
         assert response.data["username"] == payload["username"]
@@ -79,7 +84,7 @@ class TestUserAuthenticationEndpoints:
             response.data["tokens"]["refresh"] and response.data["tokens"]["access"]
         ) is not None
 
-    def test_login(self, api_client):
+    def test_login(self, register_response, api_client):
         """
         Test the login endpoint.
 
@@ -97,11 +102,7 @@ class TestUserAuthenticationEndpoints:
         Raises:
             AssertionError: If any of the assertions fail.
         """
-        payload = self.get_register_payload()
-        response_register = api_client().post(
-            f"{self.endpoint}/register/", payload, format="json"
-        )
-
+        payload, response = register_response
         login_payload = {
             "email": payload["email"],
             "password": payload["password"],
@@ -112,18 +113,15 @@ class TestUserAuthenticationEndpoints:
         )
         assert response_login.status_code == status.HTTP_200_OK
         assert response_login.data["id"] is not None
-        assert response_login.data["username"] == response_register.data["username"]
-        assert response_login.data["email"] == response_register.data["email"]
-        assert (
-            response_login.data["wallet_address"]
-            == response_register.data["wallet_address"]
-        )
+        assert response_login.data["username"] == payload["username"]
+        assert response_login.data["email"] == payload["email"]
+        assert response_login.data["wallet_address"] == payload["wallet_address"]
         assert (
             response_login.data["tokens"]["refresh"]
             and response_login.data["tokens"]["access"]
         ) is not None
 
-    def test_logout(self, api_client):
+    def test_logout(self, register_response, api_client):
         """
         Test the logout endpoint.
 
@@ -143,12 +141,10 @@ class TestUserAuthenticationEndpoints:
         Raises:
             AssertionError: If the assertion fails.
         """
-        payload = self.get_register_payload()
-        response_register = api_client().post(
-            f"{self.endpoint}/register/", payload, format="json"
-        )
-        refresh_token = response_register.data["tokens"]["refresh"]
-        access_token = response_register.data["tokens"]["access"]
+        payload, response = register_response
+
+        refresh_token = response.data["tokens"]["refresh"]
+        access_token = response.data["tokens"]["access"]
         headers = {"Authorization": f"Bearer {access_token}"}
 
         logout_payload = {"refresh": refresh_token}
@@ -157,7 +153,7 @@ class TestUserAuthenticationEndpoints:
         )
         assert response_logout.status_code == status.HTTP_205_RESET_CONTENT
 
-    def test_token_refresh(self, api_client):
+    def test_token_refresh(self, register_response, api_client):
         """
         Test the token refresh endpoint.
 
@@ -178,12 +174,10 @@ class TestUserAuthenticationEndpoints:
         Raises:
             AssertionError: If any of the assertions fail.
         """
-        payload = self.get_register_payload()
-        response_register = api_client().post(
-            f"{self.endpoint}/register/", payload, format="json"
-        )
+        payload, response = register_response
+
         for req_index in range(1, 3):
-            refresh_payload = {"refresh": response_register.data["tokens"]["refresh"]}
+            refresh_payload = {"refresh": response.data["tokens"]["refresh"]}
             response_refresh = api_client().post(
                 f"{self.endpoint}/token/refresh/", refresh_payload, format="json"
             )
@@ -199,7 +193,7 @@ class TestUserAuthenticationEndpoints:
             else:
                 assert True
 
-    def test_get_user(self, api_client):
+    def test_get_user(self, register_response, api_client):
         """
         Test the get user endpoint.
 
@@ -219,11 +213,9 @@ class TestUserAuthenticationEndpoints:
         Raises:
             AssertionError: If any of the assertions fail.
         """
-        payload = self.get_register_payload()
-        response_register = api_client().post(
-            f"{self.endpoint}/register/", payload, format="json"
-        )
-        access_token = response_register.data["tokens"]["access"]
+        payload, response = register_response
+
+        access_token = response.data["tokens"]["access"]
         headers = {"Authorization": f"Bearer {access_token}"}
         response_user = api_client().get(f"{self.endpoint}/", headers=headers)
         assert response_user.status_code == status.HTTP_200_OK

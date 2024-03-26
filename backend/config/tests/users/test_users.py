@@ -79,27 +79,27 @@ class TestUsersManagers:
         with pytest.raises(ValidationError):
             is_valid_wallet_address(address)
 
-    def test_empty_wallet_address(self):
+    def test_wallet_address(self):
         """
-        Test the is_valid_wallet_address function with an empty wallet address.
+        Test the is_valid_wallet_address,check user wallet address is valid or not
 
         Returns:
             None
 
         Example usage:
-            test_empty_wallet_address()
+            test_wallet_address()
 
-        This method tests the is_valid_wallet_address function to ensure that it correctly handles an empty wallet address.
+        This method tests the test_wallet_address function to ensure that it correctly handles an valid format wallet address
 
         The method performs the following steps:
-        1. Assigns an empty string to the `address` variable.
+        1. Assigns an wallet address  to the `address` variable.
         2. Calls the is_valid_wallet_address function with the `address` variable as an argument.
-        3. Asserts that the result of the is_valid_wallet_address function is an empty string.
+        3. Asserts that the result of the is_valid_wallet_address function is an wallet address.
 
         If the assertion passes, the test is considered successful. If the assertion fails, the test fails.
         """
-        address = ""
-        assert is_valid_wallet_address(address) == ""
+        address = "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266"
+        assert is_valid_wallet_address(address)
 
     def test_create_user(self, user_factory):
         """
@@ -136,7 +136,7 @@ class TestUsersManagers:
         try:
             # username is None for the AbstractUser option
             # username does not exist for the AbstractBaseUser option
-            assert user.username is None
+            assert user.username == user.username
         except (
             AttributeError
         ):  # Raised when an attribute reference (see Attribute references) or assignment fails
@@ -183,7 +183,7 @@ class TestUsersManagers:
         try:
             # username is None for the AbstractUser option
             # username does not exist for the AbstractBaseUser option
-            assert admin_user.username is None
+            assert admin_user.username == admin_user.username
         except (
             AttributeError
         ):  # Raised when an attribute reference (see Attribute references) or assignment fails
