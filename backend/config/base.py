@@ -87,7 +87,7 @@ CREATED_APPS = [
     "apps.upload",
     "apps.order",
     "apps.transaction",
-    # "apps.authentication",
+    "apps.posts",
 ]
 
 # !Installed Apps
