@@ -58,6 +58,7 @@ if settings.APP_NAME == AppName.ADMIN.name:
     urlpatterns += [
         path("transactions/", include("apps.transaction.urls", namespace="transaction"))
     ]
+    urlpatterns += [path("posts/", include("apps.posts.urls", namespace="post"))]
     # urlpatterns += [
     #     path("api/auth/", include("apps.authentication.urls", namespace="auth"))
     # ]
