@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.core.validators import FileExtensionValidator
 from django.db import models
+from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 from django_extensions.db.fields import AutoSlugField, SlugField
 from django_extensions.db.models import TimeStampedModel
@@ -11,13 +12,15 @@ from django_extensions.db.models import TimeStampedModel
 # !Category
 class Category(TimeStampedModel):
     name = models.CharField(_("Category name"), max_length=100)
-    slug = AutoSlugField(
-        max_length=100, unique=True, db_index=True, populate_from="name"
-    )
+    slug = models.SlugField(max_length=100, unique=True, db_index=True, null=True)
 
     class Meta:
         verbose_name = _("Category")
         verbose_name_plural = _("Categories")
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
+        return super(Category, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.name
@@ -33,9 +36,7 @@ class Post(TimeStampedModel):
         null=True,
         on_delete=models.SET_NULL,
     )
-    slug = AutoSlugField(
-        max_length=100, unique=True, db_index=True, populate_from="title"
-    )
+    slug = models.SlugField(max_length=100, unique=True, db_index=True, null=True)
     post_photo_url = models.FileField(
         _("Post photo"),
         blank=True,
@@ -58,6 +59,10 @@ class Post(TimeStampedModel):
     class Meta:
         verbose_name = _("Post")
         verbose_name_plural = _("Posts")
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.title)
+        return super(Post, self).save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.title} by {self.author.username}"

@@ -30,9 +30,13 @@ clean_migrations:
 install:
 	poetry install
 
+generate_api_docs:
+	poetry run python manage.py spectacular --file schema.yml
+
 .PHONY: down,build
 .PHONY: get_backend,get_redis
 .PHONY: run_server,create_superuser
 .PHONY: test, test_paralel
 .PHONY: run_makemigrations,run_migrate,run_migrations,clean_migrations
 .PHONY: install
+.PHONY: generate_api_docs
