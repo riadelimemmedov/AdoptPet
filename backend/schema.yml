@@ -195,6 +195,527 @@ paths:
       responses:
         '204':
           description: No response body
+  /posts/:
+    get:
+      operationId: posts_list
+      description: CRUD posts
+      tags:
+      - posts
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PostRead'
+          description: ''
+    post:
+      operationId: posts_create
+      description: CRUD posts
+      tags:
+      - posts
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostWrite'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PostWrite'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PostWrite'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostWrite'
+          description: ''
+  /posts/{id}/:
+    get:
+      operationId: posts_retrieve
+      description: CRUD posts
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Post.
+        required: true
+      tags:
+      - posts
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostRead'
+          description: ''
+    put:
+      operationId: posts_update
+      description: CRUD posts
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Post.
+        required: true
+      tags:
+      - posts
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostWrite'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PostWrite'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PostWrite'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostWrite'
+          description: ''
+    patch:
+      operationId: posts_partial_update
+      description: CRUD posts
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Post.
+        required: true
+      tags:
+      - posts
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedPostWrite'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedPostWrite'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedPostWrite'
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostWrite'
+          description: ''
+    delete:
+      operationId: posts_destroy
+      description: CRUD posts
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Post.
+        required: true
+      tags:
+      - posts
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /posts/{post_id}/comment/:
+    get:
+      operationId: posts_comment_list
+      description: CRUD comments for a particular post
+      parameters:
+      - in: path
+        name: post_id
+        schema:
+          type: string
+          pattern: ^\d+$
+        required: true
+      tags:
+      - posts
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CommentRead'
+          description: ''
+    post:
+      operationId: posts_comment_create
+      description: CRUD comments for a particular post
+      parameters:
+      - in: path
+        name: post_id
+        schema:
+          type: string
+          pattern: ^\d+$
+        required: true
+      tags:
+      - posts
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CommentWrite'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CommentWrite'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CommentWrite'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommentWrite'
+          description: ''
+  /posts/{post_id}/comment/{id}/:
+    get:
+      operationId: posts_comment_retrieve
+      description: CRUD comments for a particular post
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Comment.
+        required: true
+      - in: path
+        name: post_id
+        schema:
+          type: string
+          pattern: ^\d+$
+        required: true
+      tags:
+      - posts
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommentRead'
+          description: ''
+    put:
+      operationId: posts_comment_update
+      description: CRUD comments for a particular post
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Comment.
+        required: true
+      - in: path
+        name: post_id
+        schema:
+          type: string
+          pattern: ^\d+$
+        required: true
+      tags:
+      - posts
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CommentWrite'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CommentWrite'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CommentWrite'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommentWrite'
+          description: ''
+    patch:
+      operationId: posts_comment_partial_update
+      description: CRUD comments for a particular post
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Comment.
+        required: true
+      - in: path
+        name: post_id
+        schema:
+          type: string
+          pattern: ^\d+$
+        required: true
+      tags:
+      - posts
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedCommentWrite'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedCommentWrite'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedCommentWrite'
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommentWrite'
+          description: ''
+    delete:
+      operationId: posts_comment_destroy
+      description: CRUD comments for a particular post
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Comment.
+        required: true
+      - in: path
+        name: post_id
+        schema:
+          type: string
+          pattern: ^\d+$
+        required: true
+      tags:
+      - posts
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /posts/categories/:
+    get:
+      operationId: posts_categories_list
+      description: List,Retrieve and Create post categories
+      tags:
+      - posts
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CategoryRead'
+          description: ''
+    post:
+      operationId: posts_categories_create
+      description: List,Retrieve and Create post categories
+      tags:
+      - posts
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CategoryWrite'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CategoryWrite'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CategoryWrite'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CategoryWrite'
+          description: ''
+  /posts/categories/{id}/:
+    get:
+      operationId: posts_categories_retrieve
+      description: List,Retrieve and Create post categories
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Category.
+        required: true
+      tags:
+      - posts
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CategoryRead'
+          description: ''
+    put:
+      operationId: posts_categories_update
+      description: List,Retrieve and Create post categories
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Category.
+        required: true
+      tags:
+      - posts
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CategoryWrite'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CategoryWrite'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CategoryWrite'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CategoryWrite'
+          description: ''
+    patch:
+      operationId: posts_categories_partial_update
+      description: List,Retrieve and Create post categories
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Category.
+        required: true
+      tags:
+      - posts
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedCategoryWrite'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedCategoryWrite'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedCategoryWrite'
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CategoryWrite'
+          description: ''
+    delete:
+      operationId: posts_categories_destroy
+      description: List,Retrieve and Create post categories
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Category.
+        required: true
+      tags:
+      - posts
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /posts/like/{id}/:
+    get:
+      operationId: posts_like_retrieve
+      description: Like, Dislike a post
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - posts
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
   /transactions/:
     get:
       operationId: transactions_retrieve
@@ -434,6 +955,97 @@ paths:
           description: ''
 components:
   schemas:
+    CategoryRead:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        modified:
+          type: string
+          format: date-time
+          readOnly: true
+        name:
+          type: string
+          title: Category name
+          maxLength: 100
+        slug:
+          type: string
+          readOnly: true
+          pattern: ^[-a-zA-Z0-9_]+$
+      required:
+      - created
+      - id
+      - modified
+      - name
+      - slug
+    CategoryWrite:
+      type: object
+      properties:
+        name:
+          type: string
+          title: Category name
+          maxLength: 100
+      required:
+      - name
+    CommentRead:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        author:
+          type: string
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        modified:
+          type: string
+          format: date-time
+          readOnly: true
+        body:
+          type: string
+          title: Comment body
+        post:
+          type: integer
+      required:
+      - author
+      - body
+      - created
+      - id
+      - modified
+      - post
+    CommentWrite:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        modified:
+          type: string
+          format: date-time
+          readOnly: true
+        body:
+          type: string
+          title: Comment body
+        post:
+          type: integer
+      required:
+      - body
+      - created
+      - id
+      - modified
+      - post
     CustomUser:
       type: object
       description: Serializer class to serialize CustomUser model.
@@ -467,6 +1079,32 @@ components:
       type: string
       description: "* `MALE` - male\n* `FEMALE` - female\n* `Neutered ` - neutered\
         \ \n* `Spayed` - spayed\n* `Other` - other"
+    PatchedCategoryWrite:
+      type: object
+      properties:
+        name:
+          type: string
+          title: Category name
+          maxLength: 100
+    PatchedCommentWrite:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        modified:
+          type: string
+          format: date-time
+          readOnly: true
+        body:
+          type: string
+          title: Comment body
+        post:
+          type: integer
     PatchedCustomUser:
       type: object
       description: Serializer class to serialize CustomUser model.
@@ -488,6 +1126,40 @@ components:
           type: string
           nullable: true
           maxLength: 100
+    PatchedPostWrite:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        modified:
+          type: string
+          format: date-time
+          readOnly: true
+        title:
+          type: string
+          title: Post title
+          maxLength: 250
+        post_photo_url:
+          type: string
+          format: uri
+          title: Post photo
+          pattern: (?:png|jpg|jpeg)$
+        body:
+          type: string
+          title: Post body
+        categories:
+          type: array
+          items:
+            type: integer
+        likes:
+          type: array
+          items:
+            type: integer
     PaymentOptionsEnum:
       enum:
       - STRIPE
@@ -568,6 +1240,95 @@ components:
       - price_currency
       - slug
       - weight
+    PostRead:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        author:
+          type: string
+          readOnly: true
+        categories:
+          type: string
+          readOnly: true
+        likes:
+          type: string
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        modified:
+          type: string
+          format: date-time
+          readOnly: true
+        title:
+          type: string
+          title: Post title
+          maxLength: 250
+        slug:
+          type: string
+          readOnly: true
+          pattern: ^[-a-zA-Z0-9_]+$
+        post_photo_url:
+          type: string
+          format: uri
+          title: Post photo
+          pattern: (?:png|jpg|jpeg)$
+        body:
+          type: string
+          title: Post body
+      required:
+      - author
+      - body
+      - categories
+      - created
+      - id
+      - likes
+      - modified
+      - slug
+      - title
+    PostWrite:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        modified:
+          type: string
+          format: date-time
+          readOnly: true
+        title:
+          type: string
+          title: Post title
+          maxLength: 250
+        post_photo_url:
+          type: string
+          format: uri
+          title: Post photo
+          pattern: (?:png|jpg|jpeg)$
+        body:
+          type: string
+          title: Post body
+        categories:
+          type: array
+          items:
+            type: integer
+        likes:
+          type: array
+          items:
+            type: integer
+      required:
+      - body
+      - created
+      - id
+      - modified
+      - title
     TokenRefresh:
       type: object
       properties:
@@ -673,11 +1434,10 @@ components:
           maxLength: 128
         wallet_address:
           type: string
-          nullable: true
-          maxLength: 100
       required:
       - id
       - password
+      - wallet_address
   securitySchemes:
     cookieAuth:
       type: apiKey
