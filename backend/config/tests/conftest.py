@@ -10,6 +10,7 @@ register(factories.PetFactory)
 register(factories.PetFactoryEndToEnd)
 register(factories.TransactionFactory)
 register(factories.CategoryFactory)
+register(factories.PostFactory)
 
 
 # !api_client

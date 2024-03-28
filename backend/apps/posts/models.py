@@ -28,7 +28,7 @@ class Category(TimeStampedModel):
 
 # !Post
 class Post(TimeStampedModel):
-    title = models.CharField(_("Post title"), max_length=250)
+    title = models.CharField(_("Post title"), max_length=250, unique=True, null=True)
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         verbose_name=_("Author post"),

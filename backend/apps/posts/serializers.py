@@ -13,9 +13,11 @@ class CategoryReadSerializer(serializers.ModelSerializer):
 
 # !CategoryWriteSerializer
 class CategoryWriteSerializer(serializers.ModelSerializer):
+    slug = serializers.ReadOnlyField(read_only=True)
+
     class Meta:
         model = Category
-        fields = ["name"]
+        fields = ["name", "slug"]
 
 
 # !PostReadSerializer

@@ -9,7 +9,7 @@ from faker import Faker
 
 from abstract.constants import Genders, GendersPet, Status, Types
 from apps.pet.models import Pet
-from apps.posts.models import Category
+from apps.posts.models import Category, Comment, Post
 from apps.transaction.models import Transaction
 from apps.user_profile.models import Profile
 from config.helpers import generate_metamask_address, generate_session_id
@@ -148,3 +148,23 @@ class CategoryFactory(factory.django.DjangoModelFactory):
         model = Category
 
     name = factory.LazyAttribute(lambda _: faker.word())
+
+
+# !PostFactory
+class PostFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = Post
+
+    title = factory.LazyAttribute(lambda _: faker.word())
+    author = factory.SubFactory(UserFactory)
+    post_photo_url = factory.LazyAttribute(
+        lambda _: faker.file_extension(category="image")
+    )
+    body = factory.LazyAttribute(lambda _: faker.paragraph())
+
+    @factory.post_generation
+    def categories(self, create, extracted, **kwargs):
+        if not create:
+            return
+        if extracted:
+            self.categories.add(extracted)
