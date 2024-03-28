@@ -9,6 +9,7 @@ from faker import Faker
 
 from abstract.constants import Genders, GendersPet, Status, Types
 from apps.pet.models import Pet
+from apps.posts.models import Category
 from apps.transaction.models import Transaction
 from apps.user_profile.models import Profile
 from config.helpers import generate_metamask_address, generate_session_id
@@ -139,3 +140,11 @@ class TransactionFactory(factory.django.DjangoModelFactory):
         lambda _: faker.random_element(["STRIPE", "ETHEREUM"])
     )
     session_id = factory.LazyAttribute(lambda _: generate_session_id())
+
+
+# !CategoryFactory
+class CategoryFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = Category
+
+    name = factory.LazyAttribute(lambda _: faker.word())

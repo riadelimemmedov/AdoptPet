@@ -9,6 +9,7 @@ register(factories.ProfileFactory)
 register(factories.PetFactory)
 register(factories.PetFactoryEndToEnd)
 register(factories.TransactionFactory)
+register(factories.CategoryFactory)
 
 
 # !api_client

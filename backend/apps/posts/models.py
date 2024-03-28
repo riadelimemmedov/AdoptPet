@@ -11,7 +11,7 @@ from django_extensions.db.models import TimeStampedModel
 
 # !Category
 class Category(TimeStampedModel):
-    name = models.CharField(_("Category name"), max_length=100)
+    name = models.CharField(_("Category name"), max_length=100, null=True, unique=True)
     slug = models.SlugField(max_length=100, unique=True, db_index=True, null=True)
 
     class Meta:
