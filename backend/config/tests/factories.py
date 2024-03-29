@@ -168,3 +168,10 @@ class PostFactory(factory.django.DjangoModelFactory):
             return
         if extracted:
             self.categories.add(extracted)
+
+    @factory.post_generation
+    def likes(self, create, extracted, **kwargs):
+        if not create:
+            return
+        if extracted:
+            self.likes.add(extracted)

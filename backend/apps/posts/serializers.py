@@ -54,7 +54,7 @@ class PostWriteSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Post
-        exclude = ["slug"]
+        exclude = ["likes"]
 
     def validate_categories(self, categories):
         if len(categories) <= 0:
@@ -62,6 +62,13 @@ class PostWriteSerializer(serializers.ModelSerializer):
                 "Categories cannot be empty,please add category for added post"
             )
         return categories
+
+    def validate_title(self, title):
+        if title is None:
+            raise serializers.ValidationError(
+                "Title cannot be empty,please add title for added post"
+            )
+        return title
 
 
 # !CommentReadSerializer

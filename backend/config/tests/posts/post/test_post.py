@@ -17,7 +17,7 @@ User = get_user_model()
 
 # !TestPosts
 class TestPosts:
-    def test_post_factory_creation(self, post_factory, category_factory):
+    def test_post_factory_creation(self, post_factory, category_factory, user_factory):
         """
         Test the creation of a Post instance using the post_factory.
 
@@ -32,13 +32,14 @@ class TestPosts:
             None.
 
         """
-        obj = post_factory(categories=category_factory().id)
+        obj = post_factory(categories=category_factory().id, likes=user_factory().id)
         assert isinstance(obj, Post)
         assert obj.title is not None
         assert obj.author is not None
         assert obj.post_photo_url is not None
         assert obj.body is not None
         assert len(obj.categories.all()) > 0
+        assert len(obj.likes.all()) > 0
 
     def test_str_method(self, post_factory, category_factory):
         """
@@ -155,3 +156,45 @@ class TestPosts:
         assert isinstance(post, Post)
         assert post.categories.count() == 1
         assert Post.objects.filter(categories__id=category).exists()
+
+    def test_add_category(self, category_factory, post_factory):
+        """
+        Test adding a category to a Post instance.
+
+        Args:
+            category_factory: A factory function to create a Category instance.
+            post_factory: A factory function to create a Post instance.
+
+        Raises:
+            AssertionError: If any of the assertions fail, indicating a test failure.
+
+        Returns:
+            None.
+
+        """
+        category = category_factory()
+        post = post_factory()
+        post.categories.add(category)
+        assert post.categories.count() == 1
+        assert post.categories.first() == category
+
+    def test_add_like(self, user_factory, post_factory):
+        """
+        Test adding a like to a Post instance.
+
+        Args:
+            user_factory: A factory function to create a User instance.
+            post_factory: A factory function to create a Post instance.
+
+        Raises:
+            AssertionError: If any of the assertions fail, indicating a test failure.
+
+        Returns:
+            None.
+
+        """
+        user = user_factory()
+        post = post_factory()
+        post.likes.add(user)
+        assert post.likes.count() == 1
+        assert post.likes.first() == user
