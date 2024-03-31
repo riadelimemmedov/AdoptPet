@@ -175,3 +175,13 @@ class PostFactory(factory.django.DjangoModelFactory):
             return
         if extracted:
             self.likes.add(extracted)
+
+
+# !CommentFactory
+class CommentFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = Comment
+
+    post = factory.SubFactory(PostFactory)
+    author = factory.SubFactory(UserFactory)
+    body = factory.LazyAttribute(lambda _: "\n\n".join(faker.paragraphs(nb=5)))

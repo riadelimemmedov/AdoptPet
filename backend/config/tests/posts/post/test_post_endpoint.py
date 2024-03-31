@@ -101,14 +101,14 @@ class TestPostsEndpoints:
         if user.is_authenticated:
             payload = {
                 "post_photo_url": SimpleUploadedFile("test.jpg", b"xxxxxxxx"),
-                "title": "Male",
+                "title": "Python",
                 "body": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua",
                 "categories": [category_factory().id],
             }
             response = api_client().post(
                 self.endpoint, payload, format="multipart", headers=headers
             )
-            yield payload, response, user
+            yield payload, response
 
     def test_return_all_posts(self, post_factory, api_client):
         """
@@ -124,7 +124,7 @@ class TestPostsEndpoints:
         assert response.status_code == status.HTTP_200_OK
         assert len(json.loads(response.content)) == 4
 
-    def test_return_single_post(self, post_response, api_client):
+    def test_return_single_post(self, post_response, get_user, api_client):
         """
         Test the endpoint to return a single post.
 
@@ -133,7 +133,9 @@ class TestPostsEndpoints:
             api_client (APIClient): The API client used to make the request.
 
         """
-        payload, response, user = post_response
+        payload, response = post_response
+        user, headers = get_user
+        user = self.get_user_object(user.data["id"])
         response = api_client().get(
             f"{self.endpoint}{response.data['slug']}/", format="json"
         )
@@ -149,7 +151,7 @@ class TestPostsEndpoints:
             api_client (APIClient): The API client used to make the request.
 
         """
-        payload, response, user = post_response
+        payload, response = post_response
         assert response.status_code == status.HTTP_201_CREATED
         assert (
             response.data["id"]
@@ -161,3 +163,74 @@ class TestPostsEndpoints:
             and response.data["created"]
             and response.data["modified"]
         ) is not None
+
+    def test_update_post_fields(self, post_response, get_user, api_client):
+        """
+        Test updating post fields via the API.
+
+        Args:
+            post_response: A fixture that provides the initial post data and response.
+            get_user: A fixture that provides the authenticated user and headers.
+            api_client: A fixture that provides the API client.
+
+        Returns:
+            None
+
+        Raises:
+            AssertionError: If any of the assertions fail.
+        """
+        payload, response = post_response
+        user, headers = get_user
+        title = "Kotlin"
+        body = "Why we need to use kotlin"
+        post_photo_url = SimpleUploadedFile("test.jpg", b"xxxxxxxx")
+        payload["title"] = title
+        payload["body"] = body
+        payload["post_photo_url"] = post_photo_url
+        response = api_client().put(
+            f"{self.endpoint}{response.data['slug']}/",
+            payload,
+            format="multipart",
+            headers=headers,
+        )
+        assert response.status_code == status.HTTP_200_OK
+        assert response.data["title"] == title
+        assert response.data["body"] == body
+        assert response.data["post_photo_url"] != post_photo_url.name
+
+    def test_update_post_field(self, post_response, get_user, api_client):
+        """
+        Test the endpoint to update a post.
+
+        Args:
+            post_response (tuple): A tuple containing the payload, response, and user.
+            api_client (APIClient): The API client used to make the request.
+
+        """
+        payload, response = post_response
+        user, headers = get_user
+        title = "Typescript"
+        response = api_client().patch(
+            f"{self.endpoint}{response.data['slug']}/",
+            {"title": title},
+            format="json",
+            headers=headers,
+        )
+        assert response.status_code == status.HTTP_200_OK
+        assert response.data["title"] == title
+
+    def test_delete_post(self, post_response, get_user, api_client):
+        """
+        Test the endpoint to delete a post.
+
+        Args:
+            post_response (tuple): A tuple containing the payload, response, and user.
+            api_client (APIClient): The API client used to make the request.
+
+        """
+        payload, response = post_response
+        user, headers = get_user
+        response = api_client().delete(
+            f"{self.endpoint}{response.data['slug']}/", headers=headers, format="json"
+        )
+        assert response.status_code == status.HTTP_204_NO_CONTENT
