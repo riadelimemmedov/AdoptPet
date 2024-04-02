@@ -1,7 +1,9 @@
+from allauth.socialaccount.views import signup
 from django.urls import path
 from rest_framework_simplejwt.views import TokenRefreshView
 
 from .views import (
+    GoogleLogin,
     UserAPIView,
     UserLoginAPIView,
     UserLogoutAPIView,
@@ -18,4 +20,6 @@ urlpatterns = [
     path("token/refresh/", TokenRefreshView.as_view(), name="token-refresh"),
     path("logout/", UserLogoutAPIView.as_view(), name="logout-user"),
     path("", UserAPIView.as_view(), name="user-info"),
+    path("signup/", signup, name="socialaccount_signup"),
+    path("google/", GoogleLogin.as_view(), name="google_login"),
 ]

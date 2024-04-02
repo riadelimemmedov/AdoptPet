@@ -112,3 +112,6 @@ jobs:
 
       - name: Run bandit
         run: poetry run bandit .
+
+      - name: Run safety
+        run: poetry run safety check

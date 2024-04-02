@@ -1,6 +1,5 @@
 import json
 
-import factory
 import pytest
 from django.contrib.auth import get_user_model
 from django.core.files.uploadedfile import SimpleUploadedFile
@@ -234,3 +233,33 @@ class TestPostsEndpoints:
             f"{self.endpoint}{response.data['slug']}/", headers=headers, format="json"
         )
         assert response.status_code == status.HTTP_204_NO_CONTENT
+
+    def test_like_post(self, post_response, get_user, api_client):
+        """
+        Test method to verify liking a post.
+
+        Args:
+            post_response (tuple): A tuple containing the payload and response for creating a post.
+            get_user (tuple): A tuple containing the user information and headers.
+            api_client (function): A function that returns an instance of the API client.
+
+        Returns:
+            None
+
+        Raises:
+            AssertionError: If the response status codes are not HTTP_200_OK or if the number of likes on the post is not at least 1.
+
+        """
+        _, response = post_response
+        _, headers = get_user
+        response_like = api_client().get(
+            f"{self.endpoint}like/{response.data['slug']}/",
+            headers=headers,
+            format="json",
+        )
+        response_post = api_client().get(
+            f"{self.endpoint}{response.data['slug']}/", format="json"
+        )
+        assert response_post.status_code == status.HTTP_200_OK
+        assert response_like.status_code == status.HTTP_200_OK
+        assert len(response_post.data["likes"]) >= 1

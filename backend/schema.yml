@@ -241,125 +241,16 @@ paths:
               schema:
                 $ref: '#/components/schemas/PostWrite'
           description: ''
-  /posts/{id}/:
-    get:
-      operationId: posts_retrieve
-      description: CRUD posts
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: integer
-        description: A unique integer value identifying this Post.
-        required: true
-      tags:
-      - posts
-      security:
-      - jwtAuth: []
-      - cookieAuth: []
-      - {}
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PostRead'
-          description: ''
-    put:
-      operationId: posts_update
-      description: CRUD posts
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: integer
-        description: A unique integer value identifying this Post.
-        required: true
-      tags:
-      - posts
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PostWrite'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/PostWrite'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/PostWrite'
-        required: true
-      security:
-      - jwtAuth: []
-      - cookieAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PostWrite'
-          description: ''
-    patch:
-      operationId: posts_partial_update
-      description: CRUD posts
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: integer
-        description: A unique integer value identifying this Post.
-        required: true
-      tags:
-      - posts
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PatchedPostWrite'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/PatchedPostWrite'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/PatchedPostWrite'
-      security:
-      - jwtAuth: []
-      - cookieAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PostWrite'
-          description: ''
-    delete:
-      operationId: posts_destroy
-      description: CRUD posts
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: integer
-        description: A unique integer value identifying this Post.
-        required: true
-      tags:
-      - posts
-      security:
-      - jwtAuth: []
-      - cookieAuth: []
-      responses:
-        '204':
-          description: No response body
-  /posts/{post_id}/comment/:
+  /posts/{post_slug}/comment/:
     get:
       operationId: posts_comment_list
       description: CRUD comments for a particular post
       parameters:
       - in: path
-        name: post_id
+        name: post_slug
         schema:
           type: string
-          pattern: ^\d+$
+          pattern: ^[-\w]+$
         required: true
       tags:
       - posts
@@ -381,10 +272,10 @@ paths:
       description: CRUD comments for a particular post
       parameters:
       - in: path
-        name: post_id
+        name: post_slug
         schema:
           type: string
-          pattern: ^\d+$
+          pattern: ^[-\w]+$
         required: true
       tags:
       - posts
@@ -410,7 +301,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/CommentWrite'
           description: ''
-  /posts/{post_id}/comment/{id}/:
+  /posts/{post_slug}/comment/{id}/:
     get:
       operationId: posts_comment_retrieve
       description: CRUD comments for a particular post
@@ -422,10 +313,10 @@ paths:
         description: A unique integer value identifying this Comment.
         required: true
       - in: path
-        name: post_id
+        name: post_slug
         schema:
           type: string
-          pattern: ^\d+$
+          pattern: ^[-\w]+$
         required: true
       tags:
       - posts
@@ -451,10 +342,10 @@ paths:
         description: A unique integer value identifying this Comment.
         required: true
       - in: path
-        name: post_id
+        name: post_slug
         schema:
           type: string
-          pattern: ^\d+$
+          pattern: ^[-\w]+$
         required: true
       tags:
       - posts
@@ -491,10 +382,10 @@ paths:
         description: A unique integer value identifying this Comment.
         required: true
       - in: path
-        name: post_id
+        name: post_slug
         schema:
           type: string
-          pattern: ^\d+$
+          pattern: ^[-\w]+$
         required: true
       tags:
       - posts
@@ -530,10 +421,115 @@ paths:
         description: A unique integer value identifying this Comment.
         required: true
       - in: path
-        name: post_id
+        name: post_slug
         schema:
           type: string
-          pattern: ^\d+$
+          pattern: ^[-\w]+$
+        required: true
+      tags:
+      - posts
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /posts/{slug}/:
+    get:
+      operationId: posts_retrieve
+      description: CRUD posts
+      parameters:
+      - in: path
+        name: slug
+        schema:
+          type: string
+        required: true
+      tags:
+      - posts
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostRead'
+          description: ''
+    put:
+      operationId: posts_update
+      description: CRUD posts
+      parameters:
+      - in: path
+        name: slug
+        schema:
+          type: string
+        required: true
+      tags:
+      - posts
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostWrite'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PostWrite'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PostWrite'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostWrite'
+          description: ''
+    patch:
+      operationId: posts_partial_update
+      description: CRUD posts
+      parameters:
+      - in: path
+        name: slug
+        schema:
+          type: string
+        required: true
+      tags:
+      - posts
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedPostWrite'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedPostWrite'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedPostWrite'
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostWrite'
+          description: ''
+    delete:
+      operationId: posts_destroy
+      description: CRUD posts
+      parameters:
+      - in: path
+        name: slug
+        schema:
+          type: string
         required: true
       tags:
       - posts
@@ -578,7 +574,6 @@ paths:
           multipart/form-data:
             schema:
               $ref: '#/components/schemas/CategoryWrite'
-        required: true
       security:
       - jwtAuth: []
       - cookieAuth: []
@@ -589,16 +584,15 @@ paths:
               schema:
                 $ref: '#/components/schemas/CategoryWrite'
           description: ''
-  /posts/categories/{id}/:
+  /posts/categories/{slug}/:
     get:
       operationId: posts_categories_retrieve
       description: List,Retrieve and Create post categories
       parameters:
       - in: path
-        name: id
+        name: slug
         schema:
-          type: integer
-        description: A unique integer value identifying this Category.
+          type: string
         required: true
       tags:
       - posts
@@ -618,10 +612,9 @@ paths:
       description: List,Retrieve and Create post categories
       parameters:
       - in: path
-        name: id
+        name: slug
         schema:
-          type: integer
-        description: A unique integer value identifying this Category.
+          type: string
         required: true
       tags:
       - posts
@@ -636,7 +629,6 @@ paths:
           multipart/form-data:
             schema:
               $ref: '#/components/schemas/CategoryWrite'
-        required: true
       security:
       - jwtAuth: []
       - cookieAuth: []
@@ -652,10 +644,9 @@ paths:
       description: List,Retrieve and Create post categories
       parameters:
       - in: path
-        name: id
+        name: slug
         schema:
-          type: integer
-        description: A unique integer value identifying this Category.
+          type: string
         required: true
       tags:
       - posts
@@ -685,10 +676,9 @@ paths:
       description: List,Retrieve and Create post categories
       parameters:
       - in: path
-        name: id
+        name: slug
         schema:
-          type: integer
-        description: A unique integer value identifying this Category.
+          type: string
         required: true
       tags:
       - posts
@@ -698,15 +688,15 @@ paths:
       responses:
         '204':
           description: No response body
-  /posts/like/{id}/:
+  /posts/like/{slug}/:
     get:
       operationId: posts_like_retrieve
       description: Like, Dislike a post
       parameters:
       - in: path
-        name: id
+        name: slug
         schema:
-          type: integer
+          type: string
         required: true
       tags:
       - posts
@@ -855,6 +845,54 @@ paths:
               schema:
                 $ref: '#/components/schemas/CustomUser'
           description: ''
+  /users/google/:
+    post:
+      operationId: users_google_create
+      description: |-
+        class used for social authentications
+        example usage for facebook with access_token
+        -------------
+        from allauth.socialaccount.providers.facebook.views import FacebookOAuth2Adapter
+
+        class FacebookLogin(SocialLoginView):
+            adapter_class = FacebookOAuth2Adapter
+        -------------
+
+        example usage for facebook with code
+
+        -------------
+        from allauth.socialaccount.providers.facebook.views import FacebookOAuth2Adapter
+        from allauth.socialaccount.providers.oauth2.client import OAuth2Client
+
+        class FacebookLogin(SocialLoginView):
+            adapter_class = FacebookOAuth2Adapter
+            client_class = OAuth2Client
+            callback_url = 'localhost:8000'
+        -------------
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SocialLogin'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SocialLogin'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SocialLogin'
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SocialLogin'
+          description: ''
   /users/login/:
     post:
       operationId: users_login_create
@@ -971,27 +1009,32 @@ components:
           readOnly: true
         name:
           type: string
+          nullable: true
           title: Category name
           maxLength: 100
         slug:
           type: string
-          readOnly: true
+          nullable: true
+          maxLength: 100
           pattern: ^[-a-zA-Z0-9_]+$
       required:
       - created
       - id
       - modified
-      - name
-      - slug
     CategoryWrite:
       type: object
       properties:
         name:
           type: string
+          nullable: true
           title: Category name
           maxLength: 100
+        slug:
+          type: string
+          nullable: true
+          readOnly: true
       required:
-      - name
+      - slug
     CommentRead:
       type: object
       properties:
@@ -1024,28 +1067,15 @@ components:
     CommentWrite:
       type: object
       properties:
-        id:
-          type: integer
-          readOnly: true
-        created:
-          type: string
-          format: date-time
-          readOnly: true
-        modified:
-          type: string
-          format: date-time
-          readOnly: true
         body:
           type: string
           title: Comment body
-        post:
+        id:
           type: integer
+          readOnly: true
       required:
       - body
-      - created
       - id
-      - modified
-      - post
     CustomUser:
       type: object
       description: Serializer class to serialize CustomUser model.
@@ -1084,27 +1114,22 @@ components:
       properties:
         name:
           type: string
+          nullable: true
           title: Category name
           maxLength: 100
+        slug:
+          type: string
+          nullable: true
+          readOnly: true
     PatchedCommentWrite:
       type: object
       properties:
-        id:
-          type: integer
-          readOnly: true
-        created:
-          type: string
-          format: date-time
-          readOnly: true
-        modified:
-          type: string
-          format: date-time
-          readOnly: true
         body:
           type: string
           title: Comment body
-        post:
+        id:
           type: integer
+          readOnly: true
     PatchedCustomUser:
       type: object
       description: Serializer class to serialize CustomUser model.
@@ -1132,6 +1157,8 @@ components:
         id:
           type: integer
           readOnly: true
+        post_photo_url:
+          type: string
         created:
           type: string
           format: date-time
@@ -1142,21 +1169,18 @@ components:
           readOnly: true
         title:
           type: string
+          nullable: true
           title: Post title
           maxLength: 250
-        post_photo_url:
+        slug:
           type: string
-          format: uri
-          title: Post photo
-          pattern: (?:png|jpg|jpeg)$
+          nullable: true
+          maxLength: 100
+          pattern: ^[-a-zA-Z0-9_]+$
         body:
           type: string
           title: Post body
         categories:
-          type: array
-          items:
-            type: integer
-        likes:
           type: array
           items:
             type: integer
@@ -1265,11 +1289,13 @@ components:
           readOnly: true
         title:
           type: string
+          nullable: true
           title: Post title
           maxLength: 250
         slug:
           type: string
-          readOnly: true
+          nullable: true
+          maxLength: 100
           pattern: ^[-a-zA-Z0-9_]+$
         post_photo_url:
           type: string
@@ -1287,14 +1313,14 @@ components:
       - id
       - likes
       - modified
-      - slug
-      - title
     PostWrite:
       type: object
       properties:
         id:
           type: integer
           readOnly: true
+        post_photo_url:
+          type: string
         created:
           type: string
           format: date-time
@@ -1305,21 +1331,18 @@ components:
           readOnly: true
         title:
           type: string
+          nullable: true
           title: Post title
           maxLength: 250
-        post_photo_url:
+        slug:
           type: string
-          format: uri
-          title: Post photo
-          pattern: (?:png|jpg|jpeg)$
+          nullable: true
+          maxLength: 100
+          pattern: ^[-a-zA-Z0-9_]+$
         body:
           type: string
           title: Post body
         categories:
-          type: array
-          items:
-            type: integer
-        likes:
           type: array
           items:
             type: integer
@@ -1328,7 +1351,16 @@ components:
       - created
       - id
       - modified
-      - title
+      - post_photo_url
+    SocialLogin:
+      type: object
+      properties:
+        access_token:
+          type: string
+        code:
+          type: string
+        id_token:
+          type: string
     TokenRefresh:
       type: object
       properties:
